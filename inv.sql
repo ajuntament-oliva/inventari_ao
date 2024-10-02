@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `departaments` (
   `departament` varchar(50) NOT NULL,
   `dispositiu` varchar(50) NOT NULL,
   `nom` varchar(50) NOT NULL,
-  `cognom` varchar(50) NOT NULL,
+  `cognom` varchar(50) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
@@ -39,9 +39,9 @@ CREATE TABLE IF NOT EXISTS `departaments` (
 --
 
 INSERT INTO `departaments` (`id`, `departament`,  `dispositiu`, `nom`,  `cognom`) VALUES
-(1, 'Modernització', 'Torre', 'Paquita', 'Salas'),
-(2, 'Modernització', 'Torre', 'Lee', 'Minho',),
-(3, 'Modernització', 'Torre', 'Sebastian', 'Stan');
+('Modernització', 'Torre', 'Paquita', 'Salas'),
+('Modernització', 'Torre', 'Lee', 'Minho'),
+('Modernització', 'Torre', 'Sebastian', 'Stan');
 
 -- --------------------------------------------------------
 
@@ -98,7 +98,7 @@ INSERT INTO `user_groups` (`id`, `group_name`, `group_level`, `group_status`) VA
 --
 ALTER TABLE `departaments`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_level` (`user_level`);
+  ADD KEY `departament` (`departament`);
 
 --
 -- Indexes for table `users`
