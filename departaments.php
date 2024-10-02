@@ -10,6 +10,39 @@ require_once('includes/load.php');
 $all_departaments = find_all_departament();
 ?>
 <?php
+//Buscador
+  $search = isset($_GET['search']) ? $_GET['search'] : '';
+  
+  if (!empty($search)) {
+    $all_departaments = search_departaments($search, $limit, $offset);
+    $total_records = count(search_departaments($search));
+  } else {
+    $all_departaments = find_departaments_with_limit($limit, $offset);
+    $total_records = count(find_all_departament());
+  }
+
+  $total_pages = ceil($total_records / $limit);
+?>
+
+<?php
+function search_departaments($search, $limit = null, $offset = null) {
+  global $db;
+  $sql  = "SELECT * FROM departaments ";
+  $sql .= "WHERE departament LIKE '%{$search}%' ";
+  $sql .= "OR dispositiu LIKE '%{$search}%' ";
+  $sql .= "OR cognom LIKE '%{$search}%' ";
+  
+  if ($limit !== null && $offset !== null) {
+    $sql .= "LIMIT {$limit} OFFSET {$offset}";
+  }
+
+  return find_by_sql($sql);
+}
+?>
+
+
+<?php
+//Paginador
 $limit = 20;
 
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -32,6 +65,7 @@ $all_departaments = find_departaments_with_limit($limit, $offset);
 <div class="row">
   <div class="col-md-12">
     <div class="panel panel-default">
+      <!-- Buscador -->
       <div class="panel-heading clearfix">
         <strong>
           <span class="glyphicon glyphicon-th"></span>
@@ -39,7 +73,13 @@ $all_departaments = find_departaments_with_limit($limit, $offset);
         </strong>
         <a href="add_departament.php" class="btn btn-info pull-right">Afegir Departament</a>
       </div>
+
       <div class="panel-body">
+        <form method="get" action="" class="pull-right">
+          <input type="text" name="search" placeholder="Buscar..."
+            value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>" />
+          <input type="submit" value="Buscar" class="btn btn-info" />
+        </form>
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
