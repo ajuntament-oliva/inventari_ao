@@ -148,6 +148,16 @@ function tableExists($table){
       return $result;
   }
   /*--------------------------------------------------------------*/
+  /* Find all departament by
+  /*--------------------------------------------------------------*/
+  function find_all_departament(){
+    global $db;
+    $results = array();
+    $sql = "SELECT * FROM departaments ORDER BY departament ASC";
+    $result = find_by_sql($sql);
+    return $result;
+}
+  /*--------------------------------------------------------------*/
   /* Function to update the last log in of a user
   /*--------------------------------------------------------------*/
 
