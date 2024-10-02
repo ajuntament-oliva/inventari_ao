@@ -39,9 +39,9 @@ CREATE TABLE IF NOT EXISTS `departaments` (
 --
 
 INSERT INTO `departaments` (`id`, `departament`,  `dispositiu`, `nom`,  `cognom`) VALUES
-('Modernització', 'Torre', 'Paquita', 'Salas'),
-('Modernització', 'Torre', 'Lee', 'Minho'),
-('Modernització', 'Torre', 'Sebastian', 'Stan');
+('1', 'Modernització', 'Torre', 'Paquita', 'Salas'),
+('2', 'Modernització', 'Torre', 'Lee', 'Minho'),
+('3', 'Modernització', 'Torre', 'Sebastian', 'Stan');
 
 -- --------------------------------------------------------
 
@@ -115,13 +115,6 @@ ALTER TABLE `user_groups`
   ADD UNIQUE KEY `group_level` (`group_level`);
 
 --
--- Indexes for table `user_groups`
---
-ALTER TABLE `user_groups`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `group_level` (`group_level`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -129,7 +122,7 @@ ALTER TABLE `user_groups`
 -- AUTO_INCREMENT for table `departaments`
 --
 ALTER TABLE `departaments`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`

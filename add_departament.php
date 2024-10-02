@@ -17,7 +17,7 @@
         $cogn_pers  = remove_junk($db->escape($_POST['cognom-persona']));
 
         $query  = "INSERT INTO departaments (";
-        $query .="departament,dispositiu,nom,cognom";
+        $query .="departament, dispositiu, nom, cognom";
         $query .=") VALUES (";
         $query .=" '{$d_titol}', '{$n_dispo}','{$n_pers}','{$cogn_pers}' ";
         $query .=")";
@@ -42,7 +42,7 @@
        <h3>Afegix Departament</h3>
      </div>
      <?php echo display_msg($msg); ?>
-      <form method="post" action="add_group.php" class="clearfix">
+      <form method="post" action="add_departament.php" class="clearfix">
         <div class="form-group">
               <label for="name" class="control-label">Departament</label>
               <input type="name" class="form-control" name="departament-titol">
