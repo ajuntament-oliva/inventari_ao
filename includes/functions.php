@@ -116,6 +116,11 @@ function randString($length = 5)
    $str .= $cha[mt_rand(0,strlen($cha))];
   return $str;
 }
-
-
-?>
+/*--------------------------------------------------------------*/
+/* Función que busca el límite de resultados por página
+/*--------------------------------------------------------------*/
+function find_departaments_with_limit($limit, $offset) {
+  global $db;
+  $sql  = "SELECT * FROM departaments LIMIT {$limit} OFFSET {$offset}";
+  return find_by_sql($sql);
+}

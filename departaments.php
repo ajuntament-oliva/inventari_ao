@@ -1,18 +1,33 @@
 <?php
-  $page_title = 'Departaments';
-  require_once('includes/load.php');
+$page_title = 'Departaments';
+require_once('includes/load.php');
+
 ?>
 <?php
 // Checkin What level user has permission to view this page
- //page_require_level(1);
+//page_require_level(1);
 //pull out all user form database
- $all_departaments = find_all_departament();
+$all_departaments = find_all_departament();
+?>
+<?php
+$limit = 20;
+
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+
+$offset = ($page - 1) * $limit;
+
+$total_records = count(find_all_departament());
+
+$total_pages = ceil($total_records / $limit);
+
+$all_departaments = find_departaments_with_limit($limit, $offset);
+
 ?>
 <?php include_once('layouts/header.php'); ?>
 <div class="row">
-   <div class="col-md-12">
-     <?php echo display_msg($msg); ?>
-   </div>
+  <div class="col-md-12">
+    <?php echo display_msg($msg); ?>
+  </div>
 </div>
 <div class="row">
   <div class="col-md-12">
@@ -21,40 +36,61 @@
         <strong>
           <span class="glyphicon glyphicon-th"></span>
           <span>Departaments</span>
-       </strong>
-         <a href="add_departament.php" class="btn btn-info pull-right">Afegir Departament</a>
+        </strong>
+        <a href="add_departament.php" class="btn btn-info pull-right">Afegir Departament</a>
       </div>
-     <div class="panel-body">
-      <table class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th class="text-center" style="width: 50px;">Departament</th>
-            <th>Dispositiu</th>
-            <th>Nom</th>
-            <th>Cognom</th>
-            <th class="text-center" style="width: 100px;">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-        <?php foreach($all_departaments as $a_departament): ?>
-          <tr>
-           <td><?php echo remove_junk(ucwords($a_departament['departament']))?></td>
-           <td><?php echo remove_junk(ucwords($a_departament['dispositiu']))?></td>
-           <td><?php echo remove_junk(ucwords($a_departament['nom']))?></td>
-           <td><?php echo remove_junk(ucwords($a_departament['cognom']))?></td>
-           <td class="text-center">
-             <div class="btn-group">
-                <a href="edit_departament.php?id=<?php echo (int)$a_departament['id'];?>" class="btn btn-xs btn-warning" data-toggle="tooltip" title="Edit">
-                  <i class="glyphicon glyphicon-pencil"></i>
-               </a>
-              </div>
-           </td>
-          </tr>
-        <?php endforeach;?>
-       </tbody>
-     </table>
-     </div>
+      <div class="panel-body">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="text-center" style="width: 50px;">Departament</th>
+              <th>Dispositiu</th>
+              <th>Nom</th>
+              <th>Cognom</th>
+              <th class="text-center" style="width: 100px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($all_departaments as $a_departament): ?>
+              <tr>
+                <td><?php echo remove_junk(ucwords($a_departament['departament'])) ?></td>
+                <td><?php echo remove_junk(ucwords($a_departament['dispositiu'])) ?></td>
+                <td><?php echo remove_junk(ucwords($a_departament['nom'])) ?></td>
+                <td><?php echo remove_junk(ucwords($a_departament['cognom'])) ?></td>
+                <td class="text-center">
+                  <div class="btn-group">
+                    <a href="edit_departament.php?id=<?php echo (int) $a_departament['id']; ?>"
+                      class="btn btn-xs btn-warning" data-toggle="tooltip" title="Edit">
+                      <i class="glyphicon glyphicon-pencil"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
-  <?php include_once('layouts/footer.php'); ?>
+
+<!-- Paginador -->
+<nav aria-label="Page navigation">
+  <ul class="pagination">
+    <?php if ($page > 1): ?>
+      <li><a href="?page=<?php echo $page - 1; ?>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+    <?php endif; ?>
+
+    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+      <li class="<?php if ($i == $page)
+        echo 'active'; ?>"><a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+    <?php endfor; ?>
+
+    <?php if ($page < $total_pages): ?>
+      <li><a href="?page=<?php echo $page + 1; ?>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+    <?php endif; ?>
+  </ul>
+</nav>
+</div>
+
+<?php include_once('layouts/footer.php'); ?>
