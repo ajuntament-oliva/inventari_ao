@@ -29,20 +29,18 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `departaments` (
   `id` int(11) unsigned NOT NULL,
   `departament` varchar(50) NOT NULL,
-  `username` varchar(50) NOT NULL,
   `nom` varchar(50) NOT NULL,
   `cognom` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `departaments` (`id`, `departament`, `username`, `nom`,  `cognom`,`password`) VALUES
-(1, 'Modernització', 'admin', 'Paquita', 'Salas','d033e22ae348aeb5660fc2140aec35850c4da997'),
-(2, 'Modernització', 'special', 'Lee', 'Minho', 'ba36b97a41e7faf742ab09bf88405ac04f99599a'),
-(3, 'Modernització', 'user', 'Sebastian', 'Stan','12dea96fec20593566ab75692c9949596833adc9');
+INSERT INTO `departaments` (`id`, `departament`, `nom`,  `cognom`) VALUES
+(1, 'Modernització', 'Paquita', 'Salas'),
+(2, 'Modernització', 'Lee', 'Minho',),
+(3, 'Modernització', 'Sebastian', 'Stan');
 
 -- --------------------------------------------------------
 
