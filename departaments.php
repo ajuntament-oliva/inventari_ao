@@ -28,8 +28,8 @@
       <table class="table table-bordered table-striped">
         <thead>
           <tr>
-            <th class="text-center" style="width: 50px;">#</th>
-            <th>Departament </th>
+            <th class="text-center" style="width: 50px;">Departament</th>
+            <th>Dispositiu</th>
             <th>Nom</th>
             <th>Cognom</th>
             <th class="text-center" style="width: 100px;">Actions</th>
