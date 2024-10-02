@@ -22,7 +22,7 @@
           <span class="glyphicon glyphicon-th"></span>
           <span>Departaments</span>
        </strong>
-         <a href="add_user.php" class="btn btn-info pull-right">Afegir Departament</a>
+         <a href="add_departament.php" class="btn btn-info pull-right">Afegir Departament</a>
       </div>
      <div class="panel-body">
       <table class="table table-bordered table-striped">
