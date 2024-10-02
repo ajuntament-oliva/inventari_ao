@@ -19,7 +19,7 @@ if (isset($_POST['update'])) {
   $req_fields = array('departament-titol', 'dispositiu-nom', 'nom-persona', 'cognom-persona');
   validate_fields($req_fields);
   if (empty($errors)) {
-    $id = (int) $e_user['id'];
+    $id = (int) $e_departament['id'];
     $departament = remove_junk($db->escape($_POST['departament-titol']));
     $dispositiu = remove_junk($db->escape($_POST['dispositiu-nom']));
     $nom = remove_junk($db->escape($_POST['nom-persona']));
