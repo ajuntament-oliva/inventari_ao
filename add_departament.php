@@ -60,6 +60,7 @@
               <input type="name" class="form-control" name="cognom-persona">
         </div>
         <div class="form-group clearfix">
+                <a href="departaments.php" class="btn btn-danger">Torna a Departaments</a>
                 <button type="submit" name="add" class="btn btn-info">Crea</button>
         </div>
     </form>
