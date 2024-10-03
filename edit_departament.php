@@ -12,8 +12,8 @@ if (!$e_departament) {
   redirect('departaments.php');
 }
 
-// Agafant camps de la BDA
-$departaments = $db->query("SELECT departament FROM departaments");
+// Agafant camps de la BDA sense repetir-se
+$dispositius = $db->query("SELECT DISTINCT dispositiu FROM departaments");
 ?>
 
 <?php
@@ -59,20 +59,24 @@ if (isset($_POST['update'])) {
         <form method="post" action="edit_departament.php?id=<?php echo (int) $e_departament['id']; ?>" class="clearfix">
           <div class="form-group">
             <label for="name" class="control-label">Departament</label>
-            <!--<input type="name" class="form-control" name="departament-titol"
-              value="<?php echo remove_junk(ucwords($e_departament['departament'])); ?>">-->
-            <select name="departament-titol" class="form-control" required>
-              <option value="">Selecciona un departament</option>
-              <?php while ($departament = $departaments->fetch_assoc()): ?>
-                <option value="<?php echo $departament['departament']; ?>">
-                  <?php echo $departament['departament']; ?></option>
-              <?php endwhile; ?>
+            <select name="departament-titol" class="form-control" required disabled>
+              <option value="<?php echo remove_junk(ucwords($e_departament['departament'])); ?>">
+                <?php echo remove_junk(ucwords($e_departament['departament'])); ?>
+              </option>
             </select>
+            <input type="hidden" name="departament-titol"
+              value="<?php echo remove_junk(ucwords($e_departament['departament'])); ?>">
           </div>
           <div class="form-group">
             <label for="name" class="control-label">Dispostiu</label>
-            <input type="name" class="form-control" name="dispositiu-nom"
-              value="<?php echo remove_junk(ucwords($e_departament['dispositiu'])); ?>">
+            <select name="dispositiu-nom" class="form-control" required>
+              <option value="">Selecciona un dispositiu</option>
+              <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
+                <option value="<?php echo $dispositiu['dispositiu']; ?>">
+                  <?php echo $dispositiu['dispositiu']; ?>
+                </option>
+              <?php endwhile; ?>
+            </select>
           </div>
           <div class="form-group">
             <label for="name" class="control-label">Nom</label>
@@ -85,6 +89,7 @@ if (isset($_POST['update'])) {
               value="<?php echo remove_junk(ucwords($e_departament['cognom'])); ?>">
           </div>
           <div class="form-group clearfix">
+            <a href="departaments.php" class="btn btn-danger">Torna a Departaments</a>
             <button type="submit" name="update" class="btn btn-info">Actualitzar</button>
           </div>
         </form>

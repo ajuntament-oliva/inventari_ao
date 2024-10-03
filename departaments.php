@@ -73,7 +73,7 @@ function search_departaments($search, $limit = null, $offset = null)
           <span>Departaments</span>
         </strong>
         <form method="get" action="" class="pull-right">
-        <a href="add_departament.php" class="btn btn-info pull-right">Afegir Departament</a>
+          <a href="add_departament.php" class="btn btn-info pull-right">Afegir Departament</a>
           <input type="text" name="search" placeholder="Buscar..."
             value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>" />
           <input type="submit" value="Buscar" class="btn btn-success" />
