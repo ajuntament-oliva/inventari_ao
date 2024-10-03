@@ -1,5 +1,5 @@
 <?php
-$page_title = 'Departaments';
+$page_title = 'Selecció de Departaments';
 require_once('includes/load.php');
 
 // Check user permission (uncomment if needed)
