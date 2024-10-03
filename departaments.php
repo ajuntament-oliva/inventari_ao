@@ -9,37 +9,6 @@ require_once('includes/load.php');
 //pull out all user form database
 $all_departaments = find_all_departament();
 ?>
-<?php
-//Buscador
-  $search = isset($_GET['search']) ? $_GET['search'] : '';
-  
-  if (!empty($search)) {
-    $all_departaments = search_departaments($search, $limit, $offset);
-    $total_records = count(search_departaments($search));
-  } else {
-    $all_departaments = find_departaments_with_limit($limit, $offset);
-    $total_records = count(find_all_departament());
-  }
-
-  $total_pages = ceil($total_records / $limit);
-?>
-
-<?php
-function search_departaments($search, $limit = null, $offset = null) {
-  global $db;
-  $sql  = "SELECT * FROM departaments ";
-  $sql .= "WHERE departament LIKE '%{$search}%' ";
-  $sql .= "OR dispositiu LIKE '%{$search}%' ";
-  $sql .= "OR cognom LIKE '%{$search}%' ";
-  
-  if ($limit !== null && $offset !== null) {
-    $sql .= "LIMIT {$limit} OFFSET {$offset}";
-  }
-
-  return find_by_sql($sql);
-}
-?>
-
 
 <?php
 //Paginador
@@ -56,6 +25,39 @@ $total_pages = ceil($total_records / $limit);
 $all_departaments = find_departaments_with_limit($limit, $offset);
 
 ?>
+
+<?php
+//Buscador
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
+if (!empty($search)) {
+  $all_departaments = search_departaments($search, $limit, $offset);
+  $total_records = count(search_departaments($search));
+} else {
+  $all_departaments = find_departaments_with_limit($limit, $offset);
+  $total_records = count(find_all_departament());
+}
+
+$total_pages = ceil($total_records / $limit);
+?>
+
+<?php
+function search_departaments($search, $limit = null, $offset = null)
+{
+  global $db;
+  $sql = "SELECT * FROM departaments ";
+  $sql .= "WHERE departament LIKE '%{$search}%' ";
+  $sql .= "OR dispositiu LIKE '%{$search}%' ";
+  $sql .= "OR cognom LIKE '%{$search}%' ";
+
+  if ($limit !== null && $offset !== null) {
+    $sql .= "LIMIT {$limit} OFFSET {$offset}";
+  }
+
+  return find_by_sql($sql);
+}
+?>
+
 <?php include_once('layouts/header.php'); ?>
 <div class="row">
   <div class="col-md-12">
