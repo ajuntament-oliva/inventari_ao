@@ -28,17 +28,19 @@ INSERT INTO `propietaris` (`id`, `nom`, `cognom`) VALUES
 CREATE TABLE IF NOT EXISTS `dispositius` (
   `id` int(11) unsigned NOT NULL,
   `dispositiu` varchar(50) NOT NULL,
-  `propietari_id` int(11) unsigned NOT NULL
+  `propietari_id` int(11) unsigned NOT NULL,
+  `departament_id` int(11) unsigned NOT NULL, -- Nova columna per referenciar el departament
+  FOREIGN KEY (`departament_id`) REFERENCES `departaments`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `dispositius`
 --
 
-INSERT INTO `dispositius` (`id`, `dispositiu`, `propietari_id`) VALUES
-(1, 'Torre', 1),
-(2, 'Torre', 2),
-(3, 'Portàtil', 3);
+INSERT INTO `dispositius` (`id`, `dispositiu`, `propietari_id`, `departament_id`) VALUES
+(1, 'Torre', 1, 1),
+(2, 'Torre', 2, 2),
+(3, 'Portàtil', 3, 3);
 
 -- --------------------------------------------------------
 
@@ -134,7 +136,8 @@ ALTER TABLE `departaments`
 --
 ALTER TABLE `dispositius`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `propietari_id` (`propietari_id`);
+  ADD KEY `propietari_id` (`propietari_id`),
+  ADD KEY `departament_id` (`departament_id`); -- Index per departament_id
 
 --
 -- Indexes for table `caracteristiques_dispositiu`
@@ -192,10 +195,20 @@ ALTER TABLE `users`
 -- Constraints for table `dispositius`
 --
 ALTER TABLE `dispositius`
-  ADD CONSTRAINT `FK_dispositiu_propietari` FOREIGN KEY (`propietari_id`) REFERENCES `propietaris` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_dispositiu_owner` FOREIGN KEY (`propietari_id`) REFERENCES `propietaris` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `dispositius`
+--
+ALTER TABLE `dispositius`
+  ADD CONSTRAINT `FK_dispositiu_departament` FOREIGN KEY (`departament_id`) REFERENCES `departaments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `caracteristiques_dispositiu`
 --
 ALTER TABLE `caracteristiques_dispositiu`
-  ADD CONSTRAINT `FK_caracteristica_dispositiu` FOREIGN KEY (`dispositiu_id`) REFERENCES `dispositius` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  ADD CONSTRAINT `FK_caracteristica_dispositiu` FOREIGN KEY (`dispositiu_id`) REFERENCES `dispositius` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -31,15 +31,15 @@ function generarDispositiu()
 function generarCaracteristiques()
 {
     $caracteristiques = ["Intel Core i7", "Intel Core i5", "16GB RAM", "8GB RAM", "512GB SSD", "256GB SSD", "4K Monitor", "Full HD", "Teclat mecànic", "Teclat membrana"];
-    $numCaracteristiques = rand(2, 4);
+    $numCaracteristiques = rand(2, 4); // Generar entre 2 i 4 característiques per dispositiu
     return array_rand(array_flip($caracteristiques), $numCaracteristiques);
 }
 
-// Obtenir propietaris aleatoris
-function obtenirPropietari($conn)
+// Obtenir propietari aleatori
+function obtenirPropietariAleatori($conn)
 {
     $result = $conn->query("SELECT id, nom, cognom FROM propietaris ORDER BY RAND() LIMIT 1");
-    return $result->fetch_assoc();
+    return $result->fetch_assoc(); // Retorna un array associatiu amb les dades del propietari
 }
 
 // Registres aleatoris
@@ -55,13 +55,14 @@ for ($i = 1; $i <= 50; $i++) {
         continue;
     }
 
-    // Inserció de dispositiu
-    $dispositiu = mysqli_real_escape_string($conn, generarDispositiu());
-    $propietari = obtenirPropietari($conn);
-    $propietari_id = $propietari['id'];
+    // Obtenir un propietari aleatori
+    $propietari = obtenirPropietariAleatori($conn); // Obtenir un propietari aleatori
+    $propietari_id = $propietari['id']; // Obtenir l'ID del propietari
     $propietari_nom = mysqli_real_escape_string($conn, $propietari['nom']);
     $propietari_cognom = mysqli_real_escape_string($conn, $propietari['cognom']);
     
+    // Inserció de dispositiu
+    $dispositiu = mysqli_real_escape_string($conn, generarDispositiu());
     $sql_dispositiu = "INSERT INTO dispositius (dispositiu, propietari_id) VALUES ('$dispositiu', '$propietari_id')";
 
     if ($conn->query($sql_dispositiu) !== TRUE) {
