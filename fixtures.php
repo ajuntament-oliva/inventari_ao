@@ -1,3 +1,5 @@
+
+
 <?php
 // Configuració de connexió a la BDA
 $servername = "localhost";
@@ -42,20 +44,28 @@ function generarCognom()
 }
 
 // Registres aleatoris
-for ($i = 1; $i <= 5; $i++) {
-    $departament = generarDepartament();
-    $dispositiu = generarDispositiu();
-    $nom = generarNom();
-    $cognom = generarCognom();
+$errors = [];
+
+for ($i = 1; $i <= 50; $i++) {
+    $departament = mysqli_real_escape_string($conn, generarDepartament());
+    $dispositiu = mysqli_real_escape_string($conn, generarDispositiu());
+    $nom = mysqli_real_escape_string($conn, generarNom());
+    $cognom = mysqli_real_escape_string($conn, generarCognom());
 
     $sql = "INSERT INTO departaments (departament, dispositiu, nom, cognom) VALUES ('$departament', '$dispositiu', '$nom', '$cognom')";
 
-    if ($conn->query($sql) === TRUE) {
-        echo "Dades afegides!";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+    if ($conn->query($sql) !== TRUE) {
+        $errors[] = "Error en la fila $i: " . $conn->error;
     }
+}
+
+if (empty($errors)) {
+    echo "Totes les dades s'han afegit correctament!";
+} else {
+    echo "S'han produït errors en les següents insercions:<br>";
+    echo implode("<br>", $errors);
 }
 
 // Tancar conexió
 $conn->close();
+
