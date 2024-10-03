@@ -2,58 +2,17 @@
 $page_title = 'Departaments';
 require_once('includes/load.php');
 
-?>
-<?php
-// Checkin What level user has permission to view this page
-//page_require_level(1);
-//pull out all user form database
-$all_departaments = find_all_departament();
-?>
+// Check user permission (uncomment if needed)
+// page_require_level(1);
 
-<?php
-//Buscador
-$search = isset($_GET['search']) ? $_GET['search'] : '';
-$limit = 10; // Number of records per page
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$offset = ($page - 1) * $limit;
+// Obtain unique departments from the database
+$departaments = $db->query("SELECT DISTINCT id, departament FROM departaments ORDER BY departament");
 
-if (!empty($search)) {
-  $data = search_departaments($search, $limit, $offset);
-  $all_departaments = $data['records'];
-  $total_records = $data['total'];
-} else {
-  $all_departaments = find_all_departament();
-  $total_records = count($all_departaments);
-}
-
-$total_pages = ($limit > 0) ? ceil($total_records / $limit) : 1;
-
-?>
-
-<?php
-function search_departaments($search, $limit = null, $offset = null)
-{
-  global $db;
-  $sql = "SELECT * FROM departaments ";
-  $sql .= "WHERE departament LIKE '%{$search}%' ";
-  $sql .= "OR dispositiu LIKE '%{$search}%' ";
-  $sql .= "OR cognom LIKE '%{$search}%' ";
-
-  if ($limit !== null) {
-    $sql .= " LIMIT {$limit} OFFSET {$offset}";
-  }
-
-  return find_by_sql($sql);
-
-  $count_sql = "SELECT COUNT(*) as total FROM departaments ";
-  $count_sql .= "WHERE departament LIKE '%{$search}%' ";
-  $count_sql .= "OR dispositiu LIKE '%{$search}%' ";
-  $count_sql .= "OR cognom LIKE '%{$search}%' ";
-
-  $count_result = find_by_sql($count_sql);
-  $total_records = $count_result[0]['total'];
-
-  return ['records' => $results, 'total' => $total_records];
+// Redirect if department is selected
+if (isset($_POST['selec_departament'])) {
+  $departament_seleccionat = $_POST['departament_id'];
+  header("Location: view_departament.php?id=" . (int) $departament_seleccionat);
+  exit();
 }
 ?>
 
@@ -64,55 +23,28 @@ function search_departaments($search, $limit = null, $offset = null)
   </div>
 </div>
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
     <div class="panel panel-default">
-      <div class="panel-heading clearfix">
-        <strong>
-          <span class="glyphicon glyphicon-th"></span>
-          <span>Departaments</span>
-        </strong>
-        <form method="get" action="" class="pull-right">
-          <a href="add_departament.php" class="btn btn-info pull-right">Afegir Departament</a>
-          <input type="text" name="search" placeholder="Buscar..."
-            value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>" />
-          <input type="submit" value="Buscar" class="btn btn-success" />
-        </form>
-      </div>
-
-
       <div class="panel-body">
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th class="text-center" style="width: 50px;">Departament</th>
-              <th>Dispositiu</th>
-              <th>Nom</th>
-              <th>Cognom</th>
-              <th class="text-center" style="width: 100px;">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($all_departaments as $a_departament): ?>
-              <tr>
-                <td><?php echo remove_junk(ucwords($a_departament['departament'])) ?></td>
-                <td><?php echo remove_junk(ucwords($a_departament['dispositiu'])) ?></td>
-                <td><?php echo remove_junk(ucwords($a_departament['nom'])) ?></td>
-                <td><?php echo remove_junk(ucwords($a_departament['cognom'])) ?></td>
-                <td class="text-center">
-                  <div class="btn-group">
-                    <a href="edit_departament.php?id=<?php echo (int) $a_departament['id']; ?>"
-                      class="btn btn-xs btn-warning" data-toggle="tooltip" title="Edit">
-                      <i class="glyphicon glyphicon-pencil"></i>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
+        <form method="post" action="">
+          <div class="form-group">
+            <label for="departament_id">Departaments:</label>
+            <select name="departament_id" id="departament_id" class="form-control" required>
+              <option value="">Selecciona'n un</option>
+              <?php while ($departament = $departaments->fetch_assoc()): ?>
+                <option value="<?php echo (int) $departament['id']; ?>">
+                  <?php echo remove_junk(ucwords($departament['departament'])); ?>
+                </option>
+              <?php endwhile; ?>
+            </select>
+          </div>
+          <button type="submit" name="selec_departament" class="btn btn-info">Ves a Dispositius</button>
+        </form>
       </div>
     </div>
   </div>
+  <div class="col-md-3"></div>
 </div>
 
 <?php include_once('layouts/footer.php'); ?>

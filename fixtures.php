@@ -1,5 +1,3 @@
-
-
 <?php
 // Configuració de connexió a la BDA
 $servername = "localhost";
@@ -25,7 +23,7 @@ function generarDepartament()
 // Generar Dispositius aleatoris
 function generarDispositiu()
 {
-    $dispositius = ["Torre", "Portàtil", "Monitor", "Teclat"];
+    $dispositius = ["Torre", "Portàtil", "Telèfon Mòbil", "Monitor", "Teclat"];
     return $dispositius[array_rand($dispositius)];
 }
 
