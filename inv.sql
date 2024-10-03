@@ -1,43 +1,23 @@
--- phpMyAdmin SQL Dump
--- version 4.4.2
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Oct 03, 2024 at 12:00 PM
--- Server version: 5.6.24
--- PHP Version: 5.6.9
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
---
--- Database: `inv`
---
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `departaments`
+-- Table structure for table `propietaris`
 --
 
-CREATE TABLE IF NOT EXISTS `departaments` (
+CREATE TABLE IF NOT EXISTS `propietaris` (
   `id` int(11) unsigned NOT NULL,
-  `departament` varchar(50) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  `nom` varchar(30) NOT NULL,
+  `cognom` varchar(30) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `departaments`
+-- Dumping data for table `propietaris`
 --
 
-INSERT INTO `departaments` (`id`, `departament`) VALUES
-('1', 'Modernització'),
-('2', 'Finances'),
-('3', 'Recursos Humans');
+INSERT INTO `propietaris` (`id`, `nom`, `cognom`) VALUES
+(1, 'Minho', 'Lee'),
+(2, 'Richard', 'Grayson'),
+(3, 'Sebastian', 'Stan');
 
 -- --------------------------------------------------------
 
@@ -56,9 +36,29 @@ CREATE TABLE IF NOT EXISTS `dispositius` (
 --
 
 INSERT INTO `dispositius` (`id`, `dispositiu`, `propietari_id`) VALUES
-('1', 'Torre', 1),
-('2', 'Torre', 2),
-('3', 'Portàtil', 3);
+(1, 'Torre', 1),
+(2, 'Torre', 2),
+(3, 'Portàtil', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `departaments`
+--
+
+CREATE TABLE IF NOT EXISTS `departaments` (
+  `id` int(11) unsigned NOT NULL,
+  `departament` varchar(50) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `departaments`
+--
+
+INSERT INTO `departaments` (`id`, `departament`) VALUES
+(1, 'Modernització'),
+(2, 'ADL'),
+(3, 'RRHH');
 
 -- --------------------------------------------------------
 
@@ -77,13 +77,13 @@ CREATE TABLE IF NOT EXISTS `caracteristiques_dispositiu` (
 --
 
 INSERT INTO `caracteristiques_dispositiu` (`id`, `dispositiu_id`, `caracteristica`) VALUES
-('1', 1, 'Intel Core i7'),
-('2', 1, '16GB RAM'),
-('3', 1, '512GB SSD'),
-('4', 2, 'Intel Core i5'),
-('5', 2, '8GB RAM'),
-('6', 3, 'Intel Core i5'),
-('7', 3, '256GB SSD');
+(1, 1, 'Intel Core i7'),
+(2, 1, '16GB RAM'),
+(3, 1, '512GB SSD'),
+(4, 2, 'Intel Core i5'),
+(5, 2, '8GB RAM'),
+(6, 3, 'Intel Core i5'),
+(7, 3, '256GB SSD');
 
 -- --------------------------------------------------------
 
@@ -114,28 +114,14 @@ INSERT INTO `users` (`id`, `name`, `username`, `password`, `user_level`, `image`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_groups`
---
-
-CREATE TABLE IF NOT EXISTS `user_groups` (
-  `id` int(11) NOT NULL,
-  `group_name` varchar(150) NOT NULL,
-  `group_level` int(11) NOT NULL,
-  `group_status` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `user_groups`
---
-
-INSERT INTO `user_groups` (`id`, `group_name`, `group_level`, `group_status`) VALUES
-(1, 'Admin', 1, 1),
-(2, 'special', 2, 1),
-(3, 'User', 3, 1);
-
---
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `propietaris`
+--
+ALTER TABLE `propietaris`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `departaments`
@@ -165,15 +151,14 @@ ALTER TABLE `users`
   ADD KEY `user_level` (`user_level`);
 
 --
--- Indexes for table `user_groups`
---
-ALTER TABLE `user_groups`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `group_level` (`group_level`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `propietaris`
+--
+ALTER TABLE `propietaris`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `departaments`
@@ -197,13 +182,7 @@ ALTER TABLE `caracteristiques_dispositiu`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `user_groups`
---
-ALTER TABLE `user_groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -213,14 +192,10 @@ ALTER TABLE `user_groups`
 -- Constraints for table `dispositius`
 --
 ALTER TABLE `dispositius`
-  ADD CONSTRAINT `FK_dispositiu_user` FOREIGN KEY (`propietari_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_dispositiu_propietari` FOREIGN KEY (`propietari_id`) REFERENCES `propietaris` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `caracteristiques_dispositiu`
 --
 ALTER TABLE `caracteristiques_dispositiu`
-  ADD CONSTRAINT `FK_caracteristica_dispositiu` FOREIGN KEY (`dispositiu_id`) REFERENCES `dispositius` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+  ADD CONSTRAINT `FK_caracteristica_dispositiu` FOREIGN KEY (`dispositiu_id`) REFERENCES `dispositius` (`id`) ON DELETE CASCADE ON UPDATE CASCADE

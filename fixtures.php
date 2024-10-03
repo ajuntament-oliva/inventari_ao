@@ -27,33 +27,55 @@ function generarDispositiu()
     return $dispositius[array_rand($dispositius)];
 }
 
-// Generar noms aleatoris
-function generarNom()
+// Generar Característiques aleatòries
+function generarCaracteristiques()
 {
-    $noms = ["Josep", "Maria", "Pere", "Laura", "Anna", "Jordi", "Montserrat", "Marc", "Clara", "Sergi"];
-    return $noms[array_rand($noms)];
+    $caracteristiques = ["Intel Core i7", "Intel Core i5", "16GB RAM", "8GB RAM", "512GB SSD", "256GB SSD", "4K Monitor", "Full HD", "Teclat mecànic", "Teclat membrana"];
+    $numCaracteristiques = rand(2, 4); // Generar entre 2 i 4 característiques per dispositiu
+    return array_rand(array_flip($caracteristiques), $numCaracteristiques);
 }
 
-// Generar cognoms aleatoris
-function generarCognom()
+// Generar propietaris aleatoris (simulant IDs d'usuaris existents)
+function generarPropietariID()
 {
-    $cognoms = ["García", "Martínez", "López", "Sánchez", "Ferrer", "Soler", "Riera", "Vidal", "Roca", "Domènech"];
-    return $cognoms[array_rand($cognoms)];
+    return rand(1, 3); // Suposant que ja tenim 3 usuaris creats a la taula `users`
 }
 
 // Registres aleatoris
 $errors = [];
 
 for ($i = 1; $i <= 50; $i++) {
+    // Inserció de departament
     $departament = mysqli_real_escape_string($conn, generarDepartament());
+    $sql_departament = "INSERT INTO departaments (departament) VALUES ('$departament')";
+
+    if ($conn->query($sql_departament) !== TRUE) {
+        $errors[] = "Error en la fila $i (departament): " . $conn->error;
+        continue;
+    }
+
+    // Inserció de dispositiu
     $dispositiu = mysqli_real_escape_string($conn, generarDispositiu());
-    $nom = mysqli_real_escape_string($conn, generarNom());
-    $cognom = mysqli_real_escape_string($conn, generarCognom());
+    $propietari_id = generarPropietariID();
+    $sql_dispositiu = "INSERT INTO dispositius (dispositiu, propietari_id) VALUES ('$dispositiu', '$propietari_id')";
 
-    $sql = "INSERT INTO departaments (departament, dispositiu, nom, cognom) VALUES ('$departament', '$dispositiu', '$nom', '$cognom')";
+    if ($conn->query($sql_dispositiu) !== TRUE) {
+        $errors[] = "Error en la fila $i (dispositiu): " . $conn->error;
+        continue;
+    }
 
-    if ($conn->query($sql) !== TRUE) {
-        $errors[] = "Error en la fila $i: " . $conn->error;
+    // Obtenir l'ID del dispositiu acabat d'inserir
+    $dispositiu_id = $conn->insert_id;
+
+    // Inserció de característiques per al dispositiu
+    $caracteristiques = generarCaracteristiques();
+    foreach ($caracteristiques as $caracteristica) {
+        $caracteristica = mysqli_real_escape_string($conn, $caracteristica);
+        $sql_caracteristica = "INSERT INTO caracteristiques_dispositiu (dispositiu_id, caracteristica) VALUES ('$dispositiu_id', '$caracteristica')";
+        
+        if ($conn->query($sql_caracteristica) !== TRUE) {
+            $errors[] = "Error en la fila $i (característica): " . $conn->error;
+        }
     }
 }
 
@@ -66,4 +88,3 @@ if (empty($errors)) {
 
 // Tancar conexió
 $conn->close();
-
