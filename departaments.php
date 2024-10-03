@@ -5,10 +5,10 @@ require_once('includes/load.php');
 // Check user permission (uncomment if needed)
 // page_require_level(1);
 
-// Obtain unique departments from the database
-$departaments = $db->query("SELECT DISTINCT id, departament FROM departaments ORDER BY departament");
+// Obtindre departaments de la BDA 
+$departaments = $db->query("SELECT MIN(id) as id, departament FROM departaments GROUP BY departament ORDER BY departament");
 
-// Redirect if department is selected
+// Redirecció
 if (isset($_POST['selec_departament'])) {
   $departament_seleccionat = $_POST['departament_id'];
   header("Location: view_departament.php?id=" . (int) $departament_seleccionat);
