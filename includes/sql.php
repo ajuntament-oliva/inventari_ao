@@ -148,7 +148,7 @@ function tableExists($table){
       return $result;
   }
   /*--------------------------------------------------------------*/
-  /* Find all departament by
+  /* Trobar tots els departaments
   /*--------------------------------------------------------------*/
   function find_all_departament(){
     global $db;

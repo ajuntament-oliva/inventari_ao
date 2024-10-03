@@ -67,21 +67,21 @@ function search_departaments($search, $limit = null, $offset = null)
 <div class="row">
   <div class="col-md-12">
     <div class="panel panel-default">
-      <!-- Buscador -->
       <div class="panel-heading clearfix">
         <strong>
           <span class="glyphicon glyphicon-th"></span>
           <span>Departaments</span>
         </strong>
-        <a href="add_departament.php" class="btn btn-info pull-right">Afegir Departament</a>
-      </div>
-
-      <div class="panel-body">
         <form method="get" action="" class="pull-right">
+        <a href="add_departament.php" class="btn btn-info pull-right">Afegir Departament</a>
           <input type="text" name="search" placeholder="Buscar..."
             value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>" />
-          <input type="submit" value="Buscar" class="btn btn-info" />
+          <input type="submit" value="Buscar" class="btn btn-success" />
         </form>
+      </div>
+
+
+      <div class="panel-body">
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
