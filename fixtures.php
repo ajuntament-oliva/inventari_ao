@@ -5,18 +5,18 @@ $username = "root";
 $password = "";
 $dbname = "inv";
 
-// Crear conexió
+// Crear connexió
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Verificar conexió
+// Verificar connexió
 if ($conn->connect_error) {
-    die("Conexió fallida: " . $conn->connect_error);
+    die("Connexió fallida: " . $conn->connect_error);
 }
 
 // Generar Departaments aleatoris
 function generarDepartament()
 {
-    $departaments = ["Alcaldía", "Activitats", "ADL", "Agència tributària", "Benestar social i Igualtat", "Biblioteca Tamarit", "Biblioteca l'Envic", "Comerç", "Contratació", "Cultura", "EDAR", "Educació", "Esports", "Estadística i padró", "Intervenció", "Joventut", "Magatzem Munucipal", "Modernització", "Museus", "OLAMA", "OMIC", "Participació ciutadana", "Prevenció de Riscos Laborals", "Promoció Lingüística", "RRHH", "Secretaría", "Serveis Públics", "Telefonia", "Tresoreria", "Turisme", "Urbanisme"];
+    $departaments = ["Alcaldía", "Activitats", "ADL", "Agència tributària", "Benestar social i Igualtat", "Biblioteca Tamarit", "Biblioteca l'Envic", "Comerç", "Contratació", "Cultura", "EDAR", "Educació", "Esports", "Estadística i padró", "Intervenció", "Joventut", "Magatzem Municipal", "Modernització", "Museus", "OLAMA", "OMIC", "Participació ciutadana", "Prevenció de Riscos Laborals", "Promoció Lingüística", "RRHH", "Secretaría", "Serveis Públics", "Telefonia", "Tresoreria", "Turisme", "Urbanisme"];
     return $departaments[array_rand($departaments)];
 }
 
@@ -31,14 +31,15 @@ function generarDispositiu()
 function generarCaracteristiques()
 {
     $caracteristiques = ["Intel Core i7", "Intel Core i5", "16GB RAM", "8GB RAM", "512GB SSD", "256GB SSD", "4K Monitor", "Full HD", "Teclat mecànic", "Teclat membrana"];
-    $numCaracteristiques = rand(2, 4); // Generar entre 2 i 4 característiques per dispositiu
+    $numCaracteristiques = rand(2, 4);
     return array_rand(array_flip($caracteristiques), $numCaracteristiques);
 }
 
-// Generar propietaris aleatoris (simulant IDs d'usuaris existents)
-function generarPropietariID()
+// Obtenir propietaris aleatoris
+function obtenirPropietari($conn)
 {
-    return rand(1, 3); // Suposant que ja tenim 3 usuaris creats a la taula `users`
+    $result = $conn->query("SELECT id, nom, cognom FROM propietaris ORDER BY RAND() LIMIT 1");
+    return $result->fetch_assoc();
 }
 
 // Registres aleatoris
@@ -56,7 +57,11 @@ for ($i = 1; $i <= 50; $i++) {
 
     // Inserció de dispositiu
     $dispositiu = mysqli_real_escape_string($conn, generarDispositiu());
-    $propietari_id = generarPropietariID();
+    $propietari = obtenirPropietari($conn);
+    $propietari_id = $propietari['id'];
+    $propietari_nom = mysqli_real_escape_string($conn, $propietari['nom']);
+    $propietari_cognom = mysqli_real_escape_string($conn, $propietari['cognom']);
+    
     $sql_dispositiu = "INSERT INTO dispositius (dispositiu, propietari_id) VALUES ('$dispositiu', '$propietari_id')";
 
     if ($conn->query($sql_dispositiu) !== TRUE) {
@@ -86,5 +91,5 @@ if (empty($errors)) {
     echo implode("<br>", $errors);
 }
 
-// Tancar conexió
+// Tancar connexió
 $conn->close();
