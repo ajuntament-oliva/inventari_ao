@@ -42,6 +42,13 @@ function obtenirPropietariAleatori($conn)
     return $result->fetch_assoc(); // Retorna un array associatiu amb les dades del propietari
 }
 
+// Obtenir departament aleatori
+function obtenirDepartamentAleatori($conn)
+{
+    $result = $conn->query("SELECT id FROM departaments ORDER BY RAND() LIMIT 1");
+    return $result->fetch_assoc()['id']; // Retorna l'ID del departament
+}
+
 // Registres aleatoris
 $errors = [];
 
@@ -58,12 +65,11 @@ for ($i = 1; $i <= 50; $i++) {
     // Obtenir un propietari aleatori
     $propietari = obtenirPropietariAleatori($conn); // Obtenir un propietari aleatori
     $propietari_id = $propietari['id']; // Obtenir l'ID del propietari
-    $propietari_nom = mysqli_real_escape_string($conn, $propietari['nom']);
-    $propietari_cognom = mysqli_real_escape_string($conn, $propietari['cognom']);
     
     // Inserció de dispositiu
     $dispositiu = mysqli_real_escape_string($conn, generarDispositiu());
-    $sql_dispositiu = "INSERT INTO dispositius (dispositiu, propietari_id) VALUES ('$dispositiu', '$propietari_id')";
+    $departament_id = obtenirDepartamentAleatori($conn); // Obtenir un departament aleatori
+    $sql_dispositiu = "INSERT INTO dispositius (dispositiu, propietari_id, departament_id) VALUES ('$dispositiu', '$propietari_id', '$departament_id')";
 
     if ($conn->query($sql_dispositiu) !== TRUE) {
         $errors[] = "Error en la fila $i (dispositiu): " . $conn->error;
