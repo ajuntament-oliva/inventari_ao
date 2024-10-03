@@ -25,7 +25,7 @@ function generarDepartament()
 // Generar Dispositius aleatoris
 function generarDispositiu()
 {
-    $dispositius = ["Torre", "Portàtil", "Tablet", "Telèfon Mòbil", "Monitor", "Teclat"];
+    $dispositius = ["Torre", "Portàtil", "Monitor", "Teclat"];
     return $dispositius[array_rand($dispositius)];
 }
 
