@@ -1,9 +1,10 @@
 <?php
-$page_title = 'Add Group';
+$page_title = 'Creant un Departament';
 require_once('includes/load.php');
 // Checkin What level user has permission to view this page
 //page_require_level(1);
 ?>
+
 <?php
 if (isset($_POST['add'])) {
 
@@ -32,10 +33,11 @@ if (isset($_POST['add'])) {
     }
   } else {
     $session->msg("d", $errors);
-    redirect('add_departament', false);
+    redirect('add_departament.php', false);
   }
 }
 ?>
+
 <?php include_once('layouts/header.php'); ?>
 <div class="login-page">
   <div class="text-center">

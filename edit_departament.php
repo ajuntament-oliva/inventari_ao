@@ -1,5 +1,5 @@
 <?php
-$page_title = 'Edit User';
+$page_title = 'Modificant un Departament';
 require_once('includes/load.php');
 // Checkin What level user has permission to view this page
 //page_require_level(1);
@@ -11,6 +11,9 @@ if (!$e_departament) {
   $session->msg("d", "No es troba l'id del departament.");
   redirect('departaments.php');
 }
+
+// Agafant camps de la BDA
+$departaments = $db->query("SELECT departament FROM departaments");
 ?>
 
 <?php
@@ -56,8 +59,15 @@ if (isset($_POST['update'])) {
         <form method="post" action="edit_departament.php?id=<?php echo (int) $e_departament['id']; ?>" class="clearfix">
           <div class="form-group">
             <label for="name" class="control-label">Departament</label>
-            <input type="name" class="form-control" name="departament-titol"
-              value="<?php echo remove_junk(ucwords($e_departament['departament'])); ?>">
+            <!--<input type="name" class="form-control" name="departament-titol"
+              value="<?php echo remove_junk(ucwords($e_departament['departament'])); ?>">-->
+            <select name="departament-titol" class="form-control" required>
+              <option value="">Selecciona un departament</option>
+              <?php while ($departament = $departaments->fetch_assoc()): ?>
+                <option value="<?php echo $departament['departament']; ?>">
+                  <?php echo $departament['departament']; ?></option>
+              <?php endwhile; ?>
+            </select>
           </div>
           <div class="form-group">
             <label for="name" class="control-label">Dispostiu</label>
