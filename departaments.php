@@ -12,7 +12,7 @@ $all_departaments = find_all_departament();
 
 <?php
 //Paginador
-$limit = 20;
+$limit = 10;
 
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
