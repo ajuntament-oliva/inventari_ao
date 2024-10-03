@@ -11,34 +11,23 @@ $all_departaments = find_all_departament();
 ?>
 
 <?php
-//Paginador
-$limit = 10;
-
-$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-
-$offset = ($page - 1) * $limit;
-
-$total_records = count(find_all_departament());
-
-$total_pages = ceil($total_records / $limit);
-
-$all_departaments = find_departaments_with_limit($limit, $offset);
-
-?>
-
-<?php
 //Buscador
 $search = isset($_GET['search']) ? $_GET['search'] : '';
+$limit = 10; // Number of records per page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
 
 if (!empty($search)) {
-  $all_departaments = search_departaments($search, $limit, $offset);
-  $total_records = count(search_departaments($search));
+  $data = search_departaments($search, $limit, $offset);
+  $all_departaments = $data['records'];
+  $total_records = $data['total'];
 } else {
-  $all_departaments = find_departaments_with_limit($limit, $offset);
-  $total_records = count(find_all_departament());
+  $all_departaments = find_all_departament();
+  $total_records = count($all_departaments);
 }
 
-$total_pages = ceil($total_records / $limit);
+$total_pages = ($limit > 0) ? ceil($total_records / $limit) : 1;
+
 ?>
 
 <?php
@@ -50,11 +39,21 @@ function search_departaments($search, $limit = null, $offset = null)
   $sql .= "OR dispositiu LIKE '%{$search}%' ";
   $sql .= "OR cognom LIKE '%{$search}%' ";
 
-  if ($limit !== null && $offset !== null) {
-    $sql .= "LIMIT {$limit} OFFSET {$offset}";
+  if ($limit !== null) {
+    $sql .= " LIMIT {$limit} OFFSET {$offset}";
   }
 
   return find_by_sql($sql);
+
+  $count_sql = "SELECT COUNT(*) as total FROM departaments ";
+  $count_sql .= "WHERE departament LIKE '%{$search}%' ";
+  $count_sql .= "OR dispositiu LIKE '%{$search}%' ";
+  $count_sql .= "OR cognom LIKE '%{$search}%' ";
+
+  $count_result = find_by_sql($count_sql);
+  $total_records = $count_result[0]['total'];
+
+  return ['records' => $results, 'total' => $total_records];
 }
 ?>
 
@@ -114,25 +113,6 @@ function search_departaments($search, $limit = null, $offset = null)
       </div>
     </div>
   </div>
-</div>
-
-<!-- Paginador -->
-<nav aria-label="Page navigation">
-  <ul class="pagination">
-    <?php if ($page > 1): ?>
-      <li><a href="?page=<?php echo $page - 1; ?>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-    <?php endif; ?>
-
-    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-      <li class="<?php if ($i == $page)
-        echo 'active'; ?>"><a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-    <?php endfor; ?>
-
-    <?php if ($page < $total_pages): ?>
-      <li><a href="?page=<?php echo $page + 1; ?>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-    <?php endif; ?>
-  </ul>
-</nav>
 </div>
 
 <?php include_once('layouts/footer.php'); ?>
