@@ -16,10 +16,10 @@
      </ul>-->
   </li>
   <li>
-    <a href="dispositius.php" class="submenu-toggle">
+    <!--<a href="dispositius.php" class="submenu-toggle">
       <i class="glyphicon glyphicon-signal"></i>
        <span>Dispositius</span>
-      </a>
+      </a>-->
       <!--<ul class="nav submenu">
         <li><a href="sales_report.php">Sales by dates </a></li>
         <li><a href="monthly_sales.php">Monthly sales</a></li>
