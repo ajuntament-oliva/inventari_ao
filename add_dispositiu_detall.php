@@ -68,6 +68,7 @@ if (isset($_POST['add_owner'])) {
                         <label for="cognom">Cognom del Propietari:</label>
                         <input type="text" name="cognom" class="form-control" required>
                     </div>
+                    <a href="departaments.php" class="btn btn-danger">Torna a Departaments</a>
                     <button type="submit" name="add_owner" class="btn btn-primary">Afegir Propietari</button>
                 </form>
             </div>

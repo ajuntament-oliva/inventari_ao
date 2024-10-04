@@ -35,20 +35,17 @@ INSERT INTO `departaments` (`id`, `departament`) VALUES
 CREATE TABLE IF NOT EXISTS `dispositius` (
   `id` int(11) unsigned NOT NULL,
   `dispositiu` varchar(50) NOT NULL,
-  `propietari_id` int(11) unsigned NOT NULL,
   `departament_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `propietari_id` (`propietari_id`),
   KEY `departament_id` (`departament_id`),
-  CONSTRAINT `FK_dispositiu_owner` FOREIGN KEY (`propietari_id`) REFERENCES `propietaris` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_dispositiu_departament` FOREIGN KEY (`departament_id`) REFERENCES `departaments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table `dispositius`
-INSERT INTO `dispositius` (`id`, `dispositiu`, `propietari_id`, `departament_id`) VALUES
-(1, 'Torre', 1, 1),
-(2, 'Torre', 2, 2),
-(3, 'Portàtil', 3, 3);
+INSERT INTO `dispositius` (`id`, `dispositiu`, `departament_id`) VALUES
+(1, 'Torre', 1),
+(2, 'Torre', 2),
+(3, 'Portàtil', 3);
 
 -- --------------------------------------------------------
 -- Table structure for table `caracteristiques_dispositiu`
@@ -71,6 +68,28 @@ INSERT INTO `caracteristiques_dispositiu` (`id`, `dispositiu_id`, `caracteristic
 (5, 2, '8GB RAM'),
 (6, 3, 'Intel Core i5'),
 (7, 3, '256GB SSD');
+
+-- --------------------------------------------------------
+-- Table structure for table `dispositiu_propietari`
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `dispositiu_propietari` (
+  `dispositiu_id` int(11) unsigned NOT NULL,
+  `propietari_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`dispositiu_id`, `propietari_id`),
+  KEY `FK_dispositiu_propietari_dispositiu` (`dispositiu_id`),
+  KEY `FK_dispositiu_propietari_propietari` (`propietari_id`),
+  CONSTRAINT `FK_dispositiu_propietari_dispositiu` FOREIGN KEY (`dispositiu_id`) REFERENCES `dispositius` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_dispositiu_propietari_propietari` FOREIGN KEY (`propietari_id`) REFERENCES `propietaris` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+-- Dumping data for table `dispositiu_propietari`
+-- --------------------------------------------------------
+INSERT INTO `dispositiu_propietari` (`dispositiu_id`, `propietari_id`) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(1, 2);  -- Example of a device having more than one owner
 
 -- --------------------------------------------------------
 -- Table structure for table `users`
