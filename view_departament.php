@@ -25,7 +25,7 @@ if (isset($_GET['id'])) {
         <form method="GET" action="dispositiu_detall.php">
           <div class="form-group">
             <label for="dispositiu_select"><?php echo remove_junk(ucwords($departament['departament'])); ?> - Dispositius</label>
-            <select class="form-control" id="dispositiu_select" name="id" required onchange="this.form.submit()">
+            <select class="form-control" id="dispositiu_select" name="id" required>
               <option value="">Selecciona'n un</option>
               <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
                 <option value="<?php echo (int) $dispositiu['id']; ?>">
