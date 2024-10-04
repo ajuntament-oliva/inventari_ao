@@ -3,7 +3,7 @@ $page_title = 'Afegir Propietari al Dispositiu';
 require_once('includes/load.php');
 
 // Obtindre dispositius de la BDA
-$dispositius = $db->query("SELECT id, dispositiu FROM dispositius ORDER BY dispositiu");
+$dispositius = $db->query("SELECT DISTINCT id, dispositiu FROM dispositius ORDER BY dispositiu");
 
 if (isset($_POST['add_owner'])) {
     $propietari_nom = remove_junk($db->escape($_POST['nom']));

@@ -2,6 +2,8 @@
   $page_title = "Pàgina d'inici";
   require_once('includes/load.php');
   if (!$session->isUserLoggedIn(true)) { redirect('index.php', false);}
+
+  $msg = [];
 ?>
 <?php include_once('layouts/header.php'); ?>
 <div class="row">
