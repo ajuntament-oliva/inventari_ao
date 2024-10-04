@@ -2,19 +2,17 @@
 $page_title = 'Dispositius del Departament';
 require_once('includes/load.php');
 
-// Verificar que el ID del departamento se ha pasado
 if (isset($_GET['id'])) {
-    $departament_id = (int) $_GET['id'];
+  $departament_id = (int) $_GET['id'];
 
-    // Consultar la base de datos para obtener los dispositivos del departamento
-    $dispositius = $db->query("SELECT id, dispositiu FROM dispositius WHERE departament_id = $departament_id ORDER BY nom_dispositiu");
+  // Consultar BDA conseguir dispositius
+  $dispositius = $db->query("SELECT id, dispositiu FROM dispositius WHERE departament_id = $departament_id ORDER BY dispositiu");
 
-    // Obtener el nombre del departamento (opcional)
-    $departament = $db->query("SELECT departament FROM departaments WHERE id = $departament_id LIMIT 1")->fetch_assoc();
+  // Obtindre nom departament
+  $departament = $db->query("SELECT departament FROM departaments WHERE id = $departament_id LIMIT 1")->fetch_assoc();
 } else {
-    // Manejar el caso donde no se pasa un ID
-    header("Location: departaments.php");
-    exit();
+  header("Location: departaments.php");
+  exit();
 }
 ?>
 
@@ -22,15 +20,19 @@ if (isset($_GET['id'])) {
 <div class="row">
   <div class="col-md-12">
     <h2><?php echo remove_junk(ucwords($departament['departament'])); ?> - Dispositius</h2>
-    <ul class="list-group">
-      <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
-        <li class="list-group-item">
-          <a href="dispositiu_detall.php?id=<?php echo (int) $dispositiu['id']; ?>">
-            <?php echo remove_junk(ucwords($dispositiu['nom_dispositiu'])); ?>
-          </a>
-        </li>
-      <?php endwhile; ?>
-    </ul>
+    <form method="GET" action="dispositiu_detall.php">
+      <div class="form-group">
+        <label for="dispositiu_select">Selecciona un dispositiu:</label>
+        <select class="form-control" id="dispositiu_select" name="id" onchange="this.form.submit()">
+          <option value="">Selecciona un dispositiu</option>
+          <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
+            <option value="<?php echo (int) $dispositiu['id']; ?>">
+              <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?>
+            </option>
+          <?php endwhile; ?>
+        </select>
+      </div>
+    </form>
   </div>
 </div>
 
