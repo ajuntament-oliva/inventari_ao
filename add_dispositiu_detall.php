@@ -8,21 +8,22 @@ $dispositius = $db->query("SELECT id, dispositiu FROM dispositius ORDER BY dispo
 if (isset($_POST['add_owner'])) {
     $propietari_nom = remove_junk($db->escape($_POST['nom']));
     $propietari_cognom = remove_junk($db->escape($_POST['cognom']));
-    $dispositiu_id = (int) $_POST['dispositiu_id'];
+    $dispositiu_id = isset($_POST['dispositiu_id']) ? (int) $_POST['dispositiu_id'] : 0;
 
     // Afegir propietari a la BDA
     if ($propietari_nom && $propietari_cognom && $dispositiu_id) {
         // Inserir nou propietari
         $sql_insert_owner = "INSERT INTO propietaris (nom, cognom) VALUES ('$propietari_nom', '$propietari_cognom')";
-        
+
         if ($db->query($sql_insert_owner)) {
-            $propietari_id = $db->insert_id; // Obtenir l'ID del nou propietari afegit
-            
+            $propietari_id = $db->insert_id();
+
             // Actualitzar el dispositiu amb el nou propietari
             $sql_update_device = "UPDATE dispositius SET propietari_id = $propietari_id WHERE id = $dispositiu_id";
+            error_log("SQL Update Query: " . $sql_update_device);
             if ($db->query($sql_update_device)) {
                 $session->msg('s', "Propietari afegit al dispositiu amb èxit.");
-                redirect('add_owner.php', false);
+                redirect('add_dispositiu_detall.php', false);
             } else {
                 $session->msg('d', 'Ho sentim, no es va poder actualitzar el dispositiu.');
             }
@@ -42,7 +43,11 @@ if (isset($_POST['add_owner'])) {
     <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <h4>Afegir Dispositiu</h4>
+                <h4>Afegir Propietari al Dispositiu</h4>
+                <?php if ($session->has_msg()): ?>
+                    <?php echo $session->display_msg(); ?>
+                <?php endif; ?>
+
                 <form method="post" action="">
                     <div class="form-group">
                         <label for="dispositiu_id">Dispositiu:</label>

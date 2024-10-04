@@ -8,6 +8,8 @@ require_once('includes/load.php');
 // Obtindre departaments de la BDA 
 $departaments = $db->query("SELECT MIN(id) as id, departament FROM departaments GROUP BY departament ORDER BY departament");
 
+$msg = [];
+
 // Redirecció
 if (isset($_POST['selec_departament'])) {
   $departament_seleccionat = $_POST['departament_id'];
