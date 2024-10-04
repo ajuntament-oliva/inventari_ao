@@ -5,13 +5,14 @@ require_once('includes/load.php');
 if (isset($_GET['id'])) {
     $propietari_id = (int) $_GET['id'];
 
-    // Consultar BDA per obtenir els dispositius del propietari
+    // Connexíó BDA per obtindre els dispositius del propietari
     $dispositius = $db->query("SELECT d.id, d.dispositiu 
                                 FROM dispositius d 
-                                WHERE d.propietari_id = $propietari_id 
+                                JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
+                                WHERE dp.propietari_id = $propietari_id 
                                 ORDER BY d.dispositiu");
 
-    // Consultar BDA per obtenir el nom del propietari
+    // Obtindre el nom del propietari
     $propietari = $db->query("SELECT nom, cognom 
                                 FROM propietaris 
                                 WHERE id = $propietari_id LIMIT 1")->fetch_assoc();
@@ -19,7 +20,6 @@ if (isset($_GET['id'])) {
     header("Location: departaments.php");
     exit();
 }
-
 ?>
 
 <?php include_once('layouts/header.php'); ?>

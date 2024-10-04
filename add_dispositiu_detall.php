@@ -8,24 +8,23 @@ $dispositius = $db->query("SELECT id, dispositiu FROM dispositius ORDER BY dispo
 if (isset($_POST['add_owner'])) {
     $propietari_nom = remove_junk($db->escape($_POST['nom']));
     $propietari_cognom = remove_junk($db->escape($_POST['cognom']));
-    $dispositiu_id = isset($_POST['dispositiu_id']) ? (int) $_POST['dispositiu_id'] : 0;
+    $dispositiu_id = isset($_POST['dispositiu_id']) ? (int)$_POST['dispositiu_id'] : 0;
 
     // Afegir propietari a la BDA
     if ($propietari_nom && $propietari_cognom && $dispositiu_id) {
         // Inserir nou propietari
         $sql_insert_owner = "INSERT INTO propietaris (nom, cognom) VALUES ('$propietari_nom', '$propietari_cognom')";
-
+        
         if ($db->query($sql_insert_owner)) {
             $propietari_id = $db->insert_id();
 
-            // Actualitzar el dispositiu amb el nou propietari
-            $sql_update_device = "UPDATE dispositius SET propietari_id = $propietari_id WHERE id = $dispositiu_id";
-            error_log("SQL Update Query: " . $sql_update_device);
-            if ($db->query($sql_update_device)) {
+            // Inserir relació entre el dispositiu i el nou propietari
+            $sql_insert_device_owner = "INSERT INTO dispositiu_propietari (dispositiu_id, propietari_id) VALUES ($dispositiu_id, $propietari_id)";
+            if ($db->query($sql_insert_device_owner)) {
                 $session->msg('s', "Propietari afegit al dispositiu amb èxit.");
                 redirect('add_dispositiu_detall.php', false);
             } else {
-                $session->msg('d', 'Ho sentim, no es va poder actualitzar el dispositiu.');
+                $session->msg('d', 'Ho sentim, no es va poder afegir la relació dispositiu-propietari.');
             }
         } else {
             $session->msg('d', 'Ho sentim, no es va poder afegir el propietari.');
@@ -54,7 +53,7 @@ if (isset($_POST['add_owner'])) {
                         <select name="dispositiu_id" class="form-control" required>
                             <option value="">Selecciona un dispositiu</option>
                             <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
-                                <option value="<?php echo (int) $dispositiu['id']; ?>">
+                                <option value="<?php echo (int)$dispositiu['id']; ?>">
                                     <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?>
                                 </option>
                             <?php endwhile; ?>

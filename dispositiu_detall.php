@@ -9,10 +9,11 @@ if (isset($_GET['id'])) {
     $caracteristiques = $db->query("SELECT caracteristica FROM caracteristiques_dispositiu WHERE dispositiu_id = $dispositiu_id ORDER BY caracteristica");
 
     // Consultar BDA per obtindre el nom del dispositiu i propietari
-    $dispositiu = $db->query("SELECT d.dispositiu, p.id as propietari_id, p.nom, p.cognom 
-                                FROM dispositius d 
-                                JOIN propietaris p ON d.propietari_id = p.id 
-                                WHERE d.id = $dispositiu_id LIMIT 1")->fetch_assoc();
+    $dispositiu = $db->query("SELECT d.dispositiu, d.id as dispositiu_id, p.nom, p.cognom, dp.propietari_id 
+        FROM dispositius d 
+        JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
+        JOIN propietaris p ON dp.propietari_id = p.id 
+        WHERE d.id = ?", [$dispositiu_id])->fetch_assoc(); // Pass the id as a parameter
 } else {
     header("Location: departaments.php");
     exit();
