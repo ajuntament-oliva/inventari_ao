@@ -46,10 +46,13 @@ if (isset($_GET['id'])) {
                     </tbody>
                 </table>
                 <div class="mt-3">
-                    <strong>Propietari:</strong> 
-                    <a href="propietari_detall.php?id=<?php echo (int) $dispositiu['propietari_id']; ?>">
+                    <strong>Propietari:</strong>
+                    <a href="propietari_dispositius.php?id=<?php echo (int) $dispositiu['propietari_id']; ?>">
                         <?php echo remove_junk(ucwords($dispositiu['nom'] . ' ' . $dispositiu['cognom'])); ?>
                     </a>
+                </div>
+                <div class="mt-3">
+                    <a href="departaments.php" class="btn btn-danger">Torna a Departaments</a>
                 </div>
             </div>
         </div>

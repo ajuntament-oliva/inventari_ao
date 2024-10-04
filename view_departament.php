@@ -1,5 +1,5 @@
 <?php
-$page_title = 'Dispositius del Departament';
+$page_title = 'Dispositius del departament';
 require_once('includes/load.php');
 
 if (isset($_GET['id'])) {
