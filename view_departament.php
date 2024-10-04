@@ -8,7 +8,7 @@ if (isset($_GET['id'])) {
   // Consultar BDA conseguir dispositius
   $dispositius = $db->query("SELECT id, dispositiu FROM dispositius WHERE departament_id = $departament_id ORDER BY dispositiu");
 
-  // Obtindre nom departament
+  // Obtindre el nom del departament
   $departament = $db->query("SELECT departament FROM departaments WHERE id = $departament_id LIMIT 1")->fetch_assoc();
 } else {
   header("Location: departaments.php");
@@ -18,22 +18,28 @@ if (isset($_GET['id'])) {
 
 <?php include_once('layouts/header.php'); ?>
 <div class="row">
-  <div class="col-md-12">
-    <h2><?php echo remove_junk(ucwords($departament['departament'])); ?> - Dispositius</h2>
-    <form method="GET" action="dispositiu_detall.php">
-      <div class="form-group">
-        <label for="dispositiu_select">Selecciona un dispositiu:</label>
-        <select class="form-control" id="dispositiu_select" name="id" onchange="this.form.submit()">
-          <option value="">Selecciona un dispositiu</option>
-          <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
-            <option value="<?php echo (int) $dispositiu['id']; ?>">
-              <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?>
-            </option>
-          <?php endwhile; ?>
-        </select>
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form method="GET" action="dispositiu_detall.php">
+          <div class="form-group">
+            <label for="dispositiu_select"><?php echo remove_junk(ucwords($departament['departament'])); ?> - Dispositius</label>
+            <select class="form-control" id="dispositiu_select" name="id" required onchange="this.form.submit()">
+              <option value="">Selecciona'n un</option>
+              <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
+                <option value="<?php echo (int) $dispositiu['id']; ?>">
+                  <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?>
+                </option>
+              <?php endwhile; ?>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-info">Ves a Característiques de Dispositiu</button>
+        </form>
       </div>
-    </form>
+    </div>
   </div>
+  <div class="col-md-3"></div>
 </div>
 
 <?php include_once('layouts/footer.php'); ?>
