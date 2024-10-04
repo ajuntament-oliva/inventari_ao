@@ -1,5 +1,5 @@
 <?php
-$page_title = 'Creant un Departament';
+$page_title = 'Afegint un dispositiu';
 require_once('includes/load.php');
 // Checkin What level user has permission to view this page
 //page_require_level(1);

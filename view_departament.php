@@ -24,7 +24,8 @@ if (isset($_GET['id'])) {
       <div class="panel-body">
         <form method="GET" action="dispositiu_detall.php">
           <div class="form-group">
-            <label for="dispositiu_select"><?php echo remove_junk(ucwords($departament['departament'])); ?> - Dispositius</label>
+            <label for="dispositiu_select"><?php echo remove_junk(ucwords($departament['departament'])); ?> -
+              Dispositius</label>
             <select class="form-control" id="dispositiu_select" name="id" required>
               <option value="">Selecciona'n un</option>
               <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
@@ -38,6 +39,18 @@ if (isset($_GET['id'])) {
         </form>
       </div>
     </div>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <h5>Accions</h5>
+    <a href="add_dispositiu_detall.php" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i></a>
+    <a href="#" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+    <a href="#" class="btn btn-info"><i class="glyphicon glyphicon-list"></i></a>
+    <a href="#" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
   </div>
   <div class="col-md-3"></div>
 </div>
