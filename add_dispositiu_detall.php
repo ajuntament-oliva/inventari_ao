@@ -10,6 +10,10 @@ error_reporting(E_ALL);
 // Obtindre d'id del departament actual
 $departament_id = isset($_GET['departament_id']) ? (int) $_GET['departament_id'] : 0;
 
+// Obtindre nom del departament
+$departament = $db->query("SELECT departament FROM departaments")->fetch_assoc();
+$nomDepartament = htmlspecialchars($departament['departament']);
+
 if (isset($_POST['add_owner'])) {
   // Rebre les dades del formulari
   $propietari_nom = remove_junk($db->escape($_POST['nom']));
@@ -73,37 +77,50 @@ if (isset($_POST['add_owner'])) {
   <div class="col-md-3"></div>
   <div class="col-md-6">
     <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">Afegir Propietari i Dispositiu - <?php echo $nomDepartament; ?></h4>
+      </div>
       <div class="panel-body">
-        <h4>Afegir Propietari i Dispositiu</h4>
         <form method="post" action="">
           <input type="hidden" name="departament_id" value="<?php echo $departament_id; ?>">
+
           <div class="form-group">
             <label>Selecciona el dispositiu:</label><br>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="dispositiu" id="dispositiu_monitor" value="Monitor" required>
-              <label class="form-check-label" for="dispositiu_monitor">Monitor</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="dispositiu" id="dispositiu_monitor" value="Monitor" required>
+                Monitor
+              </label>
             </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="dispositiu" id="dispositiu_teclat" value="Teclat" required>
-              <label class="form-check-label" for="dispositiu_teclat">Teclat</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="dispositiu" id="dispositiu_teclat" value="Teclat" required>
+                Teclat
+              </label>
             </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="dispositiu" id="dispositiu_torre" value="Torre" required>
-              <label class="form-check-label" for="dispositiu_torre">Torre</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="dispositiu" id="dispositiu_torre" value="Torre" required>
+                Torre
+              </label>
             </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="dispositiu" id="dispositiu_portatil" value="Portàtil" required>
-              <label class="form-check-label" for="dispositiu_portatil">Portàtil</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="dispositiu" id="dispositiu_portatil" value="Portàtil" required>
+                Portàtil
+              </label>
             </div>
           </div>
+
           <div class="form-group">
-            <label for="nom">Nom Propietari:</label>
+            <label for="nom">Nom del Propietari:</label>
             <input type="text" name="nom" class="form-control" required>
           </div>
           <div class="form-group">
-            <label for="cognom">Cognom Propietari:</label>
+            <label for="cognom">Cognom del Propietari:</label>
             <input type="text" name="cognom" class="form-control" required>
           </div>
+
           <!-- Camps dinàmics -->
           <div class="form-group" id="dynamic-fields">
             <div id="monitor-fields" style="display:none;">
@@ -116,9 +133,72 @@ if (isset($_POST['add_owner'])) {
                 <input type="text" name="dimensions" class="form-control" required>
               </div>
             </div>
+
+            <div id="teclat-fields" style="display:none;">
+              <div class="form-group">
+                <label for="marca">Marca:</label>
+                <input type="text" name="marca" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="tipus">Tipus:</label>
+                <input type="text" name="tipus" class="form-control" required>
+              </div>
+            </div>
+
+            <div id="torre-fields" style="display:none;">
+              <div class="form-group">
+                <label for="uid">UID:</label>
+                <input type="text" name="uid" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="id_anydesck">ID Any Desk:</label>
+                <input type="text" name="id_anydesck" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="processador">Processador:</label>
+                <input type="text" name="processador" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="ram">RAM:</label>
+                <input type="text" name="ram" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="capacitat">Capacitat:</label>
+                <input type="text" name="capacitat" class="form-control" required>
+              </div>
+            </div>
+
+            <div id="portatil-fields" style="display:none;">
+              <div class="form-group">
+                <label for="uid">UID:</label>
+                <input type="text" name="uid" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="id_anydesck">ID Any Desk:</label>
+                <input type="text" name="id_anydesck" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="marca">Marca:</label>
+                <input type="text" name="marca" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="processador">Processador:</label>
+                <input type="text" name="processador" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="ram">RAM:</label>
+                <input type="text" name="ram" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="capacitat">Capacitat:</label>
+                <input type="text" name="capacitat" class="form-control" required>
+              </div>
+            </div>
           </div>
+
           <a href="departaments.php" class="btn btn-danger">Torna a Departaments</a>
-          <button type="submit" name="add_owner" class="btn btn-primary">Afegir Propietari, Dispositiu i Característica</button>
+          <button type="submit" name="add_owner" class="btn btn-primary">Afegir Propietari, Dispositiu i
+            Característica</button>
         </form>
       </div>
     </div>
