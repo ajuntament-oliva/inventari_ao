@@ -360,5 +360,3 @@ function  monthlySales($year){
   $sql .= " ORDER BY date_format(s.date, '%c' ) ASC";
   return find_by_sql($sql);
 }
-
-?>
