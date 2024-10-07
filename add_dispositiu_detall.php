@@ -16,14 +16,14 @@ $nomDepartament = htmlspecialchars($departament['departament']);
 
 if (isset($_POST['add_owner'])) {
   // Rebre les dades del formulari
-  $propietari_nom = remove_junk($db->escape($_POST['nom']));
-  $propietari_cognom = remove_junk($db->escape($_POST['cognom']));
-  $dispositiu_nom = remove_junk($db->escape($_POST['dispositiu']));
-  $uid = remove_junk($db->escape($_POST['uid']));
-  $id_anydesck = remove_junk($db->escape($_POST['id_anydesck']));
-  $processador = remove_junk($db->escape($_POST['processador']));
-  $ram = remove_junk($db->escape($_POST['ram']));
-  $capacitat = remove_junk($db->escape($_POST['capacitat']));
+  $propietari_nom = remove_junk($db->escape($_POST['nom'] ?? ''));
+  $propietari_cognom = remove_junk($db->escape($_POST['cognom'] ?? ''));
+  $dispositiu_nom = remove_junk($db->escape($_POST['dispositiu'] ?? ''));
+  $uid = remove_junk($db->escape($_POST['uid'] ?? ''));
+  $id_anydesck = remove_junk($db->escape($_POST['id_anydesck'] ?? ''));
+  $processador = remove_junk($db->escape($_POST['processador'] ?? ''));
+  $ram = remove_junk($db->escape($_POST['ram'] ?? ''));
+  $capacitat = remove_junk($db->escape($_POST['capacitat'] ?? ''));
   $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
   $dimensions = remove_junk($db->escape($_POST['dimensions'] ?? ''));
   $tipus = remove_junk($db->escape($_POST['tipus'] ?? ''));
@@ -197,8 +197,7 @@ if (isset($_POST['add_owner'])) {
           </div>
 
           <a href="departaments.php" class="btn btn-danger">Torna a Departaments</a>
-          <button type="submit" name="add_owner" class="btn btn-primary">Afegir Propietari, Dispositiu i
-            Característica</button>
+          <button type="submit" name="add_owner" class="btn btn-primary">Afegir</button>
         </form>
       </div>
     </div>

@@ -33,7 +33,6 @@ foreach ($propietaris as $propietari) {
     $nom = mysqli_real_escape_string($conn, $propietari[0]);
     $cognom = mysqli_real_escape_string($conn, $propietari[1]);
     
-    // Intentar inserir o actualitzar el propietari
     $sql_propietari = "INSERT INTO propietaris (nom, cognom) VALUES ('$nom', '$cognom') 
                        ON DUPLICATE KEY UPDATE id=id";
 
@@ -58,7 +57,6 @@ $departaments = [
 
 foreach ($departaments as $departament) {
     $departament_escaped = mysqli_real_escape_string($conn, $departament);
-    // Intentar inserir o actualitzar el departament
     $sql_departament = "INSERT INTO departaments (departament) VALUES ('$departament_escaped') 
                         ON DUPLICATE KEY UPDATE id=id";
 
@@ -75,11 +73,8 @@ $dispositius = ['Torre', 'Portàtil', 'Monitor', 'Teclat'];
 $dispositiu_ids = [];
 foreach ($dispositius as $dispositiu) {
     $dispositiu_escaped = mysqli_real_escape_string($conn, $dispositiu);
-    
-    // Assignar un departament aleatoriament
     $departament_id = rand(1, count($departaments)); 
 
-    // Intentar inserir el dispositiu
     $sql_dispositiu = "INSERT INTO dispositius (dispositiu, departament_id) VALUES ('$dispositiu_escaped', '$departament_id') 
                        ON DUPLICATE KEY UPDATE id=id";
 
@@ -93,7 +88,6 @@ foreach ($dispositius as $dispositiu) {
 
 // Associar Propietaris amb Dispositius
 foreach ($dispositiu_ids as $dispositiu_id) {
-    // Seleccionar 2 propietaris aleatoris per cada dispositiu
     $random_propietaris_ids = array_rand($propietaris, 2);
     
     foreach ($random_propietaris_ids as $index) {
@@ -111,16 +105,15 @@ foreach ($dispositiu_ids as $dispositiu_id) {
 
 // Generar Característiques
 $caracteristiques = [
-    ['UID123', 'A1B2C3', 'Intel Core i7', '16GB', '512GB SSD'],
-    ['UID124', 'A1B2C4', 'Intel Core i5', '8GB', '256GB SSD'],
-    ['UID125', 'A1B2C5', 'Intel Core i3', '4GB', '128GB SSD'],
-    ['UID126', 'A1B2C6', 'AMD Ryzen 5', '16GB', '1TB SSD'],
-    ['UID127', 'A1B2C7', 'Intel Core i9', '32GB', '2TB SSD'],
+    ['UID123', 'A1B2C3', 'Intel Core i7', '16GB', '512GB SSD', 'Dell', 'Torre', '40x30x20 cm'],
+    ['UID124', 'A1B2C4', 'Intel Core i5', '8GB', '256GB SSD', 'HP', 'Portàtil', '35x25x2 cm'],
+    ['UID125', 'A1B2C5', 'Intel Core i3', '4GB', '128GB SSD', 'Acer', 'Monitor', '60x40x5 cm'],
+    ['UID126', 'A1B2C6', 'AMD Ryzen 5', '16GB', '1TB SSD', 'Asus', 'Torre', '45x35x20 cm'],
+    ['UID127', 'A1B2C7', 'Intel Core i9', '32GB', '2TB SSD', 'Lenovo', 'Portàtil', '37x26x2.5 cm'],
 ];
 
 // Inserir Característiques per a cada Dispositiu
 foreach ($dispositiu_ids as $dispositiu_id) {
-    // Seleccionar aleatòriament una característica per cada dispositiu
     $caracteristica = $caracteristiques[array_rand($caracteristiques)];
     
     $uid = mysqli_real_escape_string($conn, $caracteristica[0]);
@@ -128,9 +121,12 @@ foreach ($dispositiu_ids as $dispositiu_id) {
     $processador = mysqli_real_escape_string($conn, $caracteristica[2]);
     $ram = mysqli_real_escape_string($conn, $caracteristica[3]);
     $capacitat = mysqli_real_escape_string($conn, $caracteristica[4]);
+    $marca = mysqli_real_escape_string($conn, $caracteristica[5]);
+    $tipus = mysqli_real_escape_string($conn, $caracteristica[6]);
+    $dimensions = mysqli_real_escape_string($conn, $caracteristica[7]);
     
-    $sql_caracteristica = "INSERT INTO caracteristiques_detalls (dispositiu_id, uid, id_anydesck, processador, ram, capacitat) 
-                           VALUES ('$dispositiu_id', '$uid', '$id_anydesck', '$processador', '$ram', '$capacitat') 
+    $sql_caracteristica = "INSERT INTO caracteristiques_detalls (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, tipus, dimensions) 
+                           VALUES ('$dispositiu_id', '$uid', '$id_anydesck', '$processador', '$ram', '$capacitat', '$marca', '$tipus', '$dimensions') 
                            ON DUPLICATE KEY UPDATE uid=uid";
 
     if ($conn->query($sql_caracteristica) === TRUE) {
