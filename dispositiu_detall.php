@@ -6,7 +6,7 @@ if (isset($_GET['id'])) {
     $dispositiu_id = (int) $_GET['id'];
 
     // Consultar BDA per obtindre les característiques del dispositiu
-    $caracteristiques = $db->query("SELECT caracteristica FROM caracteristiques_dispositiu WHERE dispositiu_id = $dispositiu_id ORDER BY caracteristica");
+    $caracteristiques = $db->query("SELECT uid, id_anydesck, processador, ram, capacitat FROM caracteristiques_detalls WHERE dispositiu_id = $dispositiu_id ORDER BY id");
 
     // Consultar BDA per obtindre el nom del dispositiu i propietari
     $dispositiu = $db->query("SELECT d.dispositiu, d.id as dispositiu_id, p.nom, p.cognom, dp.propietari_id 
@@ -30,18 +30,29 @@ if (isset($_GET['id'])) {
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th><?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?> - Característiques</th>
+                            <th colspan="5"><?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?> - Característiques</th>
+                        </tr>
+                        <tr>
+                            <th>UID</th>
+                            <th>ID AnyDesk</th>
+                            <th>Processador</th>
+                            <th>RAM</th>
+                            <th>Capacitat</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php while ($caracteristica = $caracteristiques->fetch_assoc()): ?>
                             <tr>
-                                <td><?php echo remove_junk(ucwords($caracteristica['caracteristica'])); ?></td>
+                                <td><?php echo remove_junk(ucwords($caracteristica['uid'])); ?></td>
+                                <td><?php echo remove_junk(ucwords($caracteristica['id_anydesck'])); ?></td>
+                                <td><?php echo remove_junk(ucwords($caracteristica['processador'])); ?></td>
+                                <td><?php echo remove_junk(ucwords($caracteristica['ram'])); ?></td>
+                                <td><?php echo remove_junk(ucwords($caracteristica['capacitat'])); ?></td>
                             </tr>
                         <?php endwhile; ?>
                         <?php if ($caracteristiques->num_rows == 0): ?>
                             <tr>
-                                <td>No hi ha característiques disponibles per a aquest dispositiu.</td>
+                                <td colspan="5">No hi ha característiques disponibles per a aquest dispositiu.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
