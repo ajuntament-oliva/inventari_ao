@@ -7,7 +7,12 @@ function main() {
   let portatilFields = document.getElementById('portatil-fields');
   let radioButtons = document.querySelectorAll('input[name="dispositiu"]');
   let form = document.querySelector('form');
-
+  
+  let nomField = document.querySelector('input[name="nom"]');
+  let cognomField = document.querySelector('input[name="cognom"]');
+  let propietariSelect = document.querySelector('select[name="propietari_exist"]');
+  
+  // Funció per alternar camps segons la selecció de dispositiu
   function toggleFields(fields, isVisible) {
     let inputs = fields.querySelectorAll('input');
     inputs.forEach(input => {
@@ -22,6 +27,7 @@ function main() {
     fields.style.display = isVisible ? 'block' : 'none';
   }
 
+  // Mostrar/ocultar camps segons el tipus de dispositiu seleccionat
   radioButtons.forEach(radio => {
     radio.addEventListener('change', function () {
       toggleFields(monitorFields, false);
@@ -41,10 +47,21 @@ function main() {
     });
   });
 
+  // Validació per a que haja un propietari
+  function validatePropietari() {
+    if (nomField.value.trim() !== '' || cognomField.value.trim() !== '') {
+      propietariSelect.removeAttribute('required');
+    } else if (!propietariSelect.value) {
+      alert("Has de seleccionar un propietari existent o afegir-ne un de nou.");
+      return false;
+    }
+    return true;
+  }
+
   form.addEventListener('submit', function (event) {
     let isValid = true;
     let requiredInputs = form.querySelectorAll('input[required]');
-
+    
     requiredInputs.forEach(input => {
       if (!input.value) {
         isValid = false;
@@ -54,9 +71,41 @@ function main() {
       }
     });
 
+    if (!validatePropietari()) {
+      isValid = false;
+    }
+
     if (!isValid) {
       event.preventDefault();
-      alert("Per favor,  plena tots els camps requerits.");
+      alert("Per favor, plena tots els camps requerits.");
+    }
+  });
+
+  nomField.addEventListener('input', function() {
+    if (this.value.trim() !== '') {
+      propietariSelect.value = '';
+      propietariSelect.setAttribute('disabled', 'disabled');
+    } else {
+      propietariSelect.removeAttribute('disabled');
+    }
+  });
+
+  cognomField.addEventListener('input', function() {
+    if (this.value.trim() !== '') {
+      propietariSelect.value = '';
+      propietariSelect.setAttribute('disabled', 'disabled');
+    } else {
+      propietariSelect.removeAttribute('disabled');
+    }
+  });
+
+  propietariSelect.addEventListener('change', function() {
+    if (this.value) {
+      nomField.setAttribute('disabled', 'disabled');
+      cognomField.setAttribute('disabled', 'disabled');
+    } else {
+      nomField.removeAttribute('disabled');
+      cognomField.removeAttribute('disabled');
     }
   });
 }

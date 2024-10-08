@@ -16,9 +16,42 @@ $nomDepartament = htmlspecialchars($departament['departament']);
 
 if (isset($_POST['add_owner'])) {
   // Rebre dades del formulari
+  $propietari_exist = $_POST['propietari_exist'] ?? '';
   $propietari_nom = remove_junk($db->escape($_POST['nom'] ?? ''));
   $propietari_cognom = remove_junk($db->escape($_POST['cognom'] ?? ''));
   $dispositiu_nom = remove_junk($db->escape($_POST['dispositiu'] ?? ''));
+
+  // Comprovar si s'ha seleccionat un propietari existent
+  if ($propietari_exist) {
+    $propietari_id = (int) $propietari_exist; // Utilitzar l'ID del propietari existent
+  } elseif ($propietari_nom && $propietari_cognom) {
+    // Inserir nou propietari si no s'ha seleccionat un existent
+    $sql_insert_owner = "INSERT INTO propietaris (nom, cognom) VALUES ('$propietari_nom', '$propietari_cognom')";
+    if ($db->query($sql_insert_owner)) {
+      $propietari_id = $db->insert_id(); // Obtenir l'ID del nou propietari
+    } else {
+      $session->msg('d', "Error afegint el propietari: " . $db->error);
+    }
+  } else {
+    $session->msg('d', "Has de seleccionar un propietari existent o afegir-ne un de nou.");
+  }
+
+  // Inserció del dispositiu i la seva relació amb el propietari
+  if ($propietari_id && $dispositiu_nom) {
+    // Inserir dispositiu
+    $sql_insert_device = "INSERT INTO dispositius (dispositiu, departament_id) VALUES ('$dispositiu_nom', $departament_id)";
+    if ($db->query($sql_insert_device)) {
+      $dispositiu_id = $db->insert_id();
+
+      // Inserir relació entre dispositiu i propietari
+      $sql_insert_device_owner = "INSERT INTO dispositiu_propietari (dispositiu_id, propietari_id) VALUES ($dispositiu_id, $propietari_id)";
+      if ($db->query($sql_insert_device_owner)) {
+        // Inserir característiques com abans...
+      }
+    } else {
+      $session->msg('d', "Error afegint el dispositiu: " . $db->error);
+    }
+  }
 
   // Verificació per dispositiu
   $uid = $id_anydesck = $processador = $ram = $capacitat = $marca = $dimensions = $tipus = '';
@@ -84,9 +117,9 @@ if (isset($_POST['add_owner'])) {
 <div class="row">
   <div class="col-md-3"></div>
   <div class="col-md-6">
-  <?php
-        echo $session->display_msg();
-        ?>
+    <?php
+    echo $session->display_msg();
+    ?>
   </div>
   <div class="col-md-3"></div>
 </div>
@@ -131,12 +164,25 @@ if (isset($_POST['add_owner'])) {
           </div>
 
           <div class="form-group">
+            <label for="propietari_exist">Selecciona un propietari existent:</label>
+            <select name="propietari_exist" class="form-control">
+              <option value="">Selecciona un propietari</option>
+              <?php
+              $owners = $db->query("SELECT id, nom, cognom FROM propietaris")->fetch_all(MYSQLI_ASSOC);
+              foreach ($owners as $owner) {
+                echo "<option value='{$owner['id']}'>" . htmlspecialchars($owner['nom'] . ' ' . $owner['cognom']) . "</option>";
+              }
+              ?>
+            </select>
+          </div>
+
+          <div class="form-group">
             <label for="nom">Nom del Propietari:</label>
-            <input type="text" name="nom" class="form-control" required>
+            <input type="text" name="nom" id="nom" class="form-control">
           </div>
           <div class="form-group">
             <label for="cognom">Cognom del Propietari:</label>
-            <input type="text" name="cognom" class="form-control" required>
+            <input type="text" name="cognom" id="cognom" class="form-control">
           </div>
 
           <!-- Camps dinàmics -->
