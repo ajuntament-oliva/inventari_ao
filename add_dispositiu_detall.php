@@ -7,66 +7,74 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Obtindre d'id del departament actual
+// Obtindre l'ID del departament actual
 $departament_id = isset($_GET['departament_id']) ? (int) $_GET['departament_id'] : 0;
 
-// Obtindre nom del departament
-$departament = $db->query("SELECT departament FROM departaments")->fetch_assoc();
+// Obtindre el nom del departament
+$departament = $db->query("SELECT departament FROM departaments WHERE id = $departament_id")->fetch_assoc();
 $nomDepartament = htmlspecialchars($departament['departament']);
 
 if (isset($_POST['add_owner'])) {
-  // Rebre les dades del formulari
+  // Rebre dades del formulari
   $propietari_nom = remove_junk($db->escape($_POST['nom'] ?? ''));
   $propietari_cognom = remove_junk($db->escape($_POST['cognom'] ?? ''));
   $dispositiu_nom = remove_junk($db->escape($_POST['dispositiu'] ?? ''));
-  $uid = remove_junk($db->escape($_POST['uid'] ?? ''));
-  $id_anydesck = remove_junk($db->escape($_POST['id_anydesck'] ?? ''));
-  $processador = remove_junk($db->escape($_POST['processador'] ?? ''));
-  $ram = remove_junk($db->escape($_POST['ram'] ?? ''));
-  $capacitat = remove_junk($db->escape($_POST['capacitat'] ?? ''));
-  $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
-  $dimensions = remove_junk($db->escape($_POST['dimensions'] ?? ''));
-  $tipus = remove_junk($db->escape($_POST['tipus'] ?? ''));
 
-  // Verificar si el departament existeix
-  $check_department = $db->query("SELECT id FROM departaments WHERE id = $departament_id");
-  if ($check_department && $check_department->num_rows > 0) {
-    if ($propietari_nom && $propietari_cognom && $dispositiu_nom) {
-      // Inserir nou propietari
-      $sql_insert_owner = "INSERT INTO propietaris (nom, cognom) VALUES ('$propietari_nom', '$propietari_cognom')";
-      if ($db->query($sql_insert_owner)) {
-        $propietari_id = $db->insert_id();
+  // Verificació per dispositiu
+  $uid = $id_anydesck = $processador = $ram = $capacitat = $marca = $dimensions = $tipus = '';
 
-        // Inserir nou dispositiu seleccionat
-        $sql_insert_device = "INSERT INTO dispositius (dispositiu, departament_id) VALUES ('$dispositiu_nom', $departament_id)";
-        if ($db->query($sql_insert_device)) {
-          $dispositiu_id = $db->insert_id();
+  if ($dispositiu_nom == 'Monitor') {
+    $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
+    $dimensions = remove_junk($db->escape($_POST['dimensions'] ?? ''));
+  } elseif ($dispositiu_nom == 'Teclat') {
+    $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
+    $tipus = remove_junk($db->escape($_POST['tipus'] ?? ''));
+  } elseif ($dispositiu_nom == 'Torre' || $dispositiu_nom == 'Portàtil') {
+    $uid = remove_junk($db->escape($_POST['uid'] ?? ''));
+    $id_anydesck = remove_junk($db->escape($_POST['id_anydesck'] ?? ''));
+    $processador = remove_junk($db->escape($_POST['processador'] ?? ''));
+    $ram = remove_junk($db->escape($_POST['ram'] ?? ''));
+    $capacitat = remove_junk($db->escape($_POST['capacitat'] ?? ''));
+    if ($dispositiu_nom == 'Portàtil') {
+      $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
+    }
+  }
 
-          // Inserir relació entre dispositiu i propietari
-          $sql_insert_device_owner = "INSERT INTO dispositiu_propietari (dispositiu_id, propietari_id) VALUES ($dispositiu_id, $propietari_id)";
-          if ($db->query($sql_insert_device_owner)) {
-            // Inserir característica per al dispositiu
-            $sql_insert_feature = "INSERT INTO caracteristiques_dispositiu (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus) VALUES ($dispositiu_id, '$uid', '$id_anydesck', '$processador', '$ram', '$capacitat', '$marca', '$dimensions', '$tipus')";
-            if ($db->query($sql_insert_feature)) {
-              $session->msg('s', "Propietari, dispositiu i característiques afegits amb èxit.");
-              redirect('add_dispositiu_detall.php?departament_id=' . $departament_id, false);
-            } else {
-              $session->msg('d', "No s'ha pogut afegir les característiques: " . $db->error);
-            }
+  // Comprovar si els camps obligatoris estan plens
+  if ($propietari_nom && $propietari_cognom && $dispositiu_nom) {
+    // Inserir nou propietari
+    $sql_insert_owner = "INSERT INTO propietaris (nom, cognom) VALUES ('$propietari_nom', '$propietari_cognom')";
+    if ($db->query($sql_insert_owner)) {
+      $propietari_id = $db->insert_id();
+
+      // Inserir dispositiu
+      $sql_insert_device = "INSERT INTO dispositius (dispositiu, departament_id) VALUES ('$dispositiu_nom', $departament_id)";
+      if ($db->query($sql_insert_device)) {
+        $dispositiu_id = $db->insert_id();
+
+        // Inserir relació entre dispositiu i propietari
+        $sql_insert_device_owner = "INSERT INTO dispositiu_propietari (dispositiu_id, propietari_id) VALUES ($dispositiu_id, $propietari_id)";
+        if ($db->query($sql_insert_device_owner)) {
+          // Inserir característiques
+          $sql_insert_feature = "INSERT INTO caracteristiques_dispositiu (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus) 
+            VALUES ($dispositiu_id, '$uid', '$id_anydesck', '$processador', '$ram', '$capacitat', '$marca', '$dimensions', '$tipus')";
+          if ($db->query($sql_insert_feature)) {
+            $session->msg('s', "Propietari, dispositiu i característiques afegits amb èxit.");
+            redirect('add_dispositiu_detall.php?departament_id=' . $departament_id, false);
           } else {
-            $session->msg('d', "No s'ha pogut afegir la relació dispositiu-propietari: " . $db->error);
+            $session->msg('d', "Error afegint característiques: " . $db->error);
           }
         } else {
-          $session->msg('d', "No s'ha pogut afegir el dispositiu: " . $db->error);
+          $session->msg('d', "Error afegint la relació dispositiu-propietari: " . $db->error);
         }
       } else {
-        $session->msg('d', "No s'ha pogut afegir el propietari: " . $db->error);
+        $session->msg('d', "Error afegint el dispositiu: " . $db->error);
       }
     } else {
-      $session->msg('d', "Es requerixen tots els camps.");
+      $session->msg('d', "Error afegint el propietari: " . $db->error);
     }
   } else {
-    $session->msg('d', "El departament seleccionat no existix o consulta fallida: " . $db->error);
+    $session->msg('d', "Tots els camps obligatoris han de ser omplerts.");
   }
 }
 ?>
