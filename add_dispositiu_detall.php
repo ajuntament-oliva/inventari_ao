@@ -56,7 +56,7 @@ if (isset($_POST['add_owner'])) {
         $sql_insert_device_owner = "INSERT INTO dispositiu_propietari (dispositiu_id, propietari_id) VALUES ($dispositiu_id, $propietari_id)";
         if ($db->query($sql_insert_device_owner)) {
           // Inserir característiques
-          $sql_insert_feature = "INSERT INTO caracteristiques_dispositiu (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus) 
+          $sql_insert_feature = "INSERT INTO caracteristiques_detalls (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus) 
             VALUES ($dispositiu_id, '$uid', '$id_anydesck', '$processador', '$ram', '$capacitat', '$marca', '$dimensions', '$tipus')";
           if ($db->query($sql_insert_feature)) {
             $session->msg('s', "Propietari, dispositiu i característiques afegits amb èxit.");
@@ -74,7 +74,7 @@ if (isset($_POST['add_owner'])) {
       $session->msg('d', "Error afegint el propietari: " . $db->error);
     }
   } else {
-    $session->msg('d', "Tots els camps obligatoris han de ser omplerts.");
+    $session->msg('d', "Tots els camps obligatoris han d'estar plens.");
   }
 }
 ?>
@@ -84,12 +84,22 @@ if (isset($_POST['add_owner'])) {
 <div class="row">
   <div class="col-md-3"></div>
   <div class="col-md-6">
+  <?php
+        echo $session->display_msg();
+        ?>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">Afegir Propietari i Dispositiu - <?php echo $nomDepartament; ?></h4>
       </div>
       <div class="panel-body">
-        <form method="post" action="">
+        <form method="post" action="" novalidate>
           <input type="hidden" name="departament_id" value="<?php echo $departament_id; ?>">
 
           <div class="form-group">
