@@ -125,8 +125,8 @@ foreach ($dispositiu_ids as $dispositiu_id) {
     $tipus = mysqli_real_escape_string($conn, $caracteristica[6]);
     $dimensions = mysqli_real_escape_string($conn, $caracteristica[7]);
     
-    $sql_caracteristica = "INSERT INTO caracteristiques_detalls (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, tipus, dimensions) 
-                           VALUES ('$dispositiu_id', '$uid', '$id_anydesck', '$processador', '$ram', '$capacitat', '$marca', '$tipus', '$dimensions') 
+    $sql_caracteristica = "INSERT INTO caracteristiques_detalls (dispositiu_id, uid, id_anydesck, processador, ram, capacitat) 
+                           VALUES ('$dispositiu_id', '$uid', '$id_anydesck', '$processador', '$ram', '$capacitat') 
                            ON DUPLICATE KEY UPDATE uid=uid";
 
     if ($conn->query($sql_caracteristica) === TRUE) {

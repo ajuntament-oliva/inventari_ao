@@ -67,11 +67,11 @@ CREATE TABLE IF NOT EXISTS `caracteristiques_detalls` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Inserir dades per a la taula `caracteristiques_detalls`
-INSERT INTO `caracteristiques_detalls` (`id`, `dispositiu_id`, `uid`, `id_anydesck`, `processador`, `ram`, `capacitat`, `marca`, `dimensions`, `tipus`) VALUES
-(1, 1, 'UID123', 'A1B2C3', 'Intel Core i7', '16GB', '512GB SSD', 'HP', '15x10x1', 'Laptop'),
-(2, 1, 'UID124', 'A1B2C4', 'Intel Core i7', '16GB', '1TB SSD', 'Dell', '15x10x1', 'Laptop'),
-(3, 2, 'UID125', 'A1B2C5', 'Intel Core i5', '8GB', '256GB SSD', 'Lenovo', '14x9x1', 'Desktop'),
-(4, 3, 'UID126', 'A1B2C6', 'Intel Core i5', '8GB', '512GB SSD', 'Asus', '13x8x0.9', 'Laptop');
+INSERT INTO `caracteristiques_detalls` (`id`, `dispositiu_id`, `uid`, `id_anydesck`, `processador`, `ram`, `capacitat`) VALUES
+(1, 1, 'UID123', 'A1B2C3', 'Intel Core i7', '16GB', '512GB SSD'),
+(2, 1, 'UID124', 'A1B2C4', 'Intel Core i7', '16GB', '1TB SSD'),
+(3, 2, 'UID125', 'A1B2C5', 'Intel Core i5', '8GB', '256GB SSD'),
+(4, 3, 'UID126', 'A1B2C6', 'Intel Core i5', '8GB', '512GB SSD');
 
 -- --------------------------------------------------------
 -- Taula estructural per a la taula `dispositiu_propietari`
