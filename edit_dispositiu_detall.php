@@ -13,7 +13,7 @@ if (!$e_departament) {
 }
 
 // Agafant camps de la BDA sense repetir-se
-$dispositius = $db->query("SELECT DISTINCT id FROM dispositius");
+$dispositius = $db->query("SELECT DISTINCT dispositiu FROM departaments");
 ?>
 
 <?php
