@@ -15,11 +15,11 @@
       <form method="post" action="auth.php" class="clearfix">
         <div class="form-group">
               <label for="username" class="control-label">Nom d'usuari</label>
-              <input type="name" class="form-control" name="username" placeholder="Username">
+              <input type="name" class="form-control" name="username" placeholder="Nom d'usuari">
         </div>
         <div class="form-group">
-            <label for="Password" class="control-label">Constrassenya</label>
-            <input type="password" name= "password" class="form-control" placeholder="password">
+            <label for="Password" class="control-label">Constrasenya</label>
+            <input type="password" name= "password" class="form-control" placeholder="Constrasenya">
         </div>
         <div class="form-group">
                 <button type="submit" class="btn btn-info  pull-right">Accés</button>
