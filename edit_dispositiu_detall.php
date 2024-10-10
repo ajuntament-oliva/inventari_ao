@@ -9,11 +9,11 @@ $e_departament = find_by_id('departaments', (int) $_GET['id']);
 $groups = find_all('departaments');
 if (!$e_departament) {
   $session->msg("d", "No es troba l'id del departament.");
-  redirect('departaments.php');
+  //redirect('departaments.php');
 }
 
 // Agafant camps de la BDA sense repetir-se
-$dispositius = $db->query("SELECT DISTINCT dispositiu FROM departaments");
+$dispositius = $db->query("SELECT DISTINCT id FROM dispositius");
 ?>
 
 <?php
