@@ -17,6 +17,8 @@ if (isset($_GET['id'])) {
 ?>
 
 <?php include_once('layouts/header.php'); ?>
+
+
 <div class="row">
   <div class="col-md-3"></div>
   <div class="col-md-6">
