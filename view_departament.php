@@ -49,7 +49,7 @@ if (isset($_GET['id'])) {
   <div class="col-md-6">
     <h5>Accions</h5>
     <a href="add_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i></a>
-    <a href="edit_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+    <a href="edit_dispositiu_detall.php?dispositiu_id=<?php echo $departament_id; ?>" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
     <a href="#" class="btn btn-info"><i class="glyphicon glyphicon-eye-open"></i></a>
     <a href="#" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
   </div>
