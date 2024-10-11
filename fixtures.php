@@ -13,8 +13,11 @@ if ($conn->connect_error) {
     die("Connexió fallida: " . $conn->connect_error);
 }
 
+$successMessages = [];
+$errors = [];
+
 // Generar Propietaris
-$propietaris = [
+/*/$propietaris = [
     ['Minho', 'Lee'],
     ['Richard', 'Grayson'],
     ['Sebastian', 'Stan'],
@@ -23,13 +26,9 @@ $propietaris = [
     ['Diana', 'Prince'],
     ['Tony', 'Stark'],
     ['Natasha', 'Romanoff'],
-];
+];*/
 
-$successMessages = [];
-$errors = [];
-
-// Afegir propietaris
-foreach ($propietaris as $propietari) {
+/*foreach ($propietaris as $propietari) {
     $nom = mysqli_real_escape_string($conn, $propietari[0]);
     $cognom = mysqli_real_escape_string($conn, $propietari[1]);
     
@@ -41,7 +40,7 @@ foreach ($propietaris as $propietari) {
     } else {
         $errors[] = "Error en la inserció del propietari '$nom $cognom': " . $conn->error;
     }
-}
+}*/
 
 // Generar Departaments
 $departaments = [
@@ -68,7 +67,7 @@ foreach ($departaments as $departament) {
 }
 
 // Generar Dispositius
-$dispositius = ['Torre', 'Portàtil', 'Monitor', 'Teclat'];
+/*$dispositius = ['Torre', 'Portàtil', 'Monitor', 'Teclat'];
 
 $dispositiu_ids = [];
 foreach ($dispositius as $dispositiu) {
@@ -84,10 +83,10 @@ foreach ($dispositius as $dispositiu) {
     } else {
         $errors[] = "Error en la inserció del dispositiu '$dispositiu': " . $conn->error;
     }
-}
+}*/
 
 // Associar Propietaris amb Dispositius
-foreach ($dispositiu_ids as $dispositiu_id) {
+/*foreach ($dispositiu_ids as $dispositiu_id) {
     $random_propietaris_ids = array_rand($propietaris, 2);
     
     foreach ($random_propietaris_ids as $index) {
@@ -101,19 +100,19 @@ foreach ($dispositiu_ids as $dispositiu_id) {
             $errors[] = "Error en la inserció de la associació entre dispositiu ID '$dispositiu_id' i propietari ID '$propietari_id': " . $conn->error;
         }
     }
-}
+}*/
 
 // Generar Característiques
-$caracteristiques = [
+/*$caracteristiques = [
     ['UID123', 'A1B2C3', 'Intel Core i7', '16GB', '512GB SSD', 'Dell', 'Torre', '40x30x20 cm'],
     ['UID124', 'A1B2C4', 'Intel Core i5', '8GB', '256GB SSD', 'HP', 'Portàtil', '35x25x2 cm'],
     ['UID125', 'A1B2C5', 'Intel Core i3', '4GB', '128GB SSD', 'Acer', 'Monitor', '60x40x5 cm'],
     ['UID126', 'A1B2C6', 'AMD Ryzen 5', '16GB', '1TB SSD', 'Asus', 'Torre', '45x35x20 cm'],
     ['UID127', 'A1B2C7', 'Intel Core i9', '32GB', '2TB SSD', 'Lenovo', 'Portàtil', '37x26x2.5 cm'],
-];
+];*/
 
 // Inserir Característiques per a cada Dispositiu
-foreach ($dispositiu_ids as $dispositiu_id) {
+/*foreach ($dispositiu_ids as $dispositiu_id) {
     $caracteristica = $caracteristiques[array_rand($caracteristiques)];
     
     $uid = mysqli_real_escape_string($conn, $caracteristica[0]);
@@ -134,7 +133,7 @@ foreach ($dispositiu_ids as $dispositiu_id) {
     } else {
         $errors[] = "Error en la inserció de les característiques per al dispositiu ID '$dispositiu_id': " . $conn->error;
     }
-}
+}*/
 
 // Mostrar missatges de resultats
 if (empty($errors)) {
