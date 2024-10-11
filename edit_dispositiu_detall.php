@@ -7,71 +7,65 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Comprovar si el departament està present a l'URL
-if (isset($_GET['departament_id']) && !empty($_GET['departament_id'])) {
-  $departament_id = (int) $_GET['departament_id'];
-} else {
-  $session->msg('d', "Departament ID no vàlid.");
+// Obté l'ID del departament
+$departament_id = $_GET['departament_id'] ?? null;
+if (!$departament_id) {
+  $session->msg('d', 'No s\'ha proporcionat cap ID de departament.');
   redirect('departaments.php', false);
-  exit;
 }
 
-// Obtenir dispositiu_id si està present a l'URL
-$dispositiu_id = isset($_GET['dispositiu_id']) ? (int) $_GET['dispositiu_id'] : null;
-
-// Obtenir departament associat
-$departament_query = $db->query("SELECT * FROM departaments WHERE id = $departament_id");
+// Consulta del departament
+$departament_query = $db->query("SELECT * FROM departaments WHERE id = '{$departament_id}'");
 $departament = $departament_query->fetch_assoc();
 if (!$departament) {
-  $session->msg('d', "Departament no trobat amb ID: $departament_id.");
+  $session->msg('d', 'No s\'ha trobat cap departament amb aquest ID.');
   redirect('departaments.php', false);
-  exit;
 }
 
-// Consulta per obtenir tots els dispositius del departament
-$dispositius_query = $db->query("SELECT id, dispositiu FROM dispositius WHERE departament_id = $departament_id");
+// Consulta dels dispositius del departament
+$dispositius_query = $db->query("SELECT * FROM dispositius WHERE departament_id = '{$departament_id}'");
 
-// Comprovar si s'ha seleccionat un dispositiu
-if ($dispositiu_id) {
-  $dispositiu = $db->query("SELECT * FROM dispositius WHERE id = $dispositiu_id")->fetch_assoc();
-  if ($dispositiu) {
-    // Obtenir propietari del dispositiu
-    $dispositiu_assoc = $db->query("SELECT propietari_id FROM dispositiu_propietari WHERE dispositiu_id = $dispositiu_id");
-    if ($dispositiu_assoc && $dispositiu_assoc->num_rows > 0) {
-      $propietari_id = $dispositiu_assoc->fetch_assoc()['propietari_id'];
-      // Obtenir detalls del propietari
-      $propietari = $db->query("SELECT * FROM propietaris WHERE id = $propietari_id")->fetch_assoc();
-    } else {
-      $propietari = null; // No hi ha propietari associat
-      $session->msg('d', "No s'ha trobat propietari per al dispositiu seleccionat.");
-    }
-  } else {
-    $session->msg('d', "Dispositiu no trobat. Mostrant altres dispositius del departament.");
-  }
-} else {
-  $dispositiu = null; // No s'ha seleccionat cap dispositiu
-  $propietari = null; // No hi ha propietari associat
+// Dades del dispositiu seleccionat
+$dispositiu = null;
+$propietari = null;
+
+if (isset($_POST['dispositiu'])) {
+  $dispositiu_id = (int) $_POST['dispositiu'];
+
+  // Consulta per obtenir el dispositiu seleccionat
+  $dispositiu_query = $db->query("SELECT * FROM dispositius WHERE id = '{$dispositiu_id}'");
+  $dispositiu = $dispositiu_query->fetch_assoc();
+
+  // Consulta per obtenir el propietari associat al dispositiu
+  $propietari_query = $db->query("
+        SELECT p.id, p.nom, p.cognom 
+        FROM dispositiu_propietari dp
+        JOIN propietaris p ON dp.propietari_id = p.id
+        WHERE dp.dispositiu_id = '{$dispositiu_id}'
+        LIMIT 1
+    ");
+  $propietari = $propietari_query->fetch_assoc();
 }
 
-// Si s'ha enviat el formulari per editar el dispositiu
 if (isset($_POST['edit_device'])) {
+  $dispositiu_id = (int) $_POST['dispositiu'];
   $propietari_nom = remove_junk($db->escape($_POST['nom'] ?? ''));
   $propietari_cognom = remove_junk($db->escape($_POST['cognom'] ?? ''));
+  $propietari_id = (int) $_POST['propietari_id'];
 
-  // Actualització del propietari
-  if ($propietari && $propietari_nom && $propietari_cognom) {
-    $sql_update_owner = "UPDATE propietaris SET nom = '$propietari_nom', cognom = '$propietari_cognom' WHERE id = $propietari_id";
-    if ($db->query($sql_update_owner)) {
-      $session->msg('s', "Propietari actualitzat amb èxit.");
-    } else {
-      $session->msg('d', "Error actualitzant el propietari: " . $db->error);
-    }
+  // Actualitza el propietari
+  $sql_update_owner = "UPDATE propietaris SET nom = '$propietari_nom', cognom = '$propietari_cognom' WHERE id = $propietari_id";
+  if ($db->query($sql_update_owner)) {
+    $session->msg('s', "Propietari actualitzat amb èxit.");
+  } else {
+    $session->msg('d', "Error actualitzant el propietari: " . $db->error);
   }
-  redirect('edit_dispositiu_detall.php?departament_id=' . $departament_id . '&dispositiu_id=' . $dispositiu_id, false);
-}
-?>
 
-<?php include_once('layouts/header.php'); ?>
+  redirect('edit_dispositiu_detall.php?departament_id=' . $departament_id, false);
+}
+
+include_once('layouts/header.php');
+?>
 
 <div class="row">
   <div class="col-md-3"></div>
@@ -86,15 +80,16 @@ if (isset($_POST['edit_device'])) {
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h4 class="panel-title">Afegir Propietari i Dispositiu -
+        <h4 class="panel-title">Modificar Propietari i Dispositiu -
           <?php echo remove_junk(ucwords($departament['departament'])); ?>
         </h4>
       </div>
       <div class="panel-body">
-        <form method="post" action="edit_dispositiu_detall.php?departament_id=<?php echo (int) $departament_id; ?>&dispositiu_id=<?php echo (int) $dispositiu_id; ?>" novalidate>
+        <form method="post" action="" novalidate>
           <div class="form-group">
             <label for="dispositiu">Selecciona el dispositiu:</label>
             <select name="dispositiu" id="dispositiu" class="form-control" required>
+              <option value="">Selecciona'n un</option>
               <?php while ($row = $dispositius_query->fetch_assoc()): ?>
                 <option value="<?php echo $row['id']; ?>" <?php echo ($dispositiu && $dispositiu['id'] == $row['id']) ? 'selected' : ''; ?>>
                   <?php echo htmlspecialchars($row['dispositiu']); ?>
@@ -103,20 +98,21 @@ if (isset($_POST['edit_device'])) {
             </select>
           </div>
 
-          <?php if ($propietari): ?>
           <div class="form-group">
             <label for="nom">Nom del Propietari:</label>
             <input type="text" name="nom" id="nom" class="form-control"
-              value="<?php echo htmlspecialchars($propietari['nom']); ?>" required>
+              value="<?php echo isset($propietari['nom']) ? htmlspecialchars($propietari['nom']) : ''; ?>" required>
+            <input type="hidden" name="propietari_id"
+              value="<?php echo isset($propietari['id']) ? $propietari['id'] : ''; ?>">
           </div>
+
           <div class="form-group">
             <label for="cognom">Cognom del Propietari:</label>
             <input type="text" name="cognom" id="cognom" class="form-control"
-              value="<?php echo htmlspecialchars($propietari['cognom']); ?>" required>
+              value="<?php echo isset($propietari['cognom']) ? htmlspecialchars($propietari['cognom']) : ''; ?>"
+              required>
           </div>
-          <?php else: ?>
-          <div class="alert alert-warning">No s'ha trobat propietari per al dispositiu seleccionat.</div>
-          <?php endif; ?>
+
 
           <a href="departaments.php" class="btn btn-danger">Torna a Departaments</a>
           <button type="submit" name="edit_device" class="btn btn-primary">Actualitza</button>
@@ -128,4 +124,3 @@ if (isset($_POST['edit_device'])) {
 </div>
 
 <?php include_once('layouts/footer.php'); ?>
-<script src="libs/js/edit_dispositiu_detall_dinamic.js"></script>
