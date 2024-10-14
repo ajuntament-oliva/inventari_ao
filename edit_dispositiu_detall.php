@@ -32,24 +32,22 @@ if (isset($_POST['edit_owner'])) {
 
     // Verificar que els camps no estan buits
     if ($propietari_id && !empty($propietari_nom) && !empty($propietari_cognom) && $dispositiu_id) {
-        // Verificar si el propietari existeix en la taula propietaris abans d'actualitzar dispositiu_propietari
+        // Verificar si el propietari existeix en la taula propietaris
         $sql_check_owner = "SELECT id FROM propietaris WHERE id = $propietari_id";
         $result_check_owner = $db->query($sql_check_owner);
-        error_log("Propietari ID: " . $propietari_id);
 
-        
         if ($db->num_rows($result_check_owner) > 0) {
             // Actualitzar dades del propietari
             $sql_update_owner = "UPDATE propietaris SET nom = '$propietari_nom', cognom = '$propietari_cognom' WHERE id = $propietari_id";
             if ($db->query($sql_update_owner)) {
-                // Verificar si ja existeix la combinació dispositiu_id i propietari_id
+                // Actualizar o insertar la combinació dispositiu_id i propietari_id
                 $sql_check_dispositiu_propietari = "SELECT * FROM dispositiu_propietari WHERE dispositiu_id = $dispositiu_id AND propietari_id = $propietari_id";
                 $result_check_dispositiu_propietari = $db->query($sql_check_dispositiu_propietari);
 
                 if ($db->num_rows($result_check_dispositiu_propietari) == 0) {
-                    // Actualitzar la taula dispositiu_propietari
-                    $sql_update_dispositiu_propietari = "UPDATE dispositiu_propietari SET propietari_id = $propietari_id WHERE dispositiu_id = $dispositiu_id";
-                    if ($db->query($sql_update_dispositiu_propietari)) {
+                    // Insertar nou propietari
+                    $sql_insert_dispositiu_propietari = "INSERT INTO dispositiu_propietari (dispositiu_id, propietari_id) VALUES ($dispositiu_id, $propietari_id)";
+                    if ($db->query($sql_insert_dispositiu_propietari)) {
                         $session->msg('s', "Propietari del dispositiu actualitzat amb èxit.");
                     } else {
                         $session->msg('d', "Error actualitzant el propietari del dispositiu: " . $db->error);
