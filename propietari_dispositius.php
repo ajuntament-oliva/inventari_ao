@@ -16,6 +16,14 @@ if (isset($_GET['id'])) {
     $propietari = $db->query("SELECT nom, cognom 
                                 FROM propietaris 
                                 WHERE id = $propietari_id LIMIT 1")->fetch_assoc();
+
+    // Connexió BDA per obtenir el departament del propietari
+    $departament = $db->query("SELECT d.id as departament_id, d.departament as departament_nom 
+                            FROM departaments d 
+                            JOIN dispositius disp ON disp.departament_id = d.id 
+                            JOIN dispositiu_propietari dp ON dp.dispositiu_id = disp.id 
+                            WHERE dp.propietari_id = $propietari_id 
+                            LIMIT 1")->fetch_assoc();
 } else {
     header("Location: departaments.php");
     exit();
@@ -52,7 +60,8 @@ if (isset($_GET['id'])) {
                     </tbody>
                 </table>
                 <div class="mt-3">
-                    <a href="departaments.php" class="btn btn-danger">Torna Llista de departaments</a>
+                    <a href="dispositiu_detall.php?departament_id=<?php echo (int) $departament['departament_id']; ?>&id=<?php echo (int) $propietari_id; ?>"
+                        class="btn btn-danger">Torna a les Característiques</a>
                 </div>
             </div>
         </div>
