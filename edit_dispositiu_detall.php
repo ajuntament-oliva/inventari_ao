@@ -114,7 +114,7 @@ if (isset($_POST['edit_owner'])) {
                         <input type="text" name="cognom" id="cognom" class="form-control" required>
                     </div>
 
-                    <a href="departaments.php" class="btn btn-danger">Torna a Departaments</a>
+                    <a href="view_departament.php?id=<?php echo $departament_id; ?>" class="btn btn-danger">Torna enrere</a>
                     <button type="submit" name="edit_owner" class="btn btn-primary">Actualitzar</button>
                 </form>
             </div>

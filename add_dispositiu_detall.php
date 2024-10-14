@@ -241,7 +241,7 @@ if (isset($_POST['add_owner'])) {
             </div>
           </div>
 
-          <a href="departaments.php" class="btn btn-danger">Torna a Departaments</a>
+          <a href="view_departament.php?id=<?php echo $departament_id; ?>" class="btn btn-danger">Torna enrere</a>
           <button type="submit" name="add_owner" class="btn btn-primary">Afegir</button>
         </form>
       </div>

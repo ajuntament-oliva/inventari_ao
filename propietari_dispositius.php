@@ -61,7 +61,7 @@ if (isset($_GET['id'])) {
                 </table>
                 <div class="mt-3">
                     <a href="dispositiu_detall.php?departament_id=<?php echo (int) $departament['departament_id']; ?>&id=<?php echo (int) $propietari_id; ?>"
-                        class="btn btn-danger">Torna a les Característiques</a>
+                        class="btn btn-danger">Torna enrere</a>
                 </div>
             </div>
         </div>

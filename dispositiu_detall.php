@@ -180,7 +180,7 @@ include_once('layouts/header.php');
                 ?>
                 <div class="mt-3">
                     <a href="view_departament.php?id=<?php echo (int) $dispositiu['departament_id']; ?>"
-                        class="btn btn-danger">Torna a Dispositius</a>
+                        class="btn btn-danger">Torna enrere</a>
                 </div>
             </div>
         </div>
