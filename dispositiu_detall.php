@@ -8,12 +8,13 @@ if (isset($_GET['id'])) {
     // Consultar BDA per obtindre les característiques del dispositiu
     $caracteristiques = $db->query("SELECT uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus FROM caracteristiques_detalls WHERE dispositiu_id = $dispositiu_id ORDER BY id");
 
-    // Consultar BDA per obtindre el nom del dispositiu, propietari i tipus
-    $dispositiu = $db->query("SELECT d.dispositiu, d.id as dispositiu_id, p.nom, p.cognom, dp.propietari_id 
-        FROM dispositius d 
-        JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
-        JOIN propietaris p ON dp.propietari_id = p.id 
-        WHERE d.id = ?", [$dispositiu_id])->fetch_assoc();
+    // Consultar BDA per obtindre el nom del dispositiu, propietari, tipus i departament
+    $dispositiu = $db->query("SELECT d.dispositiu, d.id as dispositiu_id, p.nom, p.cognom, dp.propietari_id, d.departament_id
+                                    FROM dispositius d 
+                                    JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
+                                    JOIN propietaris p ON dp.propietari_id = p.id 
+                                    WHERE d.id = ?", [$dispositiu_id])->fetch_assoc();
+
 } else {
     header("Location: departaments.php");
     exit();
@@ -42,7 +43,7 @@ include_once('layouts/header.php');
                                     <tr>
                                         <th>Marca</th>
                                         <th>Dimensions</th>
-                                        <th>Nom i cognom</th>
+                                        <th>Propietari/a</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -74,7 +75,7 @@ include_once('layouts/header.php');
                                     <tr>
                                         <th>Marca</th>
                                         <th>Tipus</th>
-                                        <th>Nom i cognom</th>
+                                        <th>Propietari/a</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -109,7 +110,7 @@ include_once('layouts/header.php');
                                         <th>Processador</th>
                                         <th>RAM</th>
                                         <th>Capacitat</th>
-                                        <th>Nom i cognom</th>
+                                        <th>Propietari/a</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -148,7 +149,7 @@ include_once('layouts/header.php');
                                         <th>RAM</th>
                                         <th>Capacitat</th>
                                         <th>Marca</th>
-                                        <th>Nom i cognom</th>
+                                        <th>Propietari/a</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -178,7 +179,8 @@ include_once('layouts/header.php');
                 }
                 ?>
                 <div class="mt-3">
-                    <a href="departaments.php" class="btn btn-danger">Torna a Departaments</a>
+                    <a href="view_departament.php?id=<?php echo (int) $dispositiu['departament_id']; ?>"
+                        class="btn btn-danger">Torna a Dispositius</a>
                 </div>
             </div>
         </div>
