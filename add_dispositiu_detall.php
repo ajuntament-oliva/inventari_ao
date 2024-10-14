@@ -143,7 +143,13 @@ if (isset($_POST['add_owner'])) {
             <select name="propietari_exist" class="form-control">
               <option value="">Selecciona un propietari</option>
               <?php
-              $owners = $db->query("SELECT id, nom, cognom FROM propietaris")->fetch_all(MYSQLI_ASSOC);
+              // Obtindre els propietaris amb dispositius en el departament seleccionat
+              $sql = "SELECT p.id, p.nom, p.cognom 
+                      FROM propietaris p
+                      JOIN dispositiu_propietari dp ON p.id = dp.propietari_id
+                      JOIN dispositius d ON dp.dispositiu_id = d.id
+                      WHERE d.departament_id = $departament_id";
+              $owners = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
               foreach ($owners as $owner) {
                 echo "<option value='{$owner['id']}'>" . htmlspecialchars($owner['nom'] . ' ' . $owner['cognom']) . "</option>";
               }

@@ -18,8 +18,8 @@ $nomDepartament = htmlspecialchars($departament['departament']);
 $dispositius = $db->query("
     SELECT d.id, d.dispositiu, p.id AS propietari_id, p.nom, p.cognom 
     FROM dispositius d 
-    JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
-    JOIN propietaris p ON dp.propietari_id = p.id 
+    LEFT JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
+    LEFT JOIN propietaris p ON dp.propietari_id = p.id 
     WHERE d.departament_id = $departament_id
 ")->fetch_all(MYSQLI_ASSOC);
 
@@ -31,8 +31,8 @@ if (isset($_POST['edit_owner'])) {
     $dispositiu_id = isset($_POST['dispositiu']) ? (int) $_POST['dispositiu'] : 0;
 
     // Verificar que els camps no estan buits
-    if ($propietari_id && !empty($propietari_nom) && !empty($propietari_cognom) && $dispositiu_id) {
-        // Verificar si el propietari existeix en la taula propietaris
+    if ($propietari_id && !empty($propietari_nom) && !empty($propietari_cognom)) {
+        // Verificar si el propietari existeix en la taula propietaris abans d'actualitzar
         $sql_check_owner = "SELECT id FROM propietaris WHERE id = $propietari_id";
         $result_check_owner = $db->query($sql_check_owner);
 
@@ -40,21 +40,7 @@ if (isset($_POST['edit_owner'])) {
             // Actualitzar dades del propietari
             $sql_update_owner = "UPDATE propietaris SET nom = '$propietari_nom', cognom = '$propietari_cognom' WHERE id = $propietari_id";
             if ($db->query($sql_update_owner)) {
-                // Actualizar o insertar la combinació dispositiu_id i propietari_id
-                $sql_check_dispositiu_propietari = "SELECT * FROM dispositiu_propietari WHERE dispositiu_id = $dispositiu_id AND propietari_id = $propietari_id";
-                $result_check_dispositiu_propietari = $db->query($sql_check_dispositiu_propietari);
-
-                if ($db->num_rows($result_check_dispositiu_propietari) == 0) {
-                    // Insertar nou propietari
-                    $sql_insert_dispositiu_propietari = "INSERT INTO dispositiu_propietari (dispositiu_id, propietari_id) VALUES ($dispositiu_id, $propietari_id)";
-                    if ($db->query($sql_insert_dispositiu_propietari)) {
-                        $session->msg('s', "Propietari del dispositiu actualitzat amb èxit.");
-                    } else {
-                        $session->msg('d', "Error actualitzant el propietari del dispositiu: " . $db->error);
-                    }
-                } else {
-                    $session->msg('s', "Propietari del dispositiu actualitzat amb èxit.");
-                }
+                $session->msg('s', "Propietari actualitzat amb èxit.");
             } else {
                 $session->msg('d', "Error actualitzant el propietari: " . $db->error);
             }
