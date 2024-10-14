@@ -144,7 +144,7 @@ if (isset($_POST['add_owner'])) {
               <option value="">Selecciona un propietari</option>
               <?php
               // Obtindre els propietaris amb dispositius en el departament seleccionat
-              $sql = "SELECT p.id, p.nom, p.cognom 
+              $sql = "SELECT DISTINCT p.id, p.nom, p.cognom 
                       FROM propietaris p
                       JOIN dispositiu_propietari dp ON p.id = dp.propietari_id
                       JOIN dispositius d ON dp.dispositiu_id = d.id

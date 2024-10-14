@@ -7,12 +7,11 @@ function main() {
   let propietariIdInput = document.getElementById("propietari_id");
 
   dispositiuSelect.addEventListener("change", function () {
-    let selectedOption =
-      dispositiuSelect.options[dispositiuSelect.selectedIndex];
+    let selectedOption = dispositiuSelect.options[dispositiuSelect.selectedIndex];
 
-    nomInput.value = selectedOption.getAttribute("data-nom");
-    cognomInput.value = selectedOption.getAttribute("data-cognom");
-    propietariIdInput.value = selectedOption.getAttribute("data-propietari-id");
+    nomInput.value = selectedOption.getAttribute("data-nom") || '';
+    cognomInput.value = selectedOption.getAttribute("data-cognom") || '';
+    propietariIdInput.value = selectedOption.getAttribute("data-propietari-id") || '';
   });
 }
 

@@ -24,6 +24,7 @@ $dispositius = $db->query("
 ")->fetch_all(MYSQLI_ASSOC);
 
 // Actualitzar les dades si s'ha enviat el formulari
+// Actualitzar les dades si s'ha enviat el formulari
 if (isset($_POST['edit_owner'])) {
     $propietari_id = isset($_POST['propietari_id']) ? (int) $_POST['propietari_id'] : 0;
     $propietari_nom = remove_junk($db->escape($_POST['nom'] ?? ''));
@@ -31,13 +32,13 @@ if (isset($_POST['edit_owner'])) {
     $dispositiu_id = isset($_POST['dispositiu']) ? (int) $_POST['dispositiu'] : 0;
 
     // Verificar que els camps no estan buits
-    if ($propietari_id && !empty($propietari_nom) && !empty($propietari_cognom)) {
-        // Verificar si el propietari existeix en la taula propietaris abans d'actualitzar
+    if (!empty($propietari_nom) && !empty($propietari_cognom)) {
+        // Verificar si el propietari existeix en la taula propietaris
         $sql_check_owner = "SELECT id FROM propietaris WHERE id = $propietari_id";
         $result_check_owner = $db->query($sql_check_owner);
 
         if ($db->num_rows($result_check_owner) > 0) {
-            // Actualitzar dades del propietari
+            // Actualitzar dades del propietari existent
             $sql_update_owner = "UPDATE propietaris SET nom = '$propietari_nom', cognom = '$propietari_cognom' WHERE id = $propietari_id";
             if ($db->query($sql_update_owner)) {
                 $session->msg('s', "Propietari actualitzat amb èxit.");
@@ -45,7 +46,18 @@ if (isset($_POST['edit_owner'])) {
                 $session->msg('d', "Error actualitzant el propietari: " . $db->error);
             }
         } else {
-            $session->msg('d', "El propietari no existeix.");
+            // Si el propietari no existeix, crear un nou propietari
+            $sql_insert_owner = "INSERT INTO propietaris (nom, cognom) VALUES ('$propietari_nom', '$propietari_cognom')";
+            if ($db->query($sql_insert_owner)) {
+                $new_owner_id = $db->insert_id;
+                $session->msg('s', "Nou propietari creat amb èxit.");
+                
+                // Actualitzar el dispositiu amb el nou propietari
+                $sql_update_device_owner = "UPDATE dispositiu_propietari SET propietari_id = $new_owner_id WHERE dispositiu_id = $dispositiu_id";
+                $db->query($sql_update_device_owner);
+            } else {
+                $session->msg('d', "Error creant el nou propietari: " . $db->error);
+            }
         }
     } else {
         $session->msg('d', "Tots els camps han d'estar plens i vàlids.");
