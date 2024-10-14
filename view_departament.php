@@ -9,10 +9,15 @@ if (isset($_GET['id'])) {
   $dispositius = $db->query("SELECT id, dispositiu FROM dispositius WHERE departament_id = $departament_id ORDER BY dispositiu");
 
   // Obtindre el nom del departament
-  $departament = $db->query("SELECT departament FROM departaments WHERE id = $departament_id LIMIT 1")->fetch_assoc();
-} else {
-  header("Location: departaments.php");
-  exit();
+  $result = $db->query("SELECT departament FROM departaments WHERE id = $departament_id LIMIT 1");
+  if ($result && $result->num_rows > 0) {
+    $departament = $result->fetch_assoc();
+  } else {
+    // Si no existe el departamento, redirigir o mostrar un mensaje de error
+    $_SESSION['message'] = "No s'ha trobat el departament.";
+    header("Location: departaments.php");
+    exit();
+  }
 }
 ?>
 
@@ -50,9 +55,12 @@ if (isset($_GET['id'])) {
   <div class="col-md-3"></div>
   <div class="col-md-6">
     <h5>Accions</h5>
-    <a href="add_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i></a>
-    <a href="edit_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
-    <a href="#" class="btn btn-success"><i class="glyphicon glyphicon-eye-open"></i></a>
+    <a href="add_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-warning"><i
+        class="glyphicon glyphicon-plus"></i></a>
+    <a href="edit_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-primary"><i
+        class="glyphicon glyphicon-pencil"></i></a>
+    <a href="read_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-success"><i
+        class="glyphicon glyphicon-eye-open"></i></a>
     <a href="#" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
   </div>
   <div class="col-md-3"></div>
