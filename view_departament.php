@@ -43,7 +43,8 @@ if (isset($_GET['id'])) {
               <?php endwhile; ?>
             </select>
           </div>
-          <button type="submit" class="btn btn-info">Ves a Característiques de Dispositiu</button>
+          <a href="departaments.php" class="btn btn-danger">Torna enrere</a>
+          <button type="submit" class="btn btn-info">Mira un dispositiu</button>
         </form>
       </div>
     </div>
@@ -61,7 +62,7 @@ if (isset($_GET['id'])) {
         class="glyphicon glyphicon-pencil"></i></a>
     <a href="read_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-success"><i
         class="glyphicon glyphicon-eye-open"></i></a>
-    <a href="#" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+    <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></a>
   </div>
   <div class="col-md-3"></div>
 </div>

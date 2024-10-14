@@ -1,4 +1,5 @@
 <?php
+$page_title = 'Vore tots els dispositius i les seues característiques';
 require_once('includes/load.php');
 
 $error_message = '';
