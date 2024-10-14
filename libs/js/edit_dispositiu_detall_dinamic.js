@@ -1,16 +1,19 @@
 "use strict";
 
 function main() {
-  document.getElementById('dispositiu').addEventListener('change', function() {
-    let selectedOption = this.options[this.selectedIndex];
-    let nom = selectedOption.getAttribute('data-nom');
-    let cognom = selectedOption.getAttribute('data-cognom');
-    let propietariId = selectedOption.getAttribute('data-propietari-id');
+  let dispositiuSelect = document.getElementById("dispositiu");
+  let nomInput = document.getElementById("nom");
+  let cognomInput = document.getElementById("cognom");
+  let propietariIdInput = document.getElementById("propietari_id");
 
-    document.getElementById('nom').value = nom;
-    document.getElementById('cognom').value = cognom;
-    document.getElementById('propietari_id').value = propietariId;
+  dispositiuSelect.addEventListener("change", function () {
+    let selectedOption =
+      dispositiuSelect.options[dispositiuSelect.selectedIndex];
+
+    nomInput.value = selectedOption.getAttribute("data-nom");
+    cognomInput.value = selectedOption.getAttribute("data-cognom");
+    propietariIdInput.value = selectedOption.getAttribute("data-propietari-id");
   });
 }
 
-document.addEventListener('DOMContentLoaded', main);
+document.addEventListener("DOMContentLoaded", main);
