@@ -2,10 +2,12 @@
 $page_title = 'Dispositius del Propietari';
 require_once('includes/load.php');
 
+$departament_id = isset($_GET['departament_id']) ? (int) $_GET['departament_id'] : 0;
+
 if (isset($_GET['id'])) {
     $propietari_id = (int) $_GET['id'];
 
-    // Connexíó BDA per obtindre els dispositius del propietari
+    // Connexió BDA per obtenir els dispositius del propietari
     $dispositius = $db->query("SELECT d.id, d.dispositiu 
                                 FROM dispositius d 
                                 JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
@@ -24,6 +26,12 @@ if (isset($_GET['id'])) {
                             JOIN dispositiu_propietari dp ON dp.dispositiu_id = disp.id 
                             WHERE dp.propietari_id = $propietari_id 
                             LIMIT 1")->fetch_assoc();
+
+    if (!$departament) {
+        header("Location: departaments.php");
+        exit();
+    }
+
 } else {
     header("Location: departaments.php");
     exit();
@@ -60,7 +68,8 @@ if (isset($_GET['id'])) {
                     </tbody>
                 </table>
                 <div class="mt-3">
-                    <a href="dispositiu_detall.php?departament_id=<?php echo (int) $departament['departament_id']; ?>&id=<?php echo (int) $propietari_id; ?>"
+                    <input type="hidden" name="departament_id" value="<?php echo $departament['departament_id']; ?>">
+                    <a href="view_departament.php?id=<?php echo $departament['departament_id'] ?>"
                         class="btn btn-danger">Torna enrere</a>
                 </div>
             </div>
