@@ -24,7 +24,6 @@ $dispositius = $db->query("
 ")->fetch_all(MYSQLI_ASSOC);
 
 // Actualitzar les dades si s'ha enviat el formulari
-// Actualitzar les dades si s'ha enviat el formulari
 if (isset($_POST['edit_owner'])) {
     $propietari_id = isset($_POST['propietari_id']) ? (int) $_POST['propietari_id'] : 0;
     $propietari_nom = remove_junk($db->escape($_POST['nom'] ?? ''));
