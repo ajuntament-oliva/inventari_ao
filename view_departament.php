@@ -13,7 +13,6 @@ if (isset($_GET['id'])) {
   if ($result && $result->num_rows > 0) {
     $departament = $result->fetch_assoc();
   } else {
-    // Si no existe el departamento, redirigir o mostrar un mensaje de error
     $_SESSION['message'] = "No s'ha trobat el departament.";
     header("Location: departaments.php");
     exit();
@@ -62,7 +61,7 @@ if (isset($_GET['id'])) {
         class="glyphicon glyphicon-pencil"></i></a>
     <a href="read_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-success"><i
         class="glyphicon glyphicon-eye-open"></i></a>
-    <a href="#" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></a>
+    <a href="delete_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></a>
   </div>
   <div class="col-md-3"></div>
 </div>
