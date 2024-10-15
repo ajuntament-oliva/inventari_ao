@@ -61,17 +61,21 @@ CREATE TABLE IF NOT EXISTS `caracteristiques_detalls` (
   `marca` VARCHAR(50) NOT NULL,
   `dimensions` VARCHAR(50) NOT NULL,
   `tipus` VARCHAR(50) NOT NULL,
+  `data_creacio` DATE NOT NULL,
+  `hora_creacio` TIME NOT NULL,
+  `data_actualitzacio` DATE NOT NULL,
+  `hora_actualitzacio` TIME NOT NULL,
   PRIMARY KEY (`id`),
   KEY `dispositiu_id` (`dispositiu_id`),
   CONSTRAINT `FK_caracteristica_dispositiu` FOREIGN KEY (`dispositiu_id`) REFERENCES `dispositius` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Inserir dades per a la taula `caracteristiques_detalls`
-INSERT INTO `caracteristiques_detalls` (`id`, `dispositiu_id`, `uid`, `id_anydesck`, `processador`, `ram`, `capacitat`) VALUES
-(1, 1, 'UID123', 'A1B2C3', 'Intel Core i7', '16GB', '512GB SSD'),
-(2, 1, 'UID124', 'A1B2C4', 'Intel Core i7', '16GB', '1TB SSD'),
-(3, 2, 'UID125', 'A1B2C5', 'Intel Core i5', '8GB', '256GB SSD'),
-(4, 3, 'UID126', 'A1B2C6', 'Intel Core i5', '8GB', '512GB SSD');
+INSERT INTO `caracteristiques_detalls` (`id`, `dispositiu_id`, `uid`, `id_anydesck`, `processador`, `ram`, `capacitat`, `marca`, `dimensions`, `tipus`, `data_creacio`, `hora_creacio`, `data_actualitzacio`, `hora_actualitzacio`) VALUES
+(1, 1, 'UID123', 'A1B2C3', 'Intel Core i7', '16GB', '512GB SSD', 'Dell', '30x20x5 cm', 'Desktop', '2024-10-15', '08:30:00', '2024-10-15', '08:30:00'),
+(2, 1, 'UID124', 'A1B2C4', 'Intel Core i7', '16GB', '1TB SSD', 'HP', '30x20x5 cm', 'Desktop', '2024-10-15', '08:30:00', '2024-10-15', '08:30:00'),
+(3, 2, 'UID125', 'A1B2C5', 'Intel Core i5', '8GB', '256GB SSD', 'Asus', '35x25x2 cm', 'Laptop', '2024-10-15', '09:00:00', '2024-10-15', '09:00:00'),
+(4, 3, 'UID126', 'A1B2C6', 'Intel Core i5', '8GB', '512GB SSD', 'Lenovo', '35x25x2 cm', 'Laptop', '2024-10-15', '09:30:00', '2024-10-15', '09:30:00');
 
 -- --------------------------------------------------------
 -- Taula estructural per a la taula `dispositiu_propietari`

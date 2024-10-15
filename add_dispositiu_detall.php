@@ -22,6 +22,9 @@ if (isset($_POST['add_owner'])) {
 
   $propietari_id = null;
 
+  $data_creacio = date('Y-m-d'); 
+  $hora_creacio = date('H:i:s'); 
+
   // Comprovar si s'ha seleccionat un propietari existent
   if ($propietari_exist) {
     $propietari_id = (int) $propietari_exist;
@@ -73,8 +76,8 @@ if (isset($_POST['add_owner'])) {
   // Comprovar si els camps obligatoris estan plens
   if ($propietari_id && $dispositiu_nom) {
     // Inserir característiques
-    $sql_insert_feature = "INSERT INTO caracteristiques_detalls (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus) 
-      VALUES ($dispositiu_id, '$uid', '$id_anydesck', '$processador', '$ram', '$capacitat', '$marca', '$dimensions', '$tipus')";
+    $sql_insert_feature = "INSERT INTO caracteristiques_detalls (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus, data_creacio, hora_creacio) 
+      VALUES ($dispositiu_id, '$uid', '$id_anydesck', '$processador', '$ram', '$capacitat', '$marca', '$dimensions', '$tipus', '$data_creacio', '$hora_creacio')";
     if ($db->query($sql_insert_feature)) {
       $session->msg('s', "Propietari, dispositiu i característiques afegits amb èxit.");
       redirect('add_dispositiu_detall.php?departament_id=' . $departament_id, false);
