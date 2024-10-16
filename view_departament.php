@@ -6,7 +6,12 @@ if (isset($_GET['id'])) {
   $departament_id = (int) $_GET['id'];
 
   // Consultar BDA conseguir dispositius
-  $dispositius = $db->query("SELECT id, dispositiu FROM dispositius WHERE departament_id = $departament_id ORDER BY dispositiu");
+  $dispositius = $db->query("
+    SELECT d.id, d.dispositiu 
+    FROM dispositius d
+    JOIN caracteristiques_detalls cd ON d.id = cd.dispositiu_id
+    WHERE d.departament_id = $departament_id
+    ORDER BY cd.data_creacio ASC, cd.hora_creacio ASC");
 
   // Obtindre el nom del departament
   $result = $db->query("SELECT departament FROM departaments WHERE id = $departament_id LIMIT 1");
@@ -36,7 +41,8 @@ if (isset($_GET['id'])) {
           <input type="hidden" name="departament_id" value="<?php echo (int) $departament_id; ?>">
           <div class="form-group">
             <?php if (isset($departament)): ?>
-              <label for="dispositiu_select"><?php echo remove_junk(ucwords($departament['departament'])); ?> - Dispositius</label>
+              <label for="dispositiu_select"><?php echo remove_junk(ucwords($departament['departament'])); ?> -
+                Dispositius</label>
               <select class="form-control" id="dispositiu_select" name="id" required>
                 <option value="">Selecciona'n un</option>
                 <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
@@ -62,10 +68,14 @@ if (isset($_GET['id'])) {
   <div class="col-md-3"></div>
   <div class="col-md-6">
     <h5>Accions</h5>
-    <a href="add_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-warning"><i class="glyphicon glyphicon-plus"></i></a>
-    <a href="edit_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
-    <a href="read_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-success"><i class="glyphicon glyphicon-eye-open"></i></a>
-    <a href="delete_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></a>
+    <a href="add_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-warning"><i
+        class="glyphicon glyphicon-plus"></i></a>
+    <a href="edit_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-primary"><i
+        class="glyphicon glyphicon-pencil"></i></a>
+    <a href="read_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-success"><i
+        class="glyphicon glyphicon-eye-open"></i></a>
+    <a href="delete_dispositiu_detall.php?departament_id=<?php echo $departament_id; ?>" class="btn btn-default"><i
+        class="glyphicon glyphicon-trash"></i></a>
   </div>
   <div class="col-md-3"></div>
 </div>
