@@ -30,6 +30,9 @@ if (isset($_POST['edit_owner'])) {
     $propietari_cognom = remove_junk($db->escape($_POST['cognom'] ?? ''));
     $dispositiu_id = isset($_POST['dispositiu']) ? (int) $_POST['dispositiu'] : 0;
 
+    $data_actualitzacio = date('Y-m-d');
+    $hora_actualitzacio = date('H:i:s');
+
     // Verificar que els camps no estan buits
     if (!empty($propietari_nom) && !empty($propietari_cognom)) {
         // Verificar si el propietari existeix en la taula propietaris
@@ -40,6 +43,11 @@ if (isset($_POST['edit_owner'])) {
             // Actualitzar dades del propietari existent
             $sql_update_owner = "UPDATE propietaris SET nom = '$propietari_nom', cognom = '$propietari_cognom' WHERE id = $propietari_id";
             if ($db->query($sql_update_owner)) {
+
+                // Actualitzar la data en caracteristiques_detalls
+                $sql_update_detalls = "UPDATE caracteristiques_detalls SET data_actualitzacio = '$data_actualitzacio', hora_actualitzacio = '$hora_actualitzacio' WHERE dispositiu_id = $dispositiu_id";
+                $db->query($sql_update_detalls);
+
                 $session->msg('s', "Propietari actualitzat amb èxit.");
             } else {
                 $session->msg('d', "Error actualitzant el propietari: " . $db->error);
@@ -50,10 +58,14 @@ if (isset($_POST['edit_owner'])) {
             if ($db->query($sql_insert_owner)) {
                 $new_owner_id = $db->insert_id;
                 $session->msg('s', "Nou propietari creat amb èxit.");
-                
+
                 // Actualitzar el dispositiu amb el nou propietari
                 $sql_update_device_owner = "UPDATE dispositiu_propietari SET propietari_id = $new_owner_id WHERE dispositiu_id = $dispositiu_id";
                 $db->query($sql_update_device_owner);
+
+                // Actualitzar la data en caracteristiques_detalls
+                $sql_update_detalls = "UPDATE caracteristiques_detalls SET data_actualitzacio = '$data_actualitzacio', hora_actualitzacio = '$hora_actualitzacio' WHERE dispositiu_id = $dispositiu_id";
+                $db->query($sql_update_detalls);
             } else {
                 $session->msg('d', "Error creant el nou propietari: " . $db->error);
             }
@@ -113,7 +125,8 @@ if (isset($_POST['edit_owner'])) {
                         <input type="text" name="cognom" id="cognom" class="form-control" required>
                     </div>
 
-                    <a href="view_departament.php?id=<?php echo $departament_id; ?>" class="btn btn-danger">Torna enrere</a>
+                    <a href="view_departament.php?id=<?php echo $departament_id; ?>" class="btn btn-danger">Torna
+                        enrere</a>
                     <button type="submit" name="edit_owner" class="btn btn-primary">Actualitzar</button>
                 </form>
             </div>
