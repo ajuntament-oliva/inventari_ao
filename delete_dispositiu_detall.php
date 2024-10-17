@@ -7,7 +7,6 @@ $message = '';
 if (isset($_GET['departament_id'])) {
   $departament_id = (int) $_GET['departament_id'];
 
-  // Modificar la consulta para unir dispositius y caracteristiques_detalls, y ordenar por data_creacio y hora_creacio
   $dispositius = $db->query("
     SELECT d.id, d.dispositiu 
     FROM dispositius d
