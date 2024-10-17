@@ -7,7 +7,13 @@ $message = '';
 if (isset($_GET['departament_id'])) {
   $departament_id = (int) $_GET['departament_id'];
 
-  $dispositius = $db->query("SELECT id, dispositiu FROM dispositius WHERE departament_id = $departament_id ORDER BY dispositiu");
+  $dispositius = $db->query("
+    SELECT d.id, d.dispositiu 
+    FROM dispositius d
+    JOIN caracteristiques_detalls cd ON d.id = cd.dispositiu_id
+    WHERE d.departament_id = $departament_id
+    ORDER BY cd.data_creacio ASC, cd.hora_creacio ASC
+  ");
 
   $result = $db->query("SELECT departament FROM departaments WHERE id = $departament_id LIMIT 1");
   if ($result && $result->num_rows > 0) {
