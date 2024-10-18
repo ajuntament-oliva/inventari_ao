@@ -2,16 +2,13 @@
 $page_title = 'Selecció de Departaments';
 require_once('includes/load.php');
 
-// Check user permission (uncomment if needed)
-// page_require_level(1);
-
 // Obtindre departaments de la BDA 
 $departaments = $db->query("SELECT MIN(id) as id, departament FROM departaments GROUP BY departament ORDER BY departament");
 
 $msg = [];
 
-// Redirecció
-if (isset($_POST['selec_departament'])) {
+// Verificar si s'ha enviat el formulari
+if (isset($_POST['departament_id']) && !empty($_POST['departament_id'])) {
   $departament_seleccionat = $_POST['departament_id'];
   header("Location: view_departament.php?id=" . (int) $departament_seleccionat);
   exit();
@@ -24,6 +21,7 @@ if (isset($_POST['selec_departament'])) {
     <?php echo display_msg($msg); ?>
   </div>
 </div>
+
 <div class="row">
   <div class="col-md-3"></div>
   <div class="col-md-6">
@@ -32,7 +30,7 @@ if (isset($_POST['selec_departament'])) {
         <form method="post" action="">
           <div class="form-group">
             <label for="departament_id">Departaments:</label>
-            <select name="departament_id" id="departament_id" class="form-control" required>
+            <select name="departament_id" id="departament_id" class="form-control" required onchange="this.form.submit()">
               <option value="">Selecciona'n un</option>
               <?php while ($departament = $departaments->fetch_assoc()): ?>
                 <option value="<?php echo (int) $departament['id']; ?>">
@@ -41,7 +39,6 @@ if (isset($_POST['selec_departament'])) {
               <?php endwhile; ?>
             </select>
           </div>
-          <button type="submit" name="selec_departament" class="btn btn-info">Ves a Dispositius</button>
         </form>
       </div>
     </div>
