@@ -5,14 +5,6 @@ require_once('includes/load.php');
 if (isset($_GET['id'])) {
   $departament_id = (int) $_GET['id'];
 
-  // Consultar BDA conseguir dispositius
-  $dispositius = $db->query("
-    SELECT d.id, d.dispositiu 
-    FROM dispositius d
-    JOIN caracteristiques_detalls cd ON d.id = cd.dispositiu_id
-    WHERE d.departament_id = $departament_id
-    ORDER BY cd.data_creacio ASC, cd.hora_creacio ASC");
-
   // Obtindre el nom del departament
   $result = $db->query("SELECT departament FROM departaments WHERE id = $departament_id LIMIT 1");
   if ($result && $result->num_rows > 0) {
@@ -37,26 +29,24 @@ if (isset($_GET['id'])) {
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-body">
-        <form method="GET" action="dispositiu_detall.php">
+        <form method="GET" action="dispositiu_detall.php" id="dispositiuForm">
           <input type="hidden" name="departament_id" value="<?php echo (int) $departament_id; ?>">
           <div class="form-group">
             <?php if (isset($departament)): ?>
               <label for="dispositiu_select"><?php echo remove_junk(ucwords($departament['departament'])); ?> -
                 Dispositius</label>
-              <select class="form-control" id="dispositiu_select" name="id" required>
+              <select class="form-control" id="dispositiu_select" name="id" required onchange="this.form.submit();">
                 <option value="">Selecciona'n un</option>
-                <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
-                  <option value="<?php echo (int) $dispositiu['id']; ?>">
-                    <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?>
-                  </option>
-                <?php endwhile; ?>
+                <option value="Monitor">Monitor</option>
+                <option value="Teclat">Teclat</option>
+                <option value="Torre">Torre</option>
+                <option value="Portàtil">Portàtil</option>
               </select>
             <?php else: ?>
               <p>No s'ha trobat cap dispositiu o departament.</p>
             <?php endif; ?>
           </div>
           <a href="departaments.php" class="btn btn-danger">Torna enrere</a>
-          <button type="submit" class="btn btn-info">Mira un dispositiu</button>
         </form>
       </div>
     </div>
