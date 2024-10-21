@@ -4,7 +4,7 @@ require_once('includes/load.php');
 
 $error_message = '';
 
-$departament_id = isset($_GET['departament_id']) ? (int)$_GET['departament_id'] : 0;
+$departament_id = isset($_GET['departament_id']) ? (int) $_GET['departament_id'] : 0;
 
 $departament = $db->query("SELECT departament FROM departaments WHERE id = $departament_id")->fetch_assoc();
 $nomDepartament = htmlspecialchars($departament['departament']);
@@ -38,7 +38,7 @@ include_once('layouts/header.php');
                     while ($dispositiu = $dispositius->fetch_assoc()) {
                         $caracteristiques = $db->query("SELECT uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus
                                                           FROM caracteristiques_detalls
-                                                          WHERE dispositiu_id = " . (int)$dispositiu['dispositiu_id'] . "
+                                                          WHERE dispositiu_id = " . (int) $dispositiu['dispositiu_id'] . "
                                                           ORDER BY id");
                         ?>
                         <div class="panel panel-default">
@@ -88,7 +88,8 @@ include_once('layouts/header.php');
                                                     <td><?php echo remove_junk(ucwords($caracteristica['marca'])); ?></td>
                                                 <?php } ?>
                                             <?php } ?>
-                                            <td><?php echo remove_junk(ucwords($dispositiu['nom'] . ' ' . $dispositiu['cognom'])); ?></td>
+                                            <td><?php echo remove_junk(ucwords($dispositiu['nom'] . ' ' . $dispositiu['cognom'])); ?>
+                                            </td>
                                         </tr>
                                     <?php endwhile; ?>
                                 </tbody>
@@ -100,8 +101,11 @@ include_once('layouts/header.php');
                     echo "<p>No s'han trobat dispositius per a aquest departament.</p>";
                 }
                 ?>
-                <div class="mt-3">
-                    <a href="view_departament.php?id=<?php echo (int)$departament_id; ?>" class="btn btn-danger">Torna enrere</a>
+                <div class="panel-footer">
+                    <div class="mt-3">
+                        <a href="view_departament.php?id=<?php echo (int) $departament_id; ?>"
+                            class="btn btn-danger">Torna enrere</a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -44,34 +44,35 @@ if (isset($_GET['id'])) {
     <div class="col-md-3"></div>
     <div class="col-md-6">
         <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4><?php echo remove_junk(ucwords($propietari['nom'] . ' ' . $propietari['cognom'])); ?></h4>
+            </div>
             <div class="panel-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th><?php echo remove_junk(ucwords($propietari['nom'] . ' ' . $propietari['cognom'])); ?> -
-                                Dispositius</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
                             <tr>
-                                <td>
-                                    <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?>
-                                </td>
+                                <th>Llista de dispositius:</th>
                             </tr>
-                        <?php endwhile; ?>
-                        <?php if ($dispositius->num_rows == 0): ?>
-                            <tr>
-                                <td colspan="2">No hi ha dispositius disponibles per a aquest propietari.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-                <div class="mt-3">
-                    <input type="hidden" name="departament_id" value="<?php echo $departament['departament_id']; ?>">
-                    <a href="view_departament.php?id=<?php echo $departament['departament_id'] ?>"
-                        class="btn btn-danger">Torna enrere</a>
+                        </thead>
+                        <tbody>
+                            <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
+                                <tr>
+                                    <td><?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?></td>
+                                </tr>
+                            <?php endwhile; ?>
+                            <?php if ($dispositius->num_rows == 0): ?>
+                                <tr>
+                                    <td colspan="1">No hi ha dispositius disponibles per a aquest propietari.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
+            <div class="panel-footer">
+                <input type="hidden" name="departament_id" value="<?php echo $departament['departament_id']; ?>">
+                <a href="view_departament.php?id=<?php echo $departament['departament_id']; ?>" class="btn btn-danger">Torna enrere</a>
             </div>
         </div>
     </div>
