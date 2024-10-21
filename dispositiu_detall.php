@@ -93,7 +93,7 @@ include_once('layouts/header.php');
                                                 <td><?php echo remove_junk(ucwords($caracteristica['marca'])); ?></td>
                                             <?php } ?>
                                         <?php } ?>
-                                        <td><?php echo remove_junk(ucwords($caracteristica['nom'] . ' ' . $caracteristica['cognom'])); ?></td>
+                                        <td><a href="propietari_dispositius.php"><?php echo remove_junk(ucwords($caracteristica['nom'] . ' ' . $caracteristica['cognom'])); ?></a></td>
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>
