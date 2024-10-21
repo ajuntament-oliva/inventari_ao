@@ -42,7 +42,7 @@ if (isset($_GET['id'])) {
                 <option value="Portàtil">Portàtil</option>
               </select>
             <?php else: ?>
-              <p>No s'ha trobat cap dispositiu o departament.</p>
+              <p>No s'ha trobat cap departament.</p>
             <?php endif; ?>
           </div>
           <a href="departaments.php" class="btn btn-danger">Torna enrere</a>

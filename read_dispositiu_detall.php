@@ -32,7 +32,7 @@ include_once('layouts/header.php');
     <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-body">
-                <h2><?php echo remove_junk(ucwords($nomDepartament ?? '')); ?> - Dispositius</h2>
+                <h3><?php echo remove_junk(ucwords($nomDepartament ?? '')); ?> - Dispositius</h3>
                 <?php
                 if ($dispositius && $dispositius->num_rows > 0) {
                     while ($dispositiu = $dispositius->fetch_assoc()) {
