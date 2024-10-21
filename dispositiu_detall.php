@@ -17,13 +17,14 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
 
     if ($dispositiu) {
         // Consultar BDA per obtindre les característiques de tots els dispositius del mateix tipus en el departament actual
-        $caracteristiques = $db->query("SELECT DISTINCT c.uid, c.id_anydesck, c.processador, c.ram, c.capacitat, c.marca, c.dimensions, c.tipus, p.nom, p.cognom 
-                                         FROM caracteristiques_detalls c
-                                         JOIN dispositius d ON c.dispositiu_id = d.id
-                                         JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
-                                         JOIN propietaris p ON dp.propietari_id = p.id 
-                                         WHERE d.dispositiu = ? AND d.departament_id = ?
-                                         ORDER BY d.id", [$dispositiu_nom, $departament_id]);
+        $caracteristiques = $db->query("SELECT DISTINCT c.uid, c.id_anydesck, c.processador, c.ram, c.capacitat, 
+                                                            c.marca, c.dimensions, c.tipus, p.id as propietari_id, p.nom, p.cognom 
+                                            FROM caracteristiques_detalls c
+                                            JOIN dispositius d ON c.dispositiu_id = d.id
+                                            JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
+                                            JOIN propietaris p ON dp.propietari_id = p.id 
+                                            WHERE d.dispositiu = ? AND d.departament_id = ?
+                                            ORDER BY d.id", [$dispositiu_nom, $departament_id]);
     } else {
         $error_message = "Dispositiu no trobat.";
     }
@@ -93,7 +94,11 @@ include_once('layouts/header.php');
                                                 <td><?php echo remove_junk(ucwords($caracteristica['marca'])); ?></td>
                                             <?php } ?>
                                         <?php } ?>
-                                        <td><a href="propietari_dispositius.php"><?php echo remove_junk(ucwords($caracteristica['nom'] . ' ' . $caracteristica['cognom'])); ?></a></td>
+                                        <td>
+                                            <a href="propietari_dispositius.php?id=<?php echo (int)$caracteristica['propietari_id']; ?>">
+                                                <?php echo remove_junk(ucwords($caracteristica['nom'] . ' ' . $caracteristica['cognom'])); ?>
+                                            </a>
+                                        </td>
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>
