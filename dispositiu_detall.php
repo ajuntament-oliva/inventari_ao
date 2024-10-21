@@ -36,8 +36,8 @@ include_once('layouts/header.php');
 ?>
 
 <div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <?php if ($error_message): ?>
@@ -111,7 +111,7 @@ include_once('layouts/header.php');
             </div>
         </div>
     </div>
-    <div class="col-md-3"></div>
+    <div class="col-md-2"></div>
 </div>
 
 <?php include_once('layouts/footer.php'); ?>

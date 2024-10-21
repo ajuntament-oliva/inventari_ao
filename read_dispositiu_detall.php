@@ -28,8 +28,8 @@ include_once('layouts/header.php');
 </div>
 
 <div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
         <div class="panel panel-default">
             <div class="panel-body">
                 <h3><?php echo remove_junk(ucwords($nomDepartament ?? '')); ?> - Dispositius</h3>
@@ -110,7 +110,7 @@ include_once('layouts/header.php');
             </div>
         </div>
     </div>
-    <div class="col-md-3"></div>
+    <div class="col-md-2"></div>
 </div>
 
 <?php include_once('layouts/footer.php'); ?>
