@@ -10,7 +10,6 @@ if (isset($_GET['id'])) {
   if ($result && $result->num_rows > 0) {
     $departament = $result->fetch_assoc();
   } else {
-    // Missatge si no es troba el departament
     $_SESSION['message'] = "No s'ha trobat el departament.";
     header("Location: departaments.php");
     exit();
