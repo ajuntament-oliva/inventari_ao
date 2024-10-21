@@ -45,7 +45,7 @@ include_once('layouts/header.php');
                             <div class="panel-heading">
                                 <label><?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?> - Característiques</label>
                             </div>
-                            <table class="table table-bordered">
+                            <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <?php if ($dispositiu['dispositiu'] == 'Monitor') { ?>
