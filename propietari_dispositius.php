@@ -74,7 +74,7 @@ if (isset($_GET['id'])) {
                         <tbody>
                             <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
                                 <tr>
-                                    <td><a href="view_device.php?id=<?php echo $dispositiu['id']; ?>">
+                                    <td><a href="view_dispositiu.php?id=<?php echo $dispositiu['id']; ?>">
                                             <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?>
                                         </a></td>
                                     <td><?php echo $dispositiu['data_creacio']; ?></td>
