@@ -16,6 +16,9 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
     )->fetch_assoc();
 
     if ($dispositiu) {
+        // Consultar BDA per obtindre el nom del departament
+        $departament = $db->query("SELECT departament FROM departaments WHERE id = ? LIMIT 1", [$departament_id])->fetch_assoc();
+        
         // Consultar BDA per obtindre les característiques de tots els dispositius del mateix tipus en el departament actual
         $caracteristiques = $db->query("SELECT DISTINCT c.uid, c.id_anydesck, c.processador, c.ram, c.capacitat, 
                                                             c.marca, c.dimensions, c.tipus, p.id as propietari_id, p.nom, p.cognom 
@@ -45,7 +48,12 @@ include_once('layouts/header.php');
                         <?php echo remove_junk($error_message); ?>
                     </div>
                 <?php else: ?>
-                    <h4><?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?> - Característiques</h4>
+                    <h4>
+                        <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?> - Característiques
+                        <?php if (isset($departament['departament'])): ?>
+                            (Departament: <?php echo remove_junk(ucwords($departament['departament'])); ?>)
+                        <?php endif; ?>
+                    </h4>
                 <?php endif; ?>
             </div>
             <div class="panel-body">
