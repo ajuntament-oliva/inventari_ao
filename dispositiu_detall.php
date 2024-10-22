@@ -49,9 +49,9 @@ include_once('layouts/header.php');
                     </div>
                 <?php else: ?>
                     <h4>
-                        <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?> - Característiques
+                        <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?> Característiques
                         <?php if (isset($departament['departament'])): ?>
-                            (Departament: <?php echo remove_junk(ucwords($departament['departament'])); ?>)
+                            - <?php echo remove_junk(ucwords($departament['departament'])); ?>
                         <?php endif; ?>
                     </h4>
                 <?php endif; ?>
