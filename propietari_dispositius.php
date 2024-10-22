@@ -13,7 +13,16 @@ if (isset($_GET['id'])) {
                                     JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id
                                     JOIN caracteristiques_detalls c ON d.id = c.dispositiu_id
                                     WHERE dp.propietari_id = $propietari_id
-                                    ORDER BY d.dispositiu");
+                                    ORDER BY 
+                                        CASE 
+                                            WHEN c.data_creacio = c.data_actualitzacio THEN c.data_creacio
+                                            ELSE LEAST(c.data_creacio, c.data_actualitzacio) 
+                                        END, 
+                                        CASE 
+                                            WHEN c.data_creacio = c.data_actualitzacio THEN c.hora_creacio
+                                            ELSE LEAST(c.hora_creacio, c.hora_actualitzacio)
+                                        END");
+
 
 
     // Obtindre el nom del propietari
@@ -54,11 +63,11 @@ if (isset($_GET['id'])) {
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Dispositius:</th>
-                                <th>Data creació:</th>
-                                <th>Hora creació:</th>
-                                <th>Data actualització:</th>
-                                <th>Hora actualització:</th>
+                                <th>Dispositius</th>
+                                <th>Data inicial</th>
+                                <th>Hora inicial</th>
+                                <th>Data final</th>
+                                <th>Hora final</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,13 +76,29 @@ if (isset($_GET['id'])) {
                                     <td><?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?></td>
                                     <td><?php echo $dispositiu['data_creacio']; ?></td> 
                                     <td><?php echo $dispositiu['hora_creacio']; ?></td>
-                                    <td><?php echo $dispositiu['data_actualitzacio']; ?></td>
-                                    <td><?php echo $dispositiu['hora_actualitzacio']; ?></td>
+                                    <td>
+                                        <?php 
+                                            if ($dispositiu['data_actualitzacio'] == '0000-00-00' && $dispositiu['hora_actualitzacio'] == '00:00:00') {
+                                                echo "No s'ha actualitzat cap dispositiu.";
+                                            } else {
+                                                echo $dispositiu['data_actualitzacio'];
+                                            }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                            if ($dispositiu['data_actualitzacio'] == '0000-00-00' && $dispositiu['hora_actualitzacio'] == '00:00:00') {
+                                                echo  "No s'ha actualitzat cap dispositiu.";
+                                            } else {
+                                                echo $dispositiu['hora_actualitzacio'];
+                                            }
+                                        ?>
+                                    </td>
                                 </tr>
                             <?php endwhile; ?>
                             <?php if ($dispositius->num_rows == 0): ?>
                                 <tr>
-                                    <td colspan="3">No hi ha dispositius disponibles per a aquest propietari.</td>
+                                    <td colspan="5">No hi ha dispositius disponibles per a aquest propietari.</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
