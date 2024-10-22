@@ -56,7 +56,8 @@ if (isset($_GET['id'])) {
     <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4><?php echo remove_junk(ucwords($propietari['nom'] . ' ' . $propietari['cognom'])); ?> - Llista de dispositius</h4>
+                <h4><?php echo remove_junk(ucwords($propietari['nom'] . ' ' . $propietari['cognom'])); ?> - Llista de
+                    dispositius</h4>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -73,25 +74,27 @@ if (isset($_GET['id'])) {
                         <tbody>
                             <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
                                 <tr>
-                                    <td><?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?></td>
-                                    <td><?php echo $dispositiu['data_creacio']; ?></td> 
+                                    <td><a href="view_device.php?id=<?php echo $dispositiu['id']; ?>">
+                                            <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?>
+                                        </a></td>
+                                    <td><?php echo $dispositiu['data_creacio']; ?></td>
                                     <td><?php echo $dispositiu['hora_creacio']; ?></td>
                                     <td>
-                                        <?php 
-                                            if ($dispositiu['data_actualitzacio'] == '0000-00-00' && $dispositiu['hora_actualitzacio'] == '00:00:00') {
-                                                echo "No s'ha actualitzat cap dispositiu.";
-                                            } else {
-                                                echo $dispositiu['data_actualitzacio'];
-                                            }
+                                        <?php
+                                        if ($dispositiu['data_actualitzacio'] == '0000-00-00' && $dispositiu['hora_actualitzacio'] == '00:00:00') {
+                                            echo "No s'ha actualitzat cap dispositiu.";
+                                        } else {
+                                            echo $dispositiu['data_actualitzacio'];
+                                        }
                                         ?>
                                     </td>
                                     <td>
-                                        <?php 
-                                            if ($dispositiu['data_actualitzacio'] == '0000-00-00' && $dispositiu['hora_actualitzacio'] == '00:00:00') {
-                                                echo  "No s'ha actualitzat cap dispositiu.";
-                                            } else {
-                                                echo $dispositiu['hora_actualitzacio'];
-                                            }
+                                        <?php
+                                        if ($dispositiu['data_actualitzacio'] == '0000-00-00' && $dispositiu['hora_actualitzacio'] == '00:00:00') {
+                                            echo "No s'ha actualitzat cap dispositiu.";
+                                        } else {
+                                            echo $dispositiu['hora_actualitzacio'];
+                                        }
                                         ?>
                                     </td>
                                 </tr>
