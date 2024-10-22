@@ -108,12 +108,11 @@ if (isset($_POST['edit_owner'])) {
                                     data-nom="<?php echo htmlspecialchars($dispositiu['nom']); ?>"
                                     data-cognom="<?php echo htmlspecialchars($dispositiu['cognom']); ?>"
                                     data-propietari-id="<?php echo $dispositiu['propietari_id']; ?>">
-                                    <?php echo htmlspecialchars($dispositiu['dispositiu']); ?>
+                                    <?php echo htmlspecialchars($dispositiu['dispositiu']) . ' - ' . htmlspecialchars($dispositiu['nom']) . ' ' . htmlspecialchars($dispositiu['cognom']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
-
                     <input type="hidden" name="propietari_id" id="propietari_id" value="">
 
                     <div class="form-group">
