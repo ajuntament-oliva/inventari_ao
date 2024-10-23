@@ -5,14 +5,12 @@ require_once('includes/load.php');
 $dispositiu_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 if ($dispositiu_id) {
-    $dispositiu = $db->query("
-        SELECT d.dispositiu, p.nom, p.cognom, c.*
-        FROM dispositius d
-        JOIN caracteristiques_detalls c ON d.id = c.dispositiu_id 
-        JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id
-        JOIN propietaris p ON dp.propietari_id = p.id
-        WHERE d.id = $dispositiu_id
-    ")->fetch_assoc();
+    $dispositiu = $db->query(" SELECT d.dispositiu, p.nom, p.cognom, p.id AS propietari_id, c.*
+                                    FROM dispositius d
+                                    JOIN caracteristiques_detalls c ON d.id = c.dispositiu_id 
+                                    JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id
+                                    JOIN propietaris p ON dp.propietari_id = p.id
+                                    WHERE d.id = $dispositiu_id")->fetch_assoc();
 
     if (!$dispositiu) {
         header("Location: departaments.php");
@@ -126,7 +124,9 @@ include_once('layouts/header.php');
                 </div>
             </div>
             <div class="panel-footer">
-                <a href="#" class="btn btn-danger">Torna enrere</a>
+                <input type="hidden" name="propietari_id" value="<?php echo $dispositiu['propietari_id']; ?>">
+                <a href="propietari_dispositius.php?id=<?php echo $dispositiu['propietari_id']; ?>"
+                    class="btn btn-danger">Torna enrere</a>
             </div>
         </div>
     </div>
