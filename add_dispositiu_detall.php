@@ -7,6 +7,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+$msg = '';
+
 // Obtindre l'ID del departament actual
 $departament_id = isset($_GET['departament_id']) ? (int) $_GET['departament_id'] : 0;
 
@@ -22,8 +24,8 @@ if (isset($_POST['add_owner'])) {
 
   $propietari_id = null;
 
-  $data_creacio = date('Y-m-d'); 
-  $hora_creacio = date('H:i:s'); 
+  $data_creacio = date('Y-m-d');
+  $hora_creacio = date('H:i:s');
 
   // Comprovar si s'ha seleccionat un propietari existent
   if ($propietari_exist) {
@@ -33,10 +35,10 @@ if (isset($_POST['add_owner'])) {
     if ($db->query($sql_insert_owner)) {
       $propietari_id = $db->insert_id();
     } else {
-      $session->msg('d', "Error afegint el propietari: " . $db->error);
+      $msg = "Error afegint el propietari: " . $db->error;
     }
   } else {
-    $session->msg('d', "Has de seleccionar un propietari existent o afegir-ne un de nou.");
+    $msg = "Has de seleccionar un propietari existent o afegir-ne un de nou.";
   }
 
   // Inserció del dispositiu i la seva relació amb el propietari
@@ -47,9 +49,10 @@ if (isset($_POST['add_owner'])) {
 
       $sql_insert_device_owner = "INSERT INTO dispositiu_propietari (dispositiu_id, propietari_id) VALUES ($dispositiu_id, $propietari_id)";
       if ($db->query($sql_insert_device_owner)) {
+        //$msg = "Error afegint el dispositiu: " . $db->error;
       }
     } else {
-      $session->msg('d', "Error afegint el dispositiu: " . $db->error);
+      $msg = "Error afegint el dispositiu: " . $db->error;
     }
   }
 
@@ -82,10 +85,14 @@ if (isset($_POST['add_owner'])) {
       $session->msg('s', "Propietari, dispositiu i característiques afegits amb èxit.");
       redirect('add_dispositiu_detall.php?departament_id=' . $departament_id, false);
     } else {
-      $session->msg('d', "Error afegint característiques: " . $db->error);
+      $msg = "Error afegint característiques: " . $db->error;
     }
   } else {
-    $session->msg('d', "Tots els camps obligatoris han d'estar plens.");
+    $msg = "Tots els camps obligatoris han d'estar plens.";
+  }
+
+  if (!empty($msg)) {
+    $session->msg('d', $msg);
   }
 }
 ?>
@@ -95,9 +102,7 @@ if (isset($_POST['add_owner'])) {
 <div class="row">
   <div class="col-md-3"></div>
   <div class="col-md-6">
-    <?php
-    echo $session->display_msg();
-    ?>
+    <?php echo $session->display_msg(); ?>
   </div>
   <div class="col-md-3"></div>
 </div>

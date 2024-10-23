@@ -12,7 +12,7 @@ function main() {
   let cognomField = document.querySelector('input[name="cognom"]');
   let propietariSelect = document.querySelector('select[name="propietari_exist"]');
   
-  // Funció per alternar camps segons la selecció de dispositiu
+  // Funció per alternar la visibilitat dels camps del dispositiu seleccionat
   function toggleFields(fields, isVisible) {
     let inputs = fields.querySelectorAll('input');
     inputs.forEach(input => {
@@ -27,7 +27,7 @@ function main() {
     fields.style.display = isVisible ? 'block' : 'none';
   }
 
-  // Mostrar/ocultar camps segons el tipus de dispositiu seleccionat
+  // Mostrar o amagar camps segons el dispositiu seleccionat
   radioButtons.forEach(radio => {
     radio.addEventListener('change', function () {
       toggleFields(monitorFields, false);
@@ -47,23 +47,30 @@ function main() {
     });
   });
 
-  // Validació per a que haja un propietari
+  // Validació de propietari (camps de nom o selecció de propietari)
   function validatePropietari() {
-    if (nomField.value.trim() !== '' || cognomField.value.trim() !== '') {
+    let nomVal = nomField.value.trim();
+    let cognomVal = cognomField.value.trim();
+    
+    if (nomVal !== '' || cognomVal !== '') {
       propietariSelect.removeAttribute('required');
+      return true;
     } else if (!propietariSelect.value) {
-      alert("Has de seleccionar un propietari existent o afegir-ne un de nou.");
+      propietariSelect.setCustomValidity('Selecciona un propietari o entra nom i cognom.');
+      propietariSelect.reportValidity();
       return false;
     }
     return true;
   }
 
+  // Validació del formulari
   form.addEventListener('submit', function (event) {
     let isValid = true;
+
     let requiredInputs = form.querySelectorAll('input[required]');
     
     requiredInputs.forEach(input => {
-      if (!input.value) {
+      if (!input.value.trim()) {
         isValid = false;
         input.classList.add('is-invalid');
       } else {
@@ -77,10 +84,10 @@ function main() {
 
     if (!isValid) {
       event.preventDefault();
-      alert("Per favor, plena tots els camps requerits.");
     }
   });
 
+  // Habilitar/deshabilitar camps de nom/cognom segons propietari
   nomField.addEventListener('input', function() {
     if (this.value.trim() !== '') {
       propietariSelect.value = '';
