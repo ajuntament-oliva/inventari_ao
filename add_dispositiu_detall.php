@@ -7,104 +7,96 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$msg = '';
-
 // Obtindre l'ID del departament actual
-$departament_id = isset($_GET['departament_id']) ? (int) $_GET['departament_id'] : 0;
+$departament_id = isset($_GET['departament_id']) ? (int)$_GET['departament_id'] : 0;
 
 // Obtindre el nom del departament
 $departament = $db->query("SELECT departament FROM departaments WHERE id = $departament_id")->fetch_assoc();
 $nomDepartament = htmlspecialchars($departament['departament']);
 
 if (isset($_POST['add_owner'])) {
-  $propietari_exist = $_POST['propietari_exist'] ?? '';
-  $propietari_nom = remove_junk($db->escape($_POST['nom'] ?? ''));
-  $propietari_cognom = remove_junk($db->escape($_POST['cognom'] ?? ''));
-  $dispositiu_nom = remove_junk($db->escape($_POST['dispositiu'] ?? ''));
+    $propietari_exist = $_POST['propietari_exist'] ?? '';
+    $propietari_nom = remove_junk($db->escape($_POST['nom'] ?? ''));
+    $propietari_cognom = remove_junk($db->escape($_POST['cognom'] ?? ''));
+    $dispositiu_nom = remove_junk($db->escape($_POST['dispositiu'] ?? ''));
 
-  $propietari_id = null;
+    $propietari_id = null;
 
-  $data_creacio = date('Y-m-d');
-  $hora_creacio = date('H:i:s');
+    $data_creacio = date('Y-m-d');
+    $hora_creacio = date('H:i:s');
 
-  // Comprovar si s'ha seleccionat un propietari existent
-  if ($propietari_exist) {
-    $propietari_id = (int) $propietari_exist;
-  } elseif ($propietari_nom && $propietari_cognom) {
-    $sql_insert_owner = "INSERT INTO propietaris (nom, cognom) VALUES ('$propietari_nom', '$propietari_cognom')";
-    if ($db->query($sql_insert_owner)) {
-      $propietari_id = $db->insert_id();
+    // Comprovar si s'ha seleccionat un propietari existent
+    if ($propietari_exist) {
+        $propietari_id = (int)$propietari_exist;
+    } elseif ($propietari_nom && $propietari_cognom) {
+        $sql_insert_owner = "INSERT INTO propietaris (nom, cognom) VALUES ('$propietari_nom', '$propietari_cognom')";
+        if ($db->query($sql_insert_owner)) {
+            $propietari_id = $db->insert_id();
+        } else {
+          $session->msg('d', "Error afegint el propietari nou: " . $db->error);
+        }
     } else {
-      $msg = "Error afegint el propietari: " . $db->error;
+      $session->msg('d', "Selecciona un propietari existent o afegeix-ne un de nou amb nom i cognom." . $db->error);
     }
-  } else {
-    $msg = "Has de seleccionar un propietari existent o afegir-ne un de nou.";
-  }
 
-  // Inserció del dispositiu i la seva relació amb el propietari
-  if ($propietari_id && $dispositiu_nom) {
-    $sql_insert_device = "INSERT INTO dispositius (dispositiu, departament_id) VALUES ('$dispositiu_nom', $departament_id)";
-    if ($db->query($sql_insert_device)) {
-      $dispositiu_id = $db->insert_id();
+    // Inserció del dispositiu i la seva relació amb el propietari
+    if ($propietari_id && $dispositiu_nom) {
+        $sql_insert_device = "INSERT INTO dispositius (dispositiu, departament_id) VALUES ('$dispositiu_nom', $departament_id)";
+        if ($db->query($sql_insert_device)) {
+            $dispositiu_id = $db->insert_id();
 
-      $sql_insert_device_owner = "INSERT INTO dispositiu_propietari (dispositiu_id, propietari_id) VALUES ($dispositiu_id, $propietari_id)";
-      if ($db->query($sql_insert_device_owner)) {
-        //$msg = "Error afegint el dispositiu: " . $db->error;
-      }
+            $sql_insert_device_owner = "INSERT INTO dispositiu_propietari (dispositiu_id, propietari_id) VALUES ($dispositiu_id, $propietari_id)";
+            if (!$db->query($sql_insert_device_owner)) {
+              $session->msg('d', "Error afegint la relació entre dispositiu i propietari: " . $db->error);
+            }
+        } else {
+          $session->msg ('d', "Error afegint el dispositiu al departament: " . $db->error);
+        }
+    }
+
+    // Comprovar camps del dispositiu segons el tipus
+    $uid = $id_anydesck = $processador = $ram = $capacitat = $marca = $dimensions = $tipus = '';
+
+    if ($dispositiu_nom == 'Monitor') {
+        $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
+        $dimensions = remove_junk($db->escape($_POST['dimensions'] ?? ''));
+    } elseif ($dispositiu_nom == 'Teclat') {
+        $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
+        $tipus = remove_junk($db->escape($_POST['tipus'] ?? ''));
+    } elseif ($dispositiu_nom == 'Torre' || $dispositiu_nom == 'Portàtil') {
+        $uid = remove_junk($db->escape($_POST['uid'] ?? ''));
+        $id_anydesck = remove_junk($db->escape($_POST['id_anydesck'] ?? ''));
+        $processador = remove_junk($db->escape($_POST['processador'] ?? ''));
+        $ram = remove_junk($db->escape($_POST['ram'] ?? ''));
+        $capacitat = remove_junk($db->escape($_POST['capacitat'] ?? ''));
+        if ($dispositiu_nom == 'Portàtil') {
+            $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
+        }
+    }
+
+    // Inserció de les característiques del dispositiu
+    if ($propietari_id && $dispositiu_nom) {
+        $sql_insert_feature = "INSERT INTO caracteristiques_detalls (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus, data_creacio, hora_creacio) 
+            VALUES ($dispositiu_id, '$uid', '$id_anydesck', '$processador', '$ram', '$capacitat', '$marca', '$dimensions', '$tipus', '$data_creacio', '$hora_creacio')";
+        if ($db->query($sql_insert_feature)) {
+          $session->msg( 's', "Propietari, dispositiu i característiques afegits amb èxit.");
+        } else {
+          $session->msg = "Error afegint característiques del dispositiu: " . $db->error;
+        }
     } else {
-      $msg = "Error afegint el dispositiu: " . $db->error;
+      $session->msg ('d', "Tots els camps obligatoris han d'estar plens per afegir el dispositiu.");
     }
-  }
-
-  // Verificació per dispositiu
-  $uid = $id_anydesck = $processador = $ram = $capacitat = $marca = $dimensions = $tipus = '';
-
-  if ($dispositiu_nom == 'Monitor') {
-    $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
-    $dimensions = remove_junk($db->escape($_POST['dimensions'] ?? ''));
-  } elseif ($dispositiu_nom == 'Teclat') {
-    $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
-    $tipus = remove_junk($db->escape($_POST['tipus'] ?? ''));
-  } elseif ($dispositiu_nom == 'Torre' || $dispositiu_nom == 'Portàtil') {
-    $uid = remove_junk($db->escape($_POST['uid'] ?? ''));
-    $id_anydesck = remove_junk($db->escape($_POST['id_anydesck'] ?? ''));
-    $processador = remove_junk($db->escape($_POST['processador'] ?? ''));
-    $ram = remove_junk($db->escape($_POST['ram'] ?? ''));
-    $capacitat = remove_junk($db->escape($_POST['capacitat'] ?? ''));
-    if ($dispositiu_nom == 'Portàtil') {
-      $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
-    }
-  }
-
-  // Comprovar si els camps obligatoris estan plens
-  if ($propietari_id && $dispositiu_nom) {
-    // Inserir característiques
-    $sql_insert_feature = "INSERT INTO caracteristiques_detalls (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus, data_creacio, hora_creacio) 
-      VALUES ($dispositiu_id, '$uid', '$id_anydesck', '$processador', '$ram', '$capacitat', '$marca', '$dimensions', '$tipus', '$data_creacio', '$hora_creacio')";
-    if ($db->query($sql_insert_feature)) {
-      $session->msg('s', "Propietari, dispositiu i característiques afegits amb èxit.");
-      redirect('add_dispositiu_detall.php?departament_id=' . $departament_id, false);
-    } else {
-      $msg = "Error afegint característiques: " . $db->error;
-    }
-  } else {
-    $msg = "Tots els camps obligatoris han d'estar plens.";
-  }
-
-  if (!empty($msg)) {
-    $session->msg('d', $msg);
-  }
 }
 ?>
 
 <?php include_once('layouts/header.php'); ?>
 
 <div class="row">
-  <div class="col-md-3"></div>
-  <div class="col-md-6">
-    <?php echo $session->display_msg(); ?>
-  </div>
-  <div class="col-md-3"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <?php echo $session->display_msg(); ?>
+    </div>
+    <div class="col-md-3"></div>
 </div>
 
 <div class="row">

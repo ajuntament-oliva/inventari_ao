@@ -47,28 +47,20 @@ function main() {
     });
   });
 
-  // Validació de propietari (camps de nom o selecció de propietari)
-  function validatePropietari() {
-    let nomVal = nomField.value.trim();
-    let cognomVal = cognomField.value.trim();
-    
-    if (nomVal !== '' || cognomVal !== '') {
-      propietariSelect.removeAttribute('required');
-      return true;
-    } else if (!propietariSelect.value) {
-      propietariSelect.setCustomValidity('Selecciona un propietari o entra nom i cognom.');
-      propietariSelect.reportValidity();
-      return false;
-    }
-    return true;
-  }
-
   // Validació del formulari
   form.addEventListener('submit', function (event) {
     let isValid = true;
-
+  
+    // Comprovar selecció d'un dispositiu
+    let dispositivoSeleccionado = Array.from(radioButtons).some(radio => radio.checked);
+    if (!dispositivoSeleccionado) {
+      isValid = false;
+      document.querySelector('.form-group .radio').classList.add('is-invalid');
+    } else {
+      document.querySelector('.form-group .radio').classList.remove('is-invalid');
+    }
+  
     let requiredInputs = form.querySelectorAll('input[required]');
-    
     requiredInputs.forEach(input => {
       if (!input.value.trim()) {
         isValid = false;
@@ -77,11 +69,12 @@ function main() {
         input.classList.remove('is-invalid');
       }
     });
-
+  
+    // Validació propietari
     if (!validatePropietari()) {
       isValid = false;
     }
-
+  
     if (!isValid) {
       event.preventDefault();
     }
