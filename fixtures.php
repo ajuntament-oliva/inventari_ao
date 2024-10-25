@@ -18,14 +18,37 @@ $errors = [];
 
 // Generar Departaments
 $departaments = [
-    'Alcaldía', 'Activitats', 'ADL', 'Agència tributària', 
-    'Benestar social i Igualtat', 'Biblioteca Tamarit', 'Biblioteca l\'Envic', 
-    'Comerç', 'Contratació', 'Cultura', 'EDAR', 'Educació', 
-    'Esports', 'Estadística i padró', 'Intervenció', 'Joventut', 
-    'Magatzem Municipal', 'Modernització', 'Museus', 'OLAMA', 
-    'OMIC', 'Participació ciutadana', 'Prevenció de Riscos Laborals', 
-    'Promoció Lingüística', 'RRHH', 'Secretaría', 'Serveis Públics', 
-    'Telefonia', 'Tresoreria', 'Turisme', 'Urbanisme'
+    'Alcaldía',
+    'Activitats',
+    'ADL',
+    'Agència tributària',
+    'Benestar social i Igualtat',
+    'Biblioteca Tamarit',
+    'Biblioteca l\'Envic',
+    'Comerç',
+    'Contratació',
+    'Cultura',
+    'EDAR',
+    'Educació',
+    'Esports',
+    'Estadística i padró',
+    'Intervenció',
+    'Joventut',
+    'Magatzem Municipal',
+    'Modernització',
+    'Museus',
+    'OLAMA',
+    'OMIC',
+    'Participació ciutadana',
+    'Prevenció de Riscos Laborals',
+    'Promoció Lingüística',
+    'RRHH',
+    'Secretaría',
+    'Serveis Públics',
+    'Telefonia',
+    'Tresoreria',
+    'Turisme',
+    'Urbanisme'
 ];
 
 foreach ($departaments as $departament) {
