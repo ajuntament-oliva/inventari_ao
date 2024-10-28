@@ -16,12 +16,11 @@ $nomDepartament = htmlspecialchars($departament['departament']);
 
 // Obtindre tots els dispositius del departament
 $dispositius = $db->query("
-    SELECT d.id, d.dispositiu, p.id AS propietari_id, p.nom, p.cognom 
+    SELECT d.id, d.dispositiu, p.id AS propietari_id, p.nom, p.cognom, p.nom_actual, p.cognom_actual
     FROM dispositius d 
     LEFT JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
     LEFT JOIN propietaris p ON dp.propietari_id = p.id 
-    WHERE d.departament_id = $departament_id
-")->fetch_all(MYSQLI_ASSOC);
+    WHERE d.departament_id = $departament_id")->fetch_all(MYSQLI_ASSOC);
 
 // Actualitzar les dades si s'ha enviat el formulari
 if (isset($_POST['edit_owner'])) {
@@ -41,7 +40,7 @@ if (isset($_POST['edit_owner'])) {
 
         if ($db->num_rows($result_check_owner) > 0) {
             // Actualitzar dades del propietari existent
-            $sql_update_owner = "UPDATE propietaris SET nom = '$propietari_nom', cognom = '$propietari_cognom' WHERE id = $propietari_id";
+            $sql_update_owner = "UPDATE propietaris SET nom_actual = '$propietari_nom', cognom_actual = '$propietari_cognom' WHERE id = $propietari_id";
             if ($db->query($sql_update_owner)) {
 
                 // Actualitzar la data en caracteristiques_detalls
@@ -54,10 +53,10 @@ if (isset($_POST['edit_owner'])) {
             }
         } else {
             // Si el propietari no existeix, crear un nou propietari
-            $sql_insert_owner = "INSERT INTO propietaris (nom, cognom) VALUES ('$propietari_nom', '$propietari_cognom')";
+            $sql_insert_owner = "INSERT INTO propietaris (nom_actual, cognom_actual) VALUES ('$propietari_nom', '$propietari_cognom')";
             if ($db->query($sql_insert_owner)) {
                 $new_owner_id = $db->insert_id;
-                $session->msg('s', "Nou propietari creat amb èxit.");
+                $session->msg('s', "Propietari actualitzat amb èxit.");
 
                 // Actualitzar el dispositiu amb el nou propietari
                 $sql_update_device_owner = "UPDATE dispositiu_propietari SET propietari_id = $new_owner_id WHERE dispositiu_id = $dispositiu_id";

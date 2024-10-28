@@ -35,7 +35,9 @@ If you find any bug, and a fix for that bug, please leave a comment on the githu
    **Username** : user  |
    **Password** : user  |
 
-6. Good luck!  
+6. fixtures.php is for add all departments.
+
+7. Good luck!  
 
 - - - -
 

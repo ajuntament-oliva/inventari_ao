@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS `propietaris` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `nom` varchar(30) NOT NULL,
   `cognom` varchar(30) NOT NULL,
+  `nom_actual` varchar(30) DEFAULT NULL,
+  `cognom_actual` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
