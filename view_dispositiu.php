@@ -5,7 +5,7 @@ require_once('includes/load.php');
 $dispositiu_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 if ($dispositiu_id) {
-    $dispositiu = $db->query(" SELECT d.dispositiu, p.nom, p.cognom, p.id AS propietari_id, c.*
+    $dispositiu = $db->query(" SELECT d.dispositiu, p.nom, p.cognom, p.nom_actual, p.cognom_actual, p.id AS propietari_id, c.*
                                     FROM dispositius d
                                     JOIN caracteristiques_detalls c ON d.id = c.dispositiu_id 
                                     JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id
@@ -30,7 +30,11 @@ include_once('layouts/header.php');
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4><?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?> -
-                    <?php echo remove_junk(ucwords($dispositiu['nom'] . ' ' . $dispositiu['cognom'])); ?>
+                <?php 
+                    $nom = !empty($dispositiu['nom_actual']) ? $dispositiu['nom_actual'] : $dispositiu['nom'];
+                    $cognom = !empty($dispositiu['cognom_actual']) ? $dispositiu['cognom_actual'] : $dispositiu['cognom'];
+                    echo remove_junk(ucwords($nom . ' ' . $cognom)); 
+                    ?>
                 </h4>
             </div>
             <div class="panel-body">

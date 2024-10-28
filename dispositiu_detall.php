@@ -21,7 +21,7 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
         
         // Consultar BDA per obtindre les característiques de tots els dispositius del mateix tipus en el departament actual
         $caracteristiques = $db->query("SELECT DISTINCT c.uid, c.id_anydesck, c.processador, c.ram, c.capacitat, 
-                                                            c.marca, c.dimensions, c.tipus, p.id as propietari_id, p.nom, p.cognom 
+                                                            c.marca, c.dimensions, c.tipus, p.id as propietari_id, p.nom, p.cognom, p.nom_actual, p.cognom_actual
                                             FROM caracteristiques_detalls c
                                             JOIN dispositius d ON c.dispositiu_id = d.id
                                             JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
@@ -49,7 +49,7 @@ include_once('layouts/header.php');
                     </div>
                 <?php else: ?>
                     <h4>
-                        <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?> Característiques
+                        <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?>
                         <?php if (isset($departament['departament'])): ?>
                             - <?php echo remove_junk(ucwords($departament['departament'])); ?>
                         <?php endif; ?>
@@ -104,7 +104,11 @@ include_once('layouts/header.php');
                                         <?php } ?>
                                         <td>
                                             <a href="propietari_dispositius.php?id=<?php echo (int)$caracteristica['propietari_id']; ?>">
-                                                <?php echo remove_junk(ucwords($caracteristica['nom'] . ' ' . $caracteristica['cognom'])); ?>
+                                                <?php
+                                                    $nom = !empty($caracteristica['nom_actual']) ? $caracteristica['nom_actual'] : $caracteristica['nom'];
+                                                    $cognom = !empty($caracteristica['cognom_actual']) ? $caracteristica['cognom_actual'] : $caracteristica['cognom'];
+                                                    echo remove_junk(ucwords($nom . ' ' . $cognom));
+                                                ?>
                                             </a>
                                         </td>
                                     </tr>

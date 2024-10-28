@@ -9,7 +9,7 @@ $departament_id = isset($_GET['departament_id']) ? (int) $_GET['departament_id']
 $departament = $db->query("SELECT departament FROM departaments WHERE id = $departament_id")->fetch_assoc();
 $nomDepartament = htmlspecialchars($departament['departament']);
 
-$dispositius = $db->query("SELECT d.id as dispositiu_id, d.dispositiu, p.nom, p.cognom
+$dispositius = $db->query("SELECT d.id as dispositiu_id, d.dispositiu, p.nom, p.cognom, p.nom_actual, p.cognom_actual
                                     FROM dispositius d 
                                     JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id
                                     JOIN propietaris p ON dp.propietari_id = p.id 
@@ -52,10 +52,12 @@ include_once('layouts/header.php');
                                             <th>Marca</th>
                                             <th>Dimensions</th>
                                             <th>Propietari/a</th>
+                                            <th>Propietari/a actual</th>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
                                             <th>Marca</th>
                                             <th>Tipus</th>
                                             <th>Propietari/a</th>
+                                            <th>Propietari/a actual</th>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Torre' || $dispositiu['dispositiu'] == 'Portàtil') { ?>
                                             <th>UID</th>
                                             <th>ID AnyDesk</th>
@@ -66,6 +68,7 @@ include_once('layouts/header.php');
                                                 <th>Marca</th>
                                             <?php } ?>
                                             <th>Propietari/a</th>
+                                            <th>Propietari/a actual</th>
                                         <?php } ?>
                                     </tr>
                                 </thead>
@@ -88,7 +91,17 @@ include_once('layouts/header.php');
                                                     <td><?php echo remove_junk(ucwords($caracteristica['marca'])); ?></td>
                                                 <?php } ?>
                                             <?php } ?>
-                                            <td><?php echo remove_junk(ucwords($dispositiu['nom'] . ' ' . $dispositiu['cognom'])); ?>
+                                            <td>
+                                                <?php echo remove_junk(ucwords($dispositiu['nom'] . ' ' . $dispositiu['cognom'])); ?>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                if (!empty($dispositiu['nom_actual']) || !empty($dispositiu['cognom_actual'])) {
+                                                    echo remove_junk(ucwords($dispositiu['nom_actual'] . ' ' . $dispositiu['cognom_actual']));
+                                                } else {
+                                                    echo '';
+                                                }
+                                                ?>
                                             </td>
                                         </tr>
                                     <?php endwhile; ?>

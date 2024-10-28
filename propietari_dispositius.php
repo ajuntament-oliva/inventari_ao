@@ -23,10 +23,8 @@ if (isset($_GET['id'])) {
                                             ELSE LEAST(c.hora_creacio, c.hora_actualitzacio)
                                         END");
 
-
-
     // Obtindre el nom del propietari
-    $propietari = $db->query("SELECT nom, cognom 
+    $propietari = $db->query("SELECT nom, cognom, nom_actual, cognom_actual 
                                 FROM propietaris 
                                 WHERE id = $propietari_id LIMIT 1")->fetch_assoc();
 
@@ -56,8 +54,11 @@ if (isset($_GET['id'])) {
     <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4><?php echo remove_junk(ucwords($propietari['nom'] . ' ' . $propietari['cognom'])); ?> - Llista de
-                    dispositius</h4>
+                <h4><?php
+                    $nom = !empty($propietari['nom_actual']) ? $propietari['nom_actual'] : $propietari['nom'];
+                    $cognom = !empty($propietari['cognom_actual']) ? $propietari['cognom_actual'] : $propietari['cognom'];
+                    echo remove_junk(ucwords($nom . ' ' . $cognom));
+                    ?> - Llista de dispositius</h4>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">

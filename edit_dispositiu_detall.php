@@ -15,12 +15,13 @@ $departament = $db->query("SELECT departament FROM departaments WHERE id = $depa
 $nomDepartament = htmlspecialchars($departament['departament']);
 
 // Obtindre tots els dispositius del departament
-$dispositius = $db->query("
-    SELECT d.id, d.dispositiu, p.id AS propietari_id, p.nom, p.cognom, p.nom_actual, p.cognom_actual
-    FROM dispositius d 
-    LEFT JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
-    LEFT JOIN propietaris p ON dp.propietari_id = p.id 
-    WHERE d.departament_id = $departament_id")->fetch_all(MYSQLI_ASSOC);
+$dispositius = $db->query("SELECT d.id, d.dispositiu, p.id AS propietari_id, 
+                                    COALESCE(p.nom_actual, p.nom) AS nom, 
+                                    COALESCE(p.cognom_actual, p.cognom) AS cognom
+                                FROM dispositius d 
+                                LEFT JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
+                                LEFT JOIN propietaris p ON dp.propietari_id = p.id 
+                                WHERE d.departament_id = $departament_id")->fetch_all(MYSQLI_ASSOC);
 
 // Actualitzar les dades si s'ha enviat el formulari
 if (isset($_POST['edit_owner'])) {
