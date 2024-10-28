@@ -7,13 +7,15 @@ $message = '';
 if (isset($_GET['departament_id'])) {
   $departament_id = (int) $_GET['departament_id'];
 
-  $dispositius = $db->query("
-    SELECT d.id, d.dispositiu 
-    FROM dispositius d
-    JOIN caracteristiques_detalls cd ON d.id = cd.dispositiu_id
-    WHERE d.departament_id = $departament_id
-    ORDER BY cd.data_creacio ASC, cd.hora_creacio ASC
-  ");
+  $dispositius = $db->query("SELECT d.id, d.dispositiu, 
+                              COALESCE(p.nom_actual, p.nom) AS nom, 
+                              COALESCE(p.cognom_actual, p.cognom) AS cognom
+                              FROM dispositius d
+                              JOIN caracteristiques_detalls cd ON d.id = cd.dispositiu_id
+                              LEFT JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id
+                              LEFT JOIN propietaris p ON dp.propietari_id = p.id
+                              WHERE d.departament_id = $departament_id
+                              ORDER BY cd.data_creacio ASC, cd.hora_creacio ASC");
 
   $result = $db->query("SELECT departament FROM departaments WHERE id = $departament_id LIMIT 1");
   if ($result && $result->num_rows > 0) {
@@ -67,7 +69,7 @@ if (isset($_GET['departament_id'])) {
                 <option value="">Selecciona'n un</option>
                 <?php while ($dispositiu = $dispositius->fetch_assoc()): ?>
                   <option value="<?php echo (int) $dispositiu['id']; ?>">
-                    <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?>
+                    <?php echo remove_junk(ucwords($dispositiu['dispositiu'])) . ' - ' . remove_junk(ucwords($dispositiu['nom'] . ' ' . $dispositiu['cognom'])); ?>
                   </option>
                 <?php endwhile; ?>
               </select>
