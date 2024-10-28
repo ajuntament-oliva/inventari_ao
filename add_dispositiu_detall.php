@@ -158,11 +158,13 @@ VALUES (
               <option value="">Selecciona un propietari</option>
               <?php
               // Obtindre els propietaris amb dispositius en el departament seleccionat
-              $sql = "SELECT DISTINCT p.id, p.nom, p.cognom 
-                      FROM propietaris p
-                      JOIN dispositiu_propietari dp ON p.id = dp.propietari_id
-                      JOIN dispositius d ON dp.dispositiu_id = d.id
-                      WHERE d.departament_id = $departament_id";
+              $sql = "SELECT DISTINCT p.id, 
+                                COALESCE(p.nom_actual, p.nom) AS nom, 
+                                COALESCE(p.cognom_actual, p.cognom) AS cognom 
+                FROM propietaris p
+                JOIN dispositiu_propietari dp ON p.id = dp.propietari_id
+                JOIN dispositius d ON dp.dispositiu_id = d.id
+                WHERE d.departament_id = $departament_id";
               $owners = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
               foreach ($owners as $owner) {
                 echo "<option value='{$owner['id']}'>" . htmlspecialchars($owner['nom'] . ' ' . $owner['cognom']) . "</option>";
