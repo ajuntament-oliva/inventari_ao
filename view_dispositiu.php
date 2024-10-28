@@ -35,7 +35,7 @@ include_once('layouts/header.php');
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-hover">
                         <!-- Monitor -->
                         <?php if ($dispositiu['dispositiu'] == 'Monitor'): ?>
                             <tr>
@@ -73,7 +73,7 @@ include_once('layouts/header.php');
                                 <td><?php echo $dispositiu['ram']; ?></td>
                             </tr>
                             <tr>
-                                <th>Capacitat</th>
+                                <th>Capacitat Disc Dur</th>
                                 <td><?php echo $dispositiu['capacitat']; ?></td>
                             </tr>
                         <?php elseif ($dispositiu['dispositiu'] == 'Portàtil'): ?>
@@ -107,17 +107,8 @@ include_once('layouts/header.php');
                             <td><?php echo $dispositiu['data_creacio']; ?></td>
                         </tr>
                         <tr>
-                            <th>Hora Creació</th>
-                            <td><?php echo $dispositiu['hora_creacio']; ?></td>
-                        </tr>
-                        <tr>
                             <th>Data Actualització</th>
-                            <td><?php echo ($dispositiu['data_actualitzacio'] == '0000-00-00') ? "No s'ha actualitzat" : $dispositiu['data_actualitzacio']; ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Hora Actualització</th>
-                            <td><?php echo ($dispositiu['hora_actualitzacio'] == '00:00:00') ? "No s'ha actualitzat" : $dispositiu['hora_actualitzacio']; ?>
+                            <td><?php echo ($dispositiu['data_actualitzacio'] == '0000-00-00') ? "" : $dispositiu['data_actualitzacio']; ?>
                             </td>
                         </tr>
                     </table>

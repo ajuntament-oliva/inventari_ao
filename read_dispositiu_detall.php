@@ -61,7 +61,7 @@ include_once('layouts/header.php');
                                             <th>ID AnyDesk</th>
                                             <th>Processador</th>
                                             <th>RAM</th>
-                                            <th>Capacitat</th>
+                                            <th>Capacitat Disc Dur</th>
                                             <?php if ($dispositiu['dispositiu'] == 'Portàtil') { ?>
                                                 <th>Marca</th>
                                             <?php } ?>

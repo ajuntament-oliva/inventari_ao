@@ -66,9 +66,7 @@ if (isset($_GET['id'])) {
                             <tr>
                                 <th>Dispositius</th>
                                 <th>Data inicial</th>
-                                <th>Hora inicial</th>
                                 <th>Data final</th>
-                                <th>Hora final</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,22 +76,12 @@ if (isset($_GET['id'])) {
                                             <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?>
                                         </a></td>
                                     <td><?php echo $dispositiu['data_creacio']; ?></td>
-                                    <td><?php echo $dispositiu['hora_creacio']; ?></td>
                                     <td>
                                         <?php
-                                        if ($dispositiu['data_actualitzacio'] == '0000-00-00' && $dispositiu['hora_actualitzacio'] == '00:00:00') {
-                                            echo "No s'ha actualitzat cap dispositiu.";
+                                        if ($dispositiu['data_actualitzacio'] == '0000-00-00') {
+                                            echo "";
                                         } else {
                                             echo $dispositiu['data_actualitzacio'];
-                                        }
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?php
-                                        if ($dispositiu['data_actualitzacio'] == '0000-00-00' && $dispositiu['hora_actualitzacio'] == '00:00:00') {
-                                            echo "No s'ha actualitzat cap dispositiu.";
-                                        } else {
-                                            echo $dispositiu['hora_actualitzacio'];
                                         }
                                         ?>
                                     </td>

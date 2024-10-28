@@ -211,7 +211,7 @@ if (isset($_POST['add_owner'])) {
                 <input type="text" name="ram" class="form-control" required>
               </div>
               <div class="form-group">
-                <label for="capacitat">Capacitat:</label>
+                <label for="capacitat">Capacitat Disc Dur:</label>
                 <input type="text" name="capacitat" class="form-control" required>
               </div>
             </div>
