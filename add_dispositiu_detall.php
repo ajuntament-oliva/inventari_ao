@@ -14,24 +14,26 @@ $departament_id = isset($_GET['departament_id']) ? (int) $_GET['departament_id']
 $departament = $db->query("SELECT departament FROM departaments WHERE id = $departament_id")->fetch_assoc();
 $nomDepartament = htmlspecialchars($departament['departament']);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if (isset($_POST['add_owner'])) {
     $propietari_exist = $_POST['propietari_exist'] ?? '';
     $propietari_nom = remove_junk($db->escape($_POST['nom'] ?? ''));
     $propietari_cognom = remove_junk($db->escape($_POST['cognom'] ?? ''));
     $dispositiu_nom = remove_junk($db->escape($_POST['dispositiu'] ?? ''));
 
-    // Verificar si los campos requeridos están vacíos
-    if (empty($dispositiu_nom) || (empty($propietari_exist) && (empty($propietari_nom) || empty($propietari_cognom)))) {
-      $session->msg('d', "Tots els camps obligatoris han d'estar plens.");
-    } else {
-      $propietari_id = null;
-      $data_creacio = date('Y-m-d');
-      $hora_creacio = date('H:i:s');
+    $propietari_id = null;
+    $data_creacio = date('Y-m-d');
+    $hora_creacio = date('H:i:s');
 
-      // Comprobar si se ha seleccionado un propietario existente
+    // Validar seleccionat un dispositiu i un propietari
+    if (empty($dispositiu_nom)) {
+      $session->msg('d', "Has de seleccionar un dispositiu.");
+    } elseif (!$propietari_exist && (!$propietari_nom || !$propietari_cognom)) {
+      $session->msg('d', "Has de seleccionar un propietari existent o afegir-ne un de nou.");
+    } else {
+      // Comprovar si s'ha seleccionat un propietari existent
       if ($propietari_exist) {
-        $propietari_id = (int)$propietari_exist;
+        $propietari_id = (int) $propietari_exist;
       } elseif ($propietari_nom && $propietari_cognom) {
         $sql_insert_owner = "INSERT INTO propietaris (nom, cognom) VALUES ('$propietari_nom', '$propietari_cognom')";
         if ($db->query($sql_insert_owner)) {
@@ -41,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
       }
 
-      // Inserción del dispositivo y su relación con el propietario
+      // Inserció del dispositiu i la seva relació amb el propietari
       if ($propietari_id && $dispositiu_nom) {
         $sql_insert_device = "INSERT INTO dispositius (dispositiu, departament_id) VALUES ('$dispositiu_nom', $departament_id)";
         if ($db->query($sql_insert_device)) {
@@ -56,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
       }
 
-      // Inserción de características específicas del dispositivo
+      // Verificació per dispositiu
       $uid = $id_anydesck = $processador = $ram = $capacitat = $marca = $dimensions = $tipus = '';
 
       if ($dispositiu_nom == 'Monitor') {
@@ -76,26 +78,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
       }
 
+      // Comprovar si els camps obligatoris estan plens
       if ($propietari_id && $dispositiu_nom) {
+        // Inserir característiques
         $sql_insert_feature = "INSERT INTO caracteristiques_detalls 
-          (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus, data_creacio, hora_creacio) 
-          VALUES (
-            $dispositiu_id, 
-            " . ($uid ? "'$uid'" : "NULL") . ", 
-            " . ($id_anydesck ? "'$id_anydesck'" : "NULL") . ", 
-            " . ($processador ? "'$processador'" : "NULL") . ", 
-            " . ($ram ? "'$ram'" : "NULL") . ", 
-            " . ($capacitat ? "'$capacitat'" : "NULL") . ", 
-            " . ($marca ? "'$marca'" : "NULL") . ", 
-            " . ($dimensions ? "'$dimensions'" : "NULL") . ", 
-            " . ($tipus ? "'$tipus'" : "NULL") . ", 
-            '$data_creacio', '$hora_creacio')";
+        (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus, data_creacio, hora_creacio) 
+        VALUES (
+          $dispositiu_id, 
+          " . ($uid ? "'$uid'" : "NULL") . ", 
+          " . ($id_anydesck ? "'$id_anydesck'" : "NULL") . ", 
+          " . ($processador ? "'$processador'" : "NULL") . ", 
+          " . ($ram ? "'$ram'" : "NULL") . ", 
+          " . ($capacitat ? "'$capacitat'" : "NULL") . ", 
+          " . ($marca ? "'$marca'" : "NULL") . ", 
+          " . ($dimensions ? "'$dimensions'" : "NULL") . ", 
+          " . ($tipus ? "'$tipus'" : "NULL") . ", 
+          '$data_creacio', '$hora_creacio')";
         if ($db->query($sql_insert_feature)) {
           $session->msg('s', "Propietari, dispositiu i característiques afegits amb èxit.");
           redirect('add_dispositiu_detall.php?departament_id=' . $departament_id, false);
         } else {
           $session->msg('d', "Error afegint característiques: " . $db->error);
         }
+      } else {
+        $session->msg('d', "Tots els camps obligatoris han d'estar plens.");
       }
     }
   }

@@ -71,7 +71,7 @@ function main() {
     let selectedDevice = Array.from(radioButtons).some(radio => radio.checked);
     if (!selectedDevice) {
       event.preventDefault();
-      //alert("Por favor, selecciona un tipo de dispositivo.");
+      document.querySelector('.col-md-6').innerHTML += '<div class="alert alert-danger">Selecciona un dispositiu i completa els camps requerits.</div>';
     }
   });
 }
