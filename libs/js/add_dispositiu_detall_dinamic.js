@@ -18,14 +18,18 @@ function main() {
     inputs.forEach(input => {
       if (isVisible) {
         input.removeAttribute('disabled');
-        input.setAttribute('required', 'required');
+        if (input.name === "nom" || input.name === "cognom") {
+          input.setAttribute('required', 'required');
+        } else {
+          input.removeAttribute('required');
+        }
       } else {
         input.setAttribute('disabled', 'disabled');
         input.removeAttribute('required');
       }
     });
     fields.style.display = isVisible ? 'block' : 'none';
-  }
+  }  
 
   // Mostrar o ocultar camps segons el dispositiu seleccionat
   radioButtons.forEach(radio => {
@@ -67,7 +71,7 @@ function main() {
     let selectedDevice = Array.from(radioButtons).some(radio => radio.checked);
     if (!selectedDevice) {
       event.preventDefault();
-      alert("Por favor, selecciona un tipo de dispositivo.");
+      //alert("Por favor, selecciona un tipo de dispositivo.");
     }
   });
 }

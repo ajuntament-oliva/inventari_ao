@@ -75,11 +75,20 @@ if (isset($_POST['add_owner'])) {
 
   // Comprovar si els camps obligatoris estan plens
   if ($propietari_id && $dispositiu_nom) {
-    $dimensions = !empty($dimensions) ? "'$dimensions'" : "NULL";
-    $tipus = !empty($tipus) ? "'$tipus'" : "NULL";
     // Inserir característiques
-    $sql_insert_feature = "INSERT INTO caracteristiques_detalls (dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus, data_creacio, hora_creacio) 
-      VALUES ($dispositiu_id, '$uid', '$id_anydesck', '$processador', '$ram', '$capacitat', '$marca', $dimensions, $tipus, '$data_creacio', '$hora_creacio')";
+    $sql_insert_feature = "INSERT INTO caracteristiques_detalls 
+(dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus, data_creacio, hora_creacio) 
+VALUES (
+    $dispositiu_id, 
+    " . ($uid ? "'$uid'" : "NULL") . ", 
+    " . ($id_anydesck ? "'$id_anydesck'" : "NULL") . ", 
+    " . ($processador ? "'$processador'" : "NULL") . ", 
+    " . ($ram ? "'$ram'" : "NULL") . ", 
+    " . ($capacitat ? "'$capacitat'" : "NULL") . ", 
+    " . ($marca ? "'$marca'" : "NULL") . ", 
+    " . ($dimensions ? "'$dimensions'" : "NULL") . ", 
+    " . ($tipus ? "'$tipus'" : "NULL") . ", 
+    '$data_creacio', '$hora_creacio')";
     if ($db->query($sql_insert_feature)) {
       $session->msg('s', "Propietari, dispositiu i característiques afegits amb èxit.");
       redirect('add_dispositiu_detall.php?departament_id=' . $departament_id, false);
@@ -162,11 +171,11 @@ if (isset($_POST['add_owner'])) {
 
           <div class="form-group">
             <label for="nom">Nom del Propietari:</label>
-            <input type="text" name="nom" id="nom" class="form-control">
+            <input type="text" name="nom" id="nom" class="form-control" required>
           </div>
           <div class="form-group">
             <label for="cognom">Cognom del Propietari:</label>
-            <input type="text" name="cognom" id="cognom" class="form-control">
+            <input type="text" name="cognom" id="cognom" class="form-control" required>
           </div>
 
           <!-- Camps dinàmics -->
@@ -178,7 +187,7 @@ if (isset($_POST['add_owner'])) {
               </div>
               <div class="form-group">
                 <label for="dimensions">Dimensions de Pantalla:</label>
-                <input type="text" name="dimensions" class="form-control">
+                <input type="text" name="dimensions" class="form-control" required>
               </div>
             </div>
 
@@ -189,7 +198,7 @@ if (isset($_POST['add_owner'])) {
               </div>
               <div class="form-group">
                 <label for="tipus">Tipus:</label>
-                <input type="text" name="tipus" class="form-control">
+                <input type="text" name="tipus" class="form-control" required>
               </div>
             </div>
 

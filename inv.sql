@@ -8,12 +8,6 @@ CREATE TABLE IF NOT EXISTS `propietaris` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Inserir dades per a la taula `propietaris`
-INSERT INTO `propietaris` (`id`, `nom`, `cognom`) VALUES
-(1, 'Minho', 'Lee'),
-(2, 'Richard', 'Grayson'),
-(3, 'Sebastian', 'Stan');
-
 -- --------------------------------------------------------
 -- Taula estructural per a la taula `departaments`
 -- --------------------------------------------------------
@@ -22,12 +16,6 @@ CREATE TABLE IF NOT EXISTS `departaments` (
   `departament` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- Inserir dades per a la taula `departaments`
-INSERT INTO `departaments` (`id`, `departament`) VALUES
-(1, 'Modernització'),
-(2, 'ADL'),
-(3, 'RRHH');
 
 -- --------------------------------------------------------
 -- Taula estructural per a la taula `dispositius`
@@ -41,26 +29,20 @@ CREATE TABLE IF NOT EXISTS `dispositius` (
   CONSTRAINT `FK_dispositiu_departament` FOREIGN KEY (`departament_id`) REFERENCES `departaments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Inserir dades per a la taula `dispositius`
-INSERT INTO `dispositius` (`id`, `dispositiu`, `departament_id`) VALUES
-(1, 'Torre', 1),
-(2, 'Torre', 2),
-(3, 'Portàtil', 3);
-
 -- --------------------------------------------------------
 -- Taula estructural per a la taula `caracteristiques_detalls`
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `caracteristiques_detalls` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `dispositiu_id` int(11) unsigned NOT NULL,
-  `uid` VARCHAR(50) NOT NULL,
-  `id_anydesck` VARCHAR(50) NOT NULL,
-  `processador` VARCHAR(50) NOT NULL,
-  `ram` VARCHAR(50) NOT NULL,
-  `capacitat` VARCHAR(50) NOT NULL,
-  `marca` VARCHAR(50) NOT NULL,
-  `dimensions` VARCHAR(50) NOT NULL,
-  `tipus` VARCHAR(50) NOT NULL,
+  `uid` VARCHAR(50) DEFAULT NULL,
+  `id_anydesck` VARCHAR(50) DEFAULT NULL,
+  `processador` VARCHAR(50) DEFAULT NULL,
+  `ram` VARCHAR(50) DEFAULT NULL,
+  `capacitat` VARCHAR(50) DEFAULT NULL,
+  `marca` VARCHAR(50) DEFAULT NULL,
+  `dimensions` VARCHAR(50) DEFAULT NULL,
+  `tipus` VARCHAR(50) DEFAULT NULL,
   `data_creacio` DATE NOT NULL,
   `hora_creacio` TIME NOT NULL,
   `data_actualitzacio` DATE NOT NULL,
@@ -69,13 +51,6 @@ CREATE TABLE IF NOT EXISTS `caracteristiques_detalls` (
   KEY `dispositiu_id` (`dispositiu_id`),
   CONSTRAINT `FK_caracteristica_dispositiu` FOREIGN KEY (`dispositiu_id`) REFERENCES `dispositius` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- Inserir dades per a la taula `caracteristiques_detalls`
-INSERT INTO `caracteristiques_detalls` (`id`, `dispositiu_id`, `uid`, `id_anydesck`, `processador`, `ram`, `capacitat`, `marca`, `dimensions`, `tipus`, `data_creacio`, `hora_creacio`, `data_actualitzacio`, `hora_actualitzacio`) VALUES
-(1, 1, 'UID123', 'A1B2C3', 'Intel Core i7', '16GB', '512GB SSD', 'Dell', '30x20x5 cm', 'Desktop', '2024-10-15', '08:30:00', '2024-10-15', '08:30:00'),
-(2, 1, 'UID124', 'A1B2C4', 'Intel Core i7', '16GB', '1TB SSD', 'HP', '30x20x5 cm', 'Desktop', '2024-10-15', '08:30:00', '2024-10-15', '08:30:00'),
-(3, 2, 'UID125', 'A1B2C5', 'Intel Core i5', '8GB', '256GB SSD', 'Asus', '35x25x2 cm', 'Laptop', '2024-10-15', '09:00:00', '2024-10-15', '09:00:00'),
-(4, 3, 'UID126', 'A1B2C6', 'Intel Core i5', '8GB', '512GB SSD', 'Lenovo', '35x25x2 cm', 'Laptop', '2024-10-15', '09:30:00', '2024-10-15', '09:30:00');
 
 -- --------------------------------------------------------
 -- Taula estructural per a la taula `dispositiu_propietari`
@@ -89,13 +64,6 @@ CREATE TABLE IF NOT EXISTS `dispositiu_propietari` (
   CONSTRAINT `FK_dispositiu_propietari_dispositiu` FOREIGN KEY (`dispositiu_id`) REFERENCES `dispositius` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_dispositiu_propietari_propietari` FOREIGN KEY (`propietari_id`) REFERENCES `propietaris` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- Inserir dades per a la taula `dispositiu_propietari`
-INSERT INTO `dispositiu_propietari` (`dispositiu_id`, `propietari_id`) VALUES
-(1, 1),
-(2, 2),
-(3, 3),
-(1, 2);  -- Exemple de dispositiu amb més d'un propietari
 
 -- --------------------------------------------------------
 -- Taula estructural per a la taula `users`
