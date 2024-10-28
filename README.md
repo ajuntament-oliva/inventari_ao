@@ -30,10 +30,10 @@ If you find any bug, and a fix for that bug, please leave a comment on the githu
 5. Then loging by typing **username** and **password**:
 
 
-   Administrator        | Special User           | Default User
-   ---------------------| -----------------------| -------------------
-   **Username** : admin | **Username** : special | **Username** : user
-   **Password** : admin | **Password** : special | **Password** : user
+   Default User         |
+   ---------------------|
+   **Username** : user  |
+   **Password** : user  |
 
 6. Good luck!  
 
