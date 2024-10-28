@@ -12,7 +12,7 @@ function main() {
   let cognomField = document.querySelector('input[name="cognom"]');
   let propietariSelect = document.querySelector('select[name="propietari_exist"]');
 
-  // Función para alternar la visibilidad de los campos del dispositivo seleccionado
+  // Funció per alternar la visibilitat dels camps del dispositiu seleccionat
   function toggleFields(fields, isVisible) {
     let inputs = fields.querySelectorAll('input');
     inputs.forEach(input => {
@@ -27,7 +27,7 @@ function main() {
     fields.style.display = isVisible ? 'block' : 'none';
   }
 
-  // Mostrar u ocultar campos según el dispositivo seleccionado
+  // Mostrar o ocultar camps segons el dispositiu seleccionat
   radioButtons.forEach(radio => {
     radio.addEventListener('change', function () {
       toggleFields(monitorFields, false);
@@ -47,7 +47,7 @@ function main() {
     });
   });
 
-  // Manejar la selección de propietario existente o nuevo
+  // Selecció de propietari existent o nou
   propietariSelect.addEventListener('change', function () {
     if (propietariSelect.value) {
       nomField.setAttribute('disabled', 'disabled');
@@ -62,7 +62,7 @@ function main() {
     }
   });
 
-  // Validar formulario antes de enviar
+  // Validar formulari abans d'enviar
   form.addEventListener('submit', function (event) {
     let selectedDevice = Array.from(radioButtons).some(radio => radio.checked);
     if (!selectedDevice) {
