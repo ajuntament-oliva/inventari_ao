@@ -66,10 +66,12 @@ include_once('layouts/header.php');
                                         <th>Marca</th>
                                         <th>Dimensions</th>
                                         <th>Propietari/a</th>
+                                        <th>Propietari/a actual</th>
                                     <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
                                         <th>Marca</th>
                                         <th>Tipus</th>
                                         <th>Propietari/a</th>
+                                        <th>Propietari/a actual</th>
                                     <?php } elseif ($dispositiu['dispositiu'] == 'Torre' || $dispositiu['dispositiu'] == 'Portàtil') { ?>
                                         <th>UID</th>
                                         <th>ID AnyDesk</th>
@@ -80,6 +82,7 @@ include_once('layouts/header.php');
                                             <th>Marca</th>
                                         <?php } ?>
                                         <th>Propietari/a</th>
+                                        <th>Propietari/a actual</th>
                                     <?php } ?>
                                 </tr>
                             </thead>
@@ -103,12 +106,15 @@ include_once('layouts/header.php');
                                             <?php } ?>
                                         <?php } ?>
                                         <td>
+                                        <a href="propietari_dispositius.php?id=<?php echo (int)$caracteristica['propietari_id']; ?>">
+                                                <?php echo remove_junk(ucwords($caracteristica['nom'] . ' ' . $caracteristica['cognom'])); ?>
+                                            </a>
+                                        </td>
+                                        <td>
                                             <a href="propietari_dispositius.php?id=<?php echo (int)$caracteristica['propietari_id']; ?>">
-                                                <?php
-                                                    $nom = !empty($caracteristica['nom_actual']) ? $caracteristica['nom_actual'] : $caracteristica['nom'];
-                                                    $cognom = !empty($caracteristica['cognom_actual']) ? $caracteristica['cognom_actual'] : $caracteristica['cognom'];
-                                                    echo remove_junk(ucwords($nom . ' ' . $cognom));
-                                                ?>
+                                                <?php 
+                                                    echo remove_junk(ucwords(($caracteristica['nom_actual'] ? $caracteristica['nom_actual'] : '') . ' ' .
+                                                    ($caracteristica['cognom_actual'] ? $caracteristica['cognom_actual'] : ''))); ?>
                                             </a>
                                         </td>
                                     </tr>
