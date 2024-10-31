@@ -20,7 +20,7 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
         $departament = $db->query("SELECT departament FROM departaments WHERE id = ? LIMIT 1", [$departament_id])->fetch_assoc();
         
         // Consultar BDA per obtindre les característiques de tots els dispositius del mateix tipus en el departament actual
-        $caracteristiques = $db->query("SELECT DISTINCT c.uid, c.id_anydesck, c.processador, c.ram, c.capacitat, 
+        $caracteristiques = $db->query("SELECT DISTINCT c.uid, c.id_anydesck, c.num_serie, c.processador, c.ram, c.capacitat, 
                                                             c.marca, c.dimensions, c.tipus, p.id as propietari_id, p.nom, p.cognom, p.nom_actual, p.cognom_actual
                                             FROM caracteristiques_detalls c
                                             JOIN dispositius d ON c.dispositiu_id = d.id
@@ -64,7 +64,8 @@ include_once('layouts/header.php');
                                 <tr>
                                     <?php if ($dispositiu['dispositiu'] == 'Monitor') { ?>
                                         <th>Marca</th>
-                                        <th>Dimensions</th>
+                                        <th>Polçades</th>
+                                        <th>Nº de sèrie</th>
                                         <th>Propietari/a</th>
                                         <th>Propietari/a actual</th>
                                     <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
@@ -92,6 +93,7 @@ include_once('layouts/header.php');
                                         <?php if ($dispositiu['dispositiu'] == 'Monitor') { ?>
                                             <td><?php echo remove_junk(ucwords($caracteristica['marca'])); ?></td>
                                             <td><?php echo remove_junk(ucwords($caracteristica['dimensions'])); ?></td>
+                                            <td><?php echo remove_junk(ucwords($caracteristica['num_serie'])); ?></td>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
                                             <td><?php echo remove_junk(ucwords($caracteristica['marca'])); ?></td>
                                             <td><?php echo remove_junk(ucwords($caracteristica['tipus'])); ?></td>

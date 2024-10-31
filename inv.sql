@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `caracteristiques_detalls` (
   `dispositiu_id` int(11) unsigned NOT NULL,
   `uid` VARCHAR(50) DEFAULT NULL,
   `id_anydesck` VARCHAR(50) DEFAULT NULL,
+  `num_serie` VARCHAR(100) DEFAULT NULL,
   `processador` VARCHAR(50) DEFAULT NULL,
   `ram` VARCHAR(50) DEFAULT NULL,
   `capacitat` VARCHAR(50) DEFAULT NULL,

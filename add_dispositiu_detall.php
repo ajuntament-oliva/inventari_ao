@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($dispositiu_nom == 'Monitor') {
       $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
       $dimensions = remove_junk($db->escape($_POST['dimensions'] ?? ''));
+      $num_serie = remove_junk($db->escape($_POST['num_serie'] ?? ''));
     } elseif ($dispositiu_nom == 'Teclat') {
       $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
       $tipus = remove_junk($db->escape($_POST['tipus'] ?? ''));
@@ -78,11 +79,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($propietari_id && $dispositiu_nom) {
       // Inserir característiques
       $sql_insert_feature = "INSERT INTO caracteristiques_detalls 
-(dispositiu_id, uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus, data_creacio, hora_creacio) 
+(dispositiu_id, uid, id_anydesck, num_serie, processador, ram, capacitat, marca, dimensions, tipus, data_creacio, hora_creacio) 
 VALUES (
     $dispositiu_id, 
     " . ($uid ? "'$uid'" : "NULL") . ", 
-    " . ($id_anydesck ? "'$id_anydesck'" : "NULL") . ", 
+    " . ($id_anydesck ? "'$id_anydesck'" : "NULL") . ",
+    " . ($num_serie ? "'$num_serie'" : "NULL") . ", 
     " . ($processador ? "'$processador'" : "NULL") . ", 
     " . ($ram ? "'$ram'" : "NULL") . ", 
     " . ($capacitat ? "'$capacitat'" : "NULL") . ", 
@@ -186,11 +188,15 @@ VALUES (
           <div class="form-group" id="dynamic-fields">
             <div id="monitor-fields" style="display:none;">
               <div class="form-group">
+                <label for="num_serie">Nº de sèrie:</label>
+                <input type="text" name="num_serie" class="form-control" required>
+              </div>
+              <div class="form-group">
                 <label for="marca">Marca:</label>
                 <input type="text" name="marca" class="form-control" required>
               </div>
               <div class="form-group">
-                <label for="dimensions">Dimensions de Pantalla:</label>
+                <label for="dimensions">Polçades:</label>
                 <input type="text" name="dimensions" class="form-control" required>
               </div>
             </div>
