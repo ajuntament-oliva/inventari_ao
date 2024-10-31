@@ -40,15 +40,18 @@ include_once('layouts/header.php');
             <div class="panel-body">
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
-                        <!-- Monitor -->
                         <?php if ($dispositiu['dispositiu'] == 'Monitor'): ?>
                             <tr>
                                 <th>Marca</th>
                                 <td><?php echo $dispositiu['marca']; ?></td>
                             </tr>
                             <tr>
-                                <th>Dimensions</th>
+                                <th>Polçades</th>
                                 <td><?php echo $dispositiu['dimensions']; ?></td>
+                            </tr>
+                            <tr>
+                                <th>Nº sèrie</th>
+                                <td><?php echo $dispositiu['num_serie']; ?></td>
                             </tr>
                         <?php elseif ($dispositiu['dispositiu'] == 'Teclat'): ?>
                             <tr>

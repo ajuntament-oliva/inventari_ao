@@ -67,7 +67,7 @@ if (isset($_GET['id'])) {
                             <tr>
                                 <th>Dispositius</th>
                                 <th>Data inicial</th>
-                                <th>Data final</th>
+                                <th>Data actualització</th>
                             </tr>
                         </thead>
                         <tbody>

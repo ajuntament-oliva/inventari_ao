@@ -36,7 +36,7 @@ include_once('layouts/header.php');
                 <?php
                 if ($dispositius && $dispositius->num_rows > 0) {
                     while ($dispositiu = $dispositius->fetch_assoc()) {
-                        $caracteristiques = $db->query("SELECT uid, id_anydesck, processador, ram, capacitat, marca, dimensions, tipus
+                        $caracteristiques = $db->query("SELECT uid, id_anydesck, num_serie, processador, ram, capacitat, marca, dimensions, tipus
                                                           FROM caracteristiques_detalls
                                                           WHERE dispositiu_id = " . (int) $dispositiu['dispositiu_id'] . "
                                                           ORDER BY id");
@@ -50,14 +50,15 @@ include_once('layouts/header.php');
                                     <tr>
                                         <?php if ($dispositiu['dispositiu'] == 'Monitor') { ?>
                                             <th>Marca</th>
-                                            <th>Dimensions</th>
+                                            <th>Polçades</th>
+                                            <th>Nº sèrie</th>
                                             <th>Propietari/a</th>
-                                            <th>Propietari/a actual</th>
+                                            <th>Propietari/a actualitzat</th>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
                                             <th>Marca</th>
                                             <th>Tipus</th>
                                             <th>Propietari/a</th>
-                                            <th>Propietari/a actual</th>
+                                            <th>Propietari/a actualitzat</th>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Torre' || $dispositiu['dispositiu'] == 'Portàtil') { ?>
                                             <th>UID</th>
                                             <th>ID AnyDesk</th>
@@ -68,7 +69,7 @@ include_once('layouts/header.php');
                                                 <th>Marca</th>
                                             <?php } ?>
                                             <th>Propietari/a</th>
-                                            <th>Propietari/a actual</th>
+                                            <th>Propietari/a actualitzat</th>
                                         <?php } ?>
                                     </tr>
                                 </thead>
@@ -78,6 +79,7 @@ include_once('layouts/header.php');
                                             <?php if ($dispositiu['dispositiu'] == 'Monitor') { ?>
                                                 <td><?php echo remove_junk(ucwords($caracteristica['marca'])); ?></td>
                                                 <td><?php echo remove_junk(ucwords($caracteristica['dimensions'])); ?></td>
+                                                <td><?php echo remove_junk(ucwords($caracteristica['num_serie'])); ?></td>
                                             <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
                                                 <td><?php echo remove_junk(ucwords($caracteristica['marca'])); ?></td>
                                                 <td><?php echo remove_junk(ucwords($caracteristica['tipus'])); ?></td>
