@@ -36,7 +36,7 @@ include_once('layouts/header.php');
                 <?php
                 if ($dispositius && $dispositius->num_rows > 0) {
                     while ($dispositiu = $dispositius->fetch_assoc()) {
-                        $caracteristiques = $db->query("SELECT uid, id_anydesck, num_serie, processador, ram, capacitat, marca, dimensions, tipus
+                        $caracteristiques = $db->query("SELECT uid, id_anydesck, num_serie, processador, ram, capacitat, marca, dimensions, tipus, data_inici, data_final
                                                           FROM caracteristiques_detalls
                                                           WHERE dispositiu_id = " . (int) $dispositiu['dispositiu_id'] . "
                                                           ORDER BY id");
@@ -52,11 +52,15 @@ include_once('layouts/header.php');
                                             <th>Marca</th>
                                             <th>Polçades</th>
                                             <th>Nº sèrie</th>
+                                            <th>Data adquisició</th>
+                                            <th>Data cessió</th>
                                             <th>Propietari/a</th>
                                             <th>Propietari/a actualitzat</th>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
                                             <th>Marca</th>
                                             <th>Tipus</th>
+                                            <th>Data adquisició</th>
+                                            <th>Data cessió</th>
                                             <th>Propietari/a</th>
                                             <th>Propietari/a actualitzat</th>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Torre' || $dispositiu['dispositiu'] == 'Portàtil') { ?>
@@ -68,6 +72,8 @@ include_once('layouts/header.php');
                                             <?php if ($dispositiu['dispositiu'] == 'Portàtil') { ?>
                                                 <th>Marca</th>
                                             <?php } ?>
+                                            <th>Data adquisició</th>
+                                            <th>Data cessió</th>
                                             <th>Propietari/a</th>
                                             <th>Propietari/a actualitzat</th>
                                         <?php } ?>
@@ -93,6 +99,8 @@ include_once('layouts/header.php');
                                                     <td><?php echo remove_junk(ucwords($caracteristica['marca'])); ?></td>
                                                 <?php } ?>
                                             <?php } ?>
+                                            <td><?php echo remove_junk(ucwords($caracteristica['data_inici'])); ?></td>
+                                            <td><?php echo remove_junk(ucwords($caracteristica['data_final'])); ?></td>
                                             <td>
                                                 <?php echo remove_junk(ucwords($dispositiu['nom'] . ' ' . $dispositiu['cognom'])); ?>
                                             </td>
