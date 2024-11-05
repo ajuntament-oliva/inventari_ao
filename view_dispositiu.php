@@ -30,10 +30,10 @@ include_once('layouts/header.php');
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4><?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?> -
-                <?php 
+                    <?php
                     $nom = !empty($dispositiu['nom_actual']) ? $dispositiu['nom_actual'] : $dispositiu['nom'];
                     $cognom = !empty($dispositiu['cognom_actual']) ? $dispositiu['cognom_actual'] : $dispositiu['cognom'];
-                    echo remove_junk(ucwords($nom . ' ' . $cognom)); 
+                    echo remove_junk(ucwords($nom . ' ' . $cognom));
                     ?>
                 </h4>
             </div>
@@ -110,13 +110,22 @@ include_once('layouts/header.php');
                             </tr>
                         <?php endif; ?>
                         <tr>
-                            <th>Data Creació</th>
-                            <td><?php echo $dispositiu['data_creacio']; ?></td>
+                            <th>Data adquisició</th>
+                            <td><?php
+                            $data_inici = new DateTime($dispositiu['data_inici']);
+                            echo $data_inici->format('d/m/Y');
+                            ?></td>
                         </tr>
                         <tr>
-                            <th>Data Actualització</th>
-                            <td><?php echo ($dispositiu['data_actualitzacio'] == '0000-00-00') ? "" : $dispositiu['data_actualitzacio']; ?>
-                            </td>
+                            <th>Data cessió</th>
+                            <td><?php
+                            if ($dispositiu['data_final'] == '0000-00-00') {
+                                echo "";
+                            } else {
+                                $data_final = new DateTime($dispositiu['data_final']);
+                                echo $data_final->format('d/m/Y');
+                            }
+                            ?></td>
                         </tr>
                     </table>
                 </div>
