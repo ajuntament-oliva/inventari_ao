@@ -74,12 +74,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $marca = remove_junk($db->escape($_POST['marca'] ?? ''));
       }
     }
+    $data_inicial = !empty($_POST['data_inici']) ? $db->escape($_POST['data_inici']) : NULL;
 
     // Comprovar si els camps obligatoris estan plens
     if ($propietari_id && $dispositiu_nom) {
       // Inserir característiques
       $sql_insert_feature = "INSERT INTO caracteristiques_detalls 
-(dispositiu_id, uid, id_anydesck, num_serie, processador, ram, capacitat, marca, dimensions, tipus, data_creacio, hora_creacio) 
+(dispositiu_id, uid, id_anydesck, num_serie, processador, ram, capacitat, marca, dimensions, tipus, data_inici, data_creacio, hora_creacio) 
 VALUES (
     $dispositiu_id, 
     " . ($uid ? "'$uid'" : "NULL") . ", 
@@ -91,6 +92,7 @@ VALUES (
     " . ($marca ? "'$marca'" : "NULL") . ", 
     " . ($dimensions ? "'$dimensions'" : "NULL") . ", 
     " . ($tipus ? "'$tipus'" : "NULL") . ", 
+    " . ($data_inicial ? "'$data_inicial'" : "NULL") . ",
     '$data_creacio', '$hora_creacio')";
       if ($db->query($sql_insert_feature)) {
         $session->msg('s', "Propietari, dispositiu i característiques afegits amb èxit.");
@@ -182,6 +184,10 @@ VALUES (
           <div class="form-group">
             <label for="cognom">Cognom del Propietari:</label>
             <input type="text" name="cognom" id="cognom" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="data_inici">Data inicial del dispositiu:</label>
+            <input type="date" name="data_inici" id="data_inici" class="form-control" required>
           </div>
 
           <!-- Camps dinàmics -->

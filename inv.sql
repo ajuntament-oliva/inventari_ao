@@ -46,6 +46,8 @@ CREATE TABLE IF NOT EXISTS `caracteristiques_detalls` (
   `marca` VARCHAR(50) DEFAULT NULL,
   `dimensions` VARCHAR(50) DEFAULT NULL,
   `tipus` VARCHAR(50) DEFAULT NULL,
+  `data_inici` DATE DEFAULT NULL,
+  `data_final` DATE DEFAULT NULL,
   `data_creacio` DATE NOT NULL,
   `hora_creacio` TIME NOT NULL,
   `data_actualitzacio` DATE NOT NULL,
