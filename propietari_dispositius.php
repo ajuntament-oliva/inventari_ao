@@ -8,20 +8,12 @@ if (isset($_GET['id'])) {
     $propietari_id = (int) $_GET['id'];
 
     // Connexió BDA per obtenir els dispositius del propietari amb les seues característiques
-    $dispositius = $db->query("SELECT d.id, d.dispositiu, c.data_creacio, c.hora_creacio, c.data_actualitzacio, c.hora_actualitzacio
+    $dispositius = $db->query("SELECT d.id, d.dispositiu, c.data_inici, c.data_final
                                     FROM dispositius d
                                     JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id
                                     JOIN caracteristiques_detalls c ON d.id = c.dispositiu_id
                                     WHERE dp.propietari_id = $propietari_id
-                                    ORDER BY 
-                                        CASE 
-                                            WHEN c.data_creacio = c.data_actualitzacio THEN c.data_creacio
-                                            ELSE LEAST(c.data_creacio, c.data_actualitzacio) 
-                                        END, 
-                                        CASE 
-                                            WHEN c.data_creacio = c.data_actualitzacio THEN c.hora_creacio
-                                            ELSE LEAST(c.hora_creacio, c.hora_actualitzacio)
-                                        END");
+                                    ORDER BY c.data_inici ASC");
 
     // Obtindre el nom del propietari
     $propietari = $db->query("SELECT nom, cognom, nom_actual, cognom_actual 
@@ -55,10 +47,10 @@ if (isset($_GET['id'])) {
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4><?php
-                    $nom = !empty($propietari['nom_actual']) ? $propietari['nom_actual'] : $propietari['nom'];
-                    $cognom = !empty($propietari['cognom_actual']) ? $propietari['cognom_actual'] : $propietari['cognom'];
-                    echo remove_junk(ucwords($nom . ' ' . $cognom));
-                    ?> - Llista de dispositius</h4>
+                $nom = !empty($propietari['nom_actual']) ? $propietari['nom_actual'] : $propietari['nom'];
+                $cognom = !empty($propietari['cognom_actual']) ? $propietari['cognom_actual'] : $propietari['cognom'];
+                echo remove_junk(ucwords($nom . ' ' . $cognom));
+                ?> - Llista de dispositius</h4>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -66,8 +58,8 @@ if (isset($_GET['id'])) {
                         <thead>
                             <tr>
                                 <th>Dispositius</th>
-                                <th>Data inicial</th>
-                                <th>Data actualització</th>
+                                <th>Data adquisició</th>
+                                <th>Data cessió</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,13 +68,19 @@ if (isset($_GET['id'])) {
                                     <td><a href="view_dispositiu.php?id=<?php echo $dispositiu['id']; ?>">
                                             <?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?>
                                         </a></td>
-                                    <td><?php echo $dispositiu['data_creacio']; ?></td>
                                     <td>
                                         <?php
-                                        if ($dispositiu['data_actualitzacio'] == '0000-00-00') {
+                                        $dataInici = DateTime::createFromFormat('Y-m-d', $dispositiu['data_inici']);
+                                        echo $dataInici ? $dataInici->format('d/m/Y') : '';
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        if ($dispositiu['data_final'] == '0000-00-00') {
                                             echo "";
                                         } else {
-                                            echo $dispositiu['data_actualitzacio'];
+                                            $dataFinal = DateTime::createFromFormat('Y-m-d', $dispositiu['data_final']);
+                                            echo $dataFinal ? $dataFinal->format('d/m/Y') : '';
                                         }
                                         ?>
                                     </td>

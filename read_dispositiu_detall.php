@@ -99,8 +99,10 @@ include_once('layouts/header.php');
                                                     <td><?php echo remove_junk(ucwords($caracteristica['marca'])); ?></td>
                                                 <?php } ?>
                                             <?php } ?>
-                                            <td><?php echo remove_junk(ucwords($caracteristica['data_inici'])); ?></td>
-                                            <td><?php echo remove_junk(ucwords($caracteristica['data_final'])); ?></td>
+                                            <td><?php $dataInici = DateTime::createFromFormat('Y-m-d', $caracteristica['data_inici']);
+                                                        echo $dataInici ? $dataInici->format('d/m/Y') : ''; ?></td>
+                                            <td><?php $dataFinal = DateTime::createFromFormat('Y-m-d', $caracteristica['data_final']);
+                                                        echo $dataFinal ? $dataFinal->format('d/m/Y') : ''; ?></td>
                                             <td>
                                                 <?php echo remove_junk(ucwords($dispositiu['nom'] . ' ' . $dispositiu['cognom'])); ?>
                                             </td>
