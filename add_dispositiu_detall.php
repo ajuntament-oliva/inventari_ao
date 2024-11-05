@@ -186,7 +186,7 @@ VALUES (
             <input type="text" name="cognom" id="cognom" class="form-control" required>
           </div>
           <div class="form-group">
-            <label for="data_inici">Data inicial del dispositiu:</label>
+            <label for="data_inici">Data d'aquisició del dispositiu:</label>
             <input type="date" name="data_inici" id="data_inici" class="form-control" required>
           </div>
 

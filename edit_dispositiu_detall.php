@@ -29,51 +29,103 @@ if (isset($_POST['edit_owner'])) {
     $propietari_nom = remove_junk($db->escape($_POST['nom'] ?? ''));
     $propietari_cognom = remove_junk($db->escape($_POST['cognom'] ?? ''));
     $dispositiu_id = isset($_POST['dispositiu']) ? (int) $_POST['dispositiu'] : 0;
+    $data_inici = isset($_POST['data_inici']) ? $db->escape($_POST['data_inici']) : null;
+    $data_final = isset($_POST['data_final']) ? $db->escape($_POST['data_final']) : null;
 
     $data_actualitzacio = date('Y-m-d');
     $hora_actualitzacio = date('H:i:s');
 
     // Verificar que els camps no estan buits
-    if (!empty($propietari_nom) && !empty($propietari_cognom)) {
-        // Verificar si el propietari existeix en la taula propietaris
-        $sql_check_owner = "SELECT id FROM propietaris WHERE id = $propietari_id";
-        $result_check_owner = $db->query($sql_check_owner);
+    if (isset($_POST['edit_owner'])) {
+        $propietari_id = isset($_POST['propietari_id']) ? (int) $_POST['propietari_id'] : 0;
+        $propietari_nom = remove_junk($db->escape($_POST['nom'] ?? ''));
+        $propietari_cognom = remove_junk($db->escape($_POST['cognom'] ?? ''));
+        $dispositiu_id = isset($_POST['dispositiu']) ? (int) $_POST['dispositiu'] : 0;
+        $data_inici = isset($_POST['data_inici']) ? $db->escape($_POST['data_inici']) : null;
+        $data_final = isset($_POST['data_final']) ? $db->escape($_POST['data_final']) : null;
 
-        if ($db->num_rows($result_check_owner) > 0) {
-            // Actualitzar dades del propietari existent
-            $sql_update_owner = "UPDATE propietaris SET nom_actual = '$propietari_nom', cognom_actual = '$propietari_cognom' WHERE id = $propietari_id";
-            if ($db->query($sql_update_owner)) {
+        $data_actualitzacio = date('Y-m-d');
+        $hora_actualitzacio = date('H:i:s');
 
-                // Actualitzar la data en caracteristiques_detalls
-                $sql_update_detalls = "UPDATE caracteristiques_detalls SET data_actualitzacio = '$data_actualitzacio', hora_actualitzacio = '$hora_actualitzacio' WHERE dispositiu_id = $dispositiu_id";
-                $db->query($sql_update_detalls);
+        // Verificar que els camps no estan buits
+        if (!empty($propietari_nom) && !empty($propietari_cognom)) {
+            // Verificar si el propietari existeix en la taula propietaris
+            $sql_check_owner = "SELECT id FROM propietaris WHERE id = $propietari_id";
+            $result_check_owner = $db->query($sql_check_owner);
 
-                $session->msg('s', "Propietari actualitzat amb èxit.");
+            if ($db->num_rows($result_check_owner) > 0) {
+                // Actualitzar dades del propietari existent
+                $sql_update_owner = "UPDATE propietaris SET nom_actual = '$propietari_nom', cognom_actual = '$propietari_cognom' WHERE id = $propietari_id";
+                if ($db->query($sql_update_owner)) {
+                    // Actualitzar la data en caracteristiques_detalls
+                    $sql_update_detalls = "UPDATE caracteristiques_detalls SET data_actualitzacio = '$data_actualitzacio', hora_actualitzacio = '$hora_actualitzacio'";
+
+                    // Condicions dates
+                    if ($data_inici) {
+                        $sql_update_detalls .= ", data_inici = '$data_inici'";
+                    } else {
+                        // Si no hay nueva fecha, asegúrate de mantener el valor anterior (NULL o existente)
+                        $sql_update_detalls .= ", data_inici = COALESCE(data_inici, NULL)";
+                    }
+
+                    if ($data_final) {
+                        $sql_update_detalls .= ", data_final = '$data_final'";
+                    } else {
+                        $sql_update_detalls .= ", data_final = COALESCE(data_final, NULL)";
+                    }
+
+                    $sql_update_detalls .= " WHERE dispositiu_id = $dispositiu_id";
+
+                    if ($db->query($sql_update_detalls)) {
+                        $session->msg('s', "Propietari actualitzat amb èxit.");
+                    } else {
+                        $session->msg('d', "Error actualitzant les característiques: " . $db->error);
+                    }
+                } else {
+                    $session->msg('d', "Error actualitzant el propietari: " . $db->error);
+                }
             } else {
-                $session->msg('d', "Error actualitzant el propietari: " . $db->error);
+                // Si el propietari no existeix, crear un nou propietari
+                $sql_insert_owner = "INSERT INTO propietaris (nom_actual, cognom_actual) VALUES ('$propietari_nom', '$propietari_cognom')";
+                if ($db->query($sql_insert_owner)) {
+                    $new_owner_id = $db->insert_id;
+                    $session->msg('s', "Propietari creat amb èxit.");
+
+                    // Actualitzar el dispositiu amb el nou propietari
+                    $sql_update_device_owner = "UPDATE dispositiu_propietari SET propietari_id = $new_owner_id WHERE dispositiu_id = $dispositiu_id";
+                    $db->query($sql_update_device_owner);
+
+                    // Actualitzar la data en caracteristiques_detalls
+                    $sql_update_detalls = "UPDATE caracteristiques_detalls SET data_actualitzacio = '$data_actualitzacio', hora_actualitzacio = '$hora_actualitzacio'";
+
+                    // Condicions dates
+                    if ($data_inici) {
+                        $sql_update_detalls .= ", data_inici = '$data_inici'";
+                    } else {
+                        $sql_update_detalls .= ", data_inici = COALESCE(data_inici, NULL)";
+                    }
+
+                    if ($data_final) {
+                        $sql_update_detalls .= ", data_final = '$data_final'";
+                    } else {
+                        $sql_update_detalls .= ", data_final = COALESCE(data_final, NULL)";
+                    }
+
+                    $sql_update_detalls .= " WHERE dispositiu_id = $dispositiu_id";
+
+                    if ($db->query($sql_update_detalls)) {
+                        $session->msg('s', "Característiques actualitzades amb èxit.");
+                    } else {
+                        $session->msg('d', "Error actualitzant les característiques: " . $db->error);
+                    }
+                } else {
+                    $session->msg('d', "Error creant el nou propietari: " . $db->error);
+                }
             }
         } else {
-            // Si el propietari no existeix, crear un nou propietari
-            $sql_insert_owner = "INSERT INTO propietaris (nom_actual, cognom_actual) VALUES ('$propietari_nom', '$propietari_cognom')";
-            if ($db->query($sql_insert_owner)) {
-                $new_owner_id = $db->insert_id;
-                $session->msg('s', "Propietari actualitzat amb èxit.");
-
-                // Actualitzar el dispositiu amb el nou propietari
-                $sql_update_device_owner = "UPDATE dispositiu_propietari SET propietari_id = $new_owner_id WHERE dispositiu_id = $dispositiu_id";
-                $db->query($sql_update_device_owner);
-
-                // Actualitzar la data en caracteristiques_detalls
-                $sql_update_detalls = "UPDATE caracteristiques_detalls SET data_actualitzacio = '$data_actualitzacio', hora_actualitzacio = '$hora_actualitzacio' WHERE dispositiu_id = $dispositiu_id";
-                $db->query($sql_update_detalls);
-            } else {
-                $session->msg('d', "Error creant el nou propietari: " . $db->error);
-            }
+            $session->msg('d', "Tots els camps han d'estar plens i vàlids.");
         }
-    } else {
-        $session->msg('d', "Tots els camps han d'estar plens i vàlids.");
     }
-
     redirect('edit_dispositiu_detall.php?departament_id=' . $departament_id);
 }
 ?>
@@ -122,6 +174,14 @@ if (isset($_POST['edit_owner'])) {
                     <div class="form-group">
                         <label for="cognom">Cognom del Propietari:</label>
                         <input type="text" name="cognom" id="cognom" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="data_inici">Data d'adquisició del dispositiu:</label>
+                        <input type="date" name="data_inici" id="data_inici" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="data_final">Data de cessió del dispositiu:</label>
+                        <input type="date" name="data_final" id="data_final" class="form-control" required>
                     </div>
 
                     <a href="view_departament.php?id=<?php echo $departament_id; ?>" class="btn btn-danger">Torna
