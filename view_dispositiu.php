@@ -112,18 +112,22 @@ include_once('layouts/header.php');
                         <tr>
                             <th>Data adquisició</th>
                             <td><?php
-                            $data_inici = new DateTime($dispositiu['data_inici']);
-                            echo $data_inici->format('d/m/Y');
+                            if (!empty($dispositiu['data_inici']) && $dispositiu['data_inici'] !== '0000-00-00') {
+                                $data_inici = new DateTime($dispositiu['data_inici']);
+                                echo $data_inici->format('d/m/Y');
+                            } else {
+                                echo "";
+                            }
                             ?></td>
                         </tr>
                         <tr>
                             <th>Data cessió</th>
                             <td><?php
-                            if ($dispositiu['data_final'] == '0000-00-00') {
-                                echo "";
-                            } else {
+                            if (!empty($dispositiu['data_final']) && $dispositiu['data_final'] !== '0000-00-00') {
                                 $data_final = new DateTime($dispositiu['data_final']);
                                 echo $data_final->format('d/m/Y');
+                            } else {
+                                echo "";
                             }
                             ?></td>
                         </tr>
