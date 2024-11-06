@@ -68,13 +68,13 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
                                         <th>Marca</th>
                                         <th>Polçades</th>
                                         <th>Nº de sèrie</th>
-                                        <th>Propietari/a</th>
-                                        <th>Comentaris</th>
+                                        <th>Propietari/a actual</th>
+                                        <th>Antics propietaris</th>
                                     <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
                                         <th>Marca</th>
                                         <th>Tipus</th>
-                                        <th>Propietari/a</th>
-                                        <th>Comentaris</th>
+                                        <th>Propietari/a actual</th>
+                                        <th>Antics propietaris</th>
                                     <?php } elseif ($dispositiu['dispositiu'] == 'Torre' || $dispositiu['dispositiu'] == 'Portàtil') { ?>
                                         <th>UID</th>
                                         <th>ID AnyDesk</th>
@@ -84,8 +84,8 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
                                         <?php if ($dispositiu['dispositiu'] == 'Portàtil') { ?>
                                             <th>Marca</th>
                                         <?php } ?>
-                                        <th>Propietari/a</th>
-                                        <th>Comentaris</th>
+                                        <th>Propietari/a actual</th>
+                                        <th>Antics propietaris/es</th>
                                     <?php } ?>
                                 </tr>
                             </thead>
@@ -115,7 +115,7 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
                                             </a>
                                         </td>
                                         <td>
-                                            <?php echo remove_junk(ucwords($caracteristica['comentaris'])); ?>
+                                            <?php echo nl2br(remove_junk(ucwords($caracteristica['comentaris']))); ?>
                                             <a class="btn btn-primary btn-editar" href="#" data-toggle="modal" data-target="#editModal" data-id="<?php echo (int)$caracteristica['propietari_id']; ?>" data-comentaris="<?php echo htmlspecialchars($caracteristica['comentaris']); ?>"><i
                                             class="glyphicon glyphicon-pencil"></i></a>
                                         </td>
@@ -135,14 +135,12 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
 </div>
 
 <!-- Modal editar comentaris -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" data-backdrop="static" aria-hidden="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form action="actualitzar_comentaris.php" method="POST">
                 <div class="modal-header">
                     <h3 class="modal-title" id="editModalLabel">Editar Comentaris</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    </button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="id" id="edit-id">
