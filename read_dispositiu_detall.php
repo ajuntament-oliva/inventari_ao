@@ -9,7 +9,7 @@ $departament_id = isset($_GET['departament_id']) ? (int) $_GET['departament_id']
 $departament = $db->query("SELECT departament FROM departaments WHERE id = $departament_id")->fetch_assoc();
 $nomDepartament = htmlspecialchars($departament['departament']);
 
-$dispositius = $db->query("SELECT d.id as dispositiu_id, d.dispositiu, p.nom, p.cognom, p.nom_actual, p.cognom_actual
+$dispositius = $db->query("SELECT d.id as dispositiu_id, d.dispositiu, p.nom, p.cognom, p.comentaris
                                     FROM dispositius d 
                                     JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id
                                     JOIN propietaris p ON dp.propietari_id = p.id 
@@ -55,14 +55,14 @@ include_once('layouts/header.php');
                                             <th>Data adquisició</th>
                                             <th>Data cessió</th>
                                             <th>Propietari/a</th>
-                                            <th>Propietari/a actualitzat</th>
+                                            <th>Antics propietaris/es</th>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
                                             <th>Marca</th>
                                             <th>Tipus</th>
                                             <th>Data adquisició</th>
                                             <th>Data cessió</th>
                                             <th>Propietari/a</th>
-                                            <th>Propietari/a actualitzat</th>
+                                            <th>Antics propietaris/es</th>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Torre' || $dispositiu['dispositiu'] == 'Portàtil') { ?>
                                             <th>UID</th>
                                             <th>ID AnyDesk</th>
@@ -75,7 +75,7 @@ include_once('layouts/header.php');
                                             <th>Data adquisició</th>
                                             <th>Data cessió</th>
                                             <th>Propietari/a</th>
-                                            <th>Propietari/a actualitzat</th>
+                                            <th>Antics propietaris/es</th>
                                         <?php } ?>
                                     </tr>
                                 </thead>
@@ -106,15 +106,7 @@ include_once('layouts/header.php');
                                             <td>
                                                 <?php echo remove_junk(ucwords($dispositiu['nom'] . ' ' . $dispositiu['cognom'])); ?>
                                             </td>
-                                            <td>
-                                                <?php
-                                                if (!empty($dispositiu['nom_actual']) || !empty($dispositiu['cognom_actual'])) {
-                                                    echo remove_junk(ucwords($dispositiu['nom_actual'] . ' ' . $dispositiu['cognom_actual']));
-                                                } else {
-                                                    echo '';
-                                                }
-                                                ?>
-                                            </td>
+                                            <td><?php echo nl2br(remove_junk(ucwords($dispositiu['comentaris']))); ?></td>
                                         </tr>
                                     <?php endwhile; ?>
                                 </tbody>
