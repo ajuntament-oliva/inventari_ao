@@ -21,7 +21,7 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
         
         // Consultar BDA per obtindre les característiques de tots els dispositius del mateix tipus en el departament actual
         $caracteristiques = $db->query("SELECT DISTINCT c.uid, c.id_anydesck, c.num_serie, c.processador, c.ram, c.capacitat, 
-                                                            c.marca, c.dimensions, c.tipus, p.id as propietari_id, p.nom, p.cognom, p.nom_actual, p.cognom_actual
+                                                            c.marca, c.dimensions, c.tipus, p.id as propietari_id, p.nom, p.cognom, comentaris
                                             FROM caracteristiques_detalls c
                                             JOIN dispositius d ON c.dispositiu_id = d.id
                                             JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
@@ -34,8 +34,10 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
 } else {
     $error_message = "ID del dispositiu o departament no especificat.";
 }
+?>
 
-include_once('layouts/header.php');
+<?php
+    include_once('layouts/header.php');
 ?>
 
 <div class="row">
@@ -67,12 +69,12 @@ include_once('layouts/header.php');
                                         <th>Polçades</th>
                                         <th>Nº de sèrie</th>
                                         <th>Propietari/a</th>
-                                        <th>Propietari/a actual</th>
+                                        <th>Comentaris</th>
                                     <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
                                         <th>Marca</th>
                                         <th>Tipus</th>
                                         <th>Propietari/a</th>
-                                        <th>Propietari/a actual</th>
+                                        <th>Comentaris</th>
                                     <?php } elseif ($dispositiu['dispositiu'] == 'Torre' || $dispositiu['dispositiu'] == 'Portàtil') { ?>
                                         <th>UID</th>
                                         <th>ID AnyDesk</th>
@@ -83,7 +85,7 @@ include_once('layouts/header.php');
                                             <th>Marca</th>
                                         <?php } ?>
                                         <th>Propietari/a</th>
-                                        <th>Propietari/a actual</th>
+                                        <th>Comentaris</th>
                                     <?php } ?>
                                 </tr>
                             </thead>
@@ -108,16 +110,14 @@ include_once('layouts/header.php');
                                             <?php } ?>
                                         <?php } ?>
                                         <td>
-                                        <a href="propietari_dispositius.php?id=<?php echo (int)$caracteristica['propietari_id']; ?>">
+                                            <a href="propietari_dispositius.php?id=<?php echo (int)$caracteristica['propietari_id']; ?>">
                                                 <?php echo remove_junk(ucwords($caracteristica['nom'] . ' ' . $caracteristica['cognom'])); ?>
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="propietari_dispositius.php?id=<?php echo (int)$caracteristica['propietari_id']; ?>">
-                                                <?php 
-                                                    echo remove_junk(ucwords(($caracteristica['nom_actual'] ? $caracteristica['nom_actual'] : '') . ' ' .
-                                                    ($caracteristica['cognom_actual'] ? $caracteristica['cognom_actual'] : ''))); ?>
-                                            </a>
+                                            <?php echo remove_junk(ucwords($caracteristica['comentaris'])); ?>
+                                            <a class="btn btn-primary btn-editar" href="#" data-toggle="modal" data-target="#editModal" data-id="<?php echo (int)$caracteristica['propietari_id']; ?>" data-comentaris="<?php echo htmlspecialchars($caracteristica['comentaris']); ?>"><i
+                                            class="glyphicon glyphicon-pencil"></i></a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -134,4 +134,31 @@ include_once('layouts/header.php');
     <div class="col-md-2"></div>
 </div>
 
+<!-- Modal editar comentaris -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="actualitzar_comentaris.php" method="POST">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="editModalLabel">Editar Comentaris</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="edit-id">
+                    <div class="form-group">
+                        <label for="comentaris">Propietari antic</label>
+                        <textarea class="form-control" id="edit-comentaris" name="comentaris"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-info">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <?php include_once('layouts/footer.php'); ?>
+<script src="libs/js/actualitzar_comentaris.js"></script>
