@@ -175,18 +175,23 @@ if (isset($_POST['edit_owner'])) {
                         <label for="cognom">Cognom del Propietari:</label>
                         <input type="text" name="cognom" id="cognom" class="form-control" required>
                     </div>
-                    <div class="form-group">
-                        <label for="data_inici">Data d'adquisició del dispositiu:</label>
-                        <input type="date" name="data_inici" id="data_inici" class="form-control" required>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="data_inici">Data d'adquisició del dispositiu:</label>
+                            <input type="date" name="data_inici" id="data_inici" class="form-control" required>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="data_final">Data de cessió del dispositiu:</label>
-                        <input type="date" name="data_final" id="data_final" class="form-control" required>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="data_final">Data de cessió del dispositiu:</label>
+                            <input type="date" name="data_final" id="data_final" class="form-control" required>
+                        </div>
                     </div>
-
+                    <div class="col-md-6">
                     <a href="view_departament.php?id=<?php echo $departament_id; ?>" class="btn btn-danger">Torna
                         enrere</a>
                     <button type="submit" name="edit_owner" class="btn btn-primary">Actualitzar</button>
+                    </div>
                 </form>
             </div>
         </div>
