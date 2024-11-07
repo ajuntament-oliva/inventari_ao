@@ -1,5 +1,11 @@
 /* Estils personalitzats */
 
-.btn-editar{
-    margin-left: 50%;
-  }
+td {
+  position: relative;
+}
+
+.btn-editar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
