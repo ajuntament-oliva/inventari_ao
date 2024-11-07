@@ -9,7 +9,7 @@ $departament_id = isset($_GET['departament_id']) ? (int) $_GET['departament_id']
 $departament = $db->query("SELECT departament FROM departaments WHERE id = $departament_id")->fetch_assoc();
 $nomDepartament = htmlspecialchars($departament['departament']);
 
-$dispositius = $db->query("SELECT d.id as dispositiu_id, d.dispositiu, p.nom, p.cognom, p.comentaris
+$dispositius = $db->query("SELECT d.id as dispositiu_id, d.dispositiu, p.nom, p.cognom, p.nom_actual, p.cognom_actual, p.comentaris
                                     FROM dispositius d 
                                     JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id
                                     JOIN propietaris p ON dp.propietari_id = p.id 
@@ -100,11 +100,17 @@ include_once('layouts/header.php');
                                                 <?php } ?>
                                             <?php } ?>
                                             <td><?php $dataInici = DateTime::createFromFormat('Y-m-d', $caracteristica['data_inici']);
-                                                        echo $dataInici ? $dataInici->format('d/m/Y') : ''; ?></td>
+                                            echo $dataInici ? $dataInici->format('d/m/Y') : ''; ?></td>
                                             <td><?php $dataFinal = DateTime::createFromFormat('Y-m-d', $caracteristica['data_final']);
-                                                        echo $dataFinal ? $dataFinal->format('d/m/Y') : ''; ?></td>
+                                            echo $dataFinal ? $dataFinal->format('d/m/Y') : ''; ?></td>
                                             <td>
-                                                <?php echo remove_junk(ucwords($dispositiu['nom'] . ' ' . $dispositiu['cognom'])); ?>
+                                                <?php
+                                                if (!empty($dispositiu['nom_actual']) && !empty($dispositiu['cognom_actual'])) {
+                                                    echo remove_junk(ucwords($dispositiu['nom_actual'] . ' ' . $dispositiu['cognom_actual']));
+                                                } else {
+                                                    echo remove_junk(ucwords($dispositiu['nom'] . ' ' . $dispositiu['cognom']));
+                                                }
+                                                ?>
                                             </td>
                                             <td><?php echo nl2br(remove_junk(ucwords($dispositiu['comentaris']))); ?></td>
                                         </tr>
