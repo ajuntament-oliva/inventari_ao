@@ -21,7 +21,7 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
         
         // Consultar BDA per obtindre les característiques de tots els dispositius del mateix tipus en el departament actual
         $caracteristiques = $db->query("SELECT DISTINCT c.uid, c.id_anydesck, c.num_serie, c.processador, c.ram, c.capacitat, 
-                                                            c.marca, c.dimensions, c.tipus, p.id as propietari_id, p.nom, p.cognom, comentaris
+                                                            c.marca, c.dimensions, c.tipus, p.id as propietari_id, p.nom, p.cognom, p.nom_actual, p.cognom_actual, p.comentaris
                                             FROM caracteristiques_detalls c
                                             JOIN dispositius d ON c.dispositiu_id = d.id
                                             JOIN dispositiu_propietari dp ON d.id = dp.dispositiu_id 
@@ -111,7 +111,12 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
                                         <?php } ?>
                                         <td>
                                             <a href="propietari_dispositius.php?id=<?php echo (int)$caracteristica['propietari_id']; ?>">
-                                                <?php echo remove_junk(ucwords($caracteristica['nom'] . ' ' . $caracteristica['cognom'])); ?>
+                                                <?php if (!empty($caracteristica['nom_actual']) && !empty($caracteristica['cognom_actual'])) {
+                                                        echo remove_junk(ucwords($caracteristica['nom_actual'] . ' ' . $caracteristica['cognom_actual']));
+                                                    } else {
+                                                        echo remove_junk(ucwords($caracteristica['nom'] . ' ' . $caracteristica['cognom']));
+                                                    } 
+                                                ?>
                                             </a>
                                         </td>
                                         <td>
