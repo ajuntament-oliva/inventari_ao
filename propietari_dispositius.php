@@ -54,12 +54,12 @@ if (isset($_GET['id'])) {
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
+                    <table class="table table-bordered table-hover text-center">
                         <thead>
                             <tr>
-                                <th>Dispositius</th>
-                                <th>Data adquisició</th>
-                                <th>Data cessió</th>
+                                <th class="text-center">Dispositius</th>
+                                <th class="text-center">Data adquisició</th>
+                                <th class="text-center">Data cessió</th>
                             </tr>
                         </thead>
                         <tbody>

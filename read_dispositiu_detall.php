@@ -45,37 +45,37 @@ include_once('layouts/header.php');
                             <div class="panel-heading">
                                 <label><?php echo remove_junk(ucwords($dispositiu['dispositiu'])); ?> - Característiques</label>
                             </div>
-                            <table class="table table-bordered table-hover">
+                            <table class="table table-bordered table-hover text-center">
                                 <thead>
                                     <tr>
                                         <?php if ($dispositiu['dispositiu'] == 'Monitor') { ?>
-                                            <th>Marca</th>
-                                            <th>Polçades</th>
-                                            <th>Nº sèrie</th>
-                                            <th>Data adquisició</th>
-                                            <th>Data cessió</th>
-                                            <th>Propietari/a</th>
-                                            <th>Antics propietaris/es</th>
+                                            <th class="text-center">Marca</th>
+                                            <th class="text-center">Polçades</th>
+                                            <th class="text-center">Nº sèrie</th>
+                                            <th class="text-center">Data adquisició</th>
+                                            <th class="text-center">Data cessió</th>
+                                            <th class="text-center">Propietari/a</th>
+                                            <th class="text-center">Antics propietaris/es</th>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
-                                            <th>Marca</th>
-                                            <th>Tipus</th>
-                                            <th>Data adquisició</th>
-                                            <th>Data cessió</th>
-                                            <th>Propietari/a</th>
-                                            <th>Antics propietaris/es</th>
+                                            <th class="text-center">Marca</th>
+                                            <th class="text-center">Tipus</th>
+                                            <th class="text-center">Data adquisició</th>
+                                            <th class="text-center">Data cessió</th>
+                                            <th class="text-center">Propietari/a</th>
+                                            <th class="text-center">Antics propietaris/es</th>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Torre' || $dispositiu['dispositiu'] == 'Portàtil') { ?>
-                                            <th>UID</th>
-                                            <th>ID AnyDesk</th>
-                                            <th>Processador</th>
-                                            <th>RAM</th>
-                                            <th>Capacitat Disc Dur</th>
+                                            <th class="text-center">UID</th>
+                                            <th class="text-center">ID AnyDesk</th>
+                                            <th class="text-center">Processador</th>
+                                            <th class="text-center">RAM</th>
+                                            <th class="text-center">Capacitat Disc Dur</th>
                                             <?php if ($dispositiu['dispositiu'] == 'Portàtil') { ?>
-                                                <th>Marca</th>
+                                                <th class="text-center">Marca</th>
                                             <?php } ?>
-                                            <th>Data adquisició</th>
-                                            <th>Data cessió</th>
-                                            <th>Propietari/a</th>
-                                            <th>Antics propietaris/es</th>
+                                            <th class="text-center">Data adquisició</th>
+                                            <th class="text-center">Data cessió</th>
+                                            <th class="text-center">Propietari/a</th>
+                                            <th class="text-center">Antics propietaris/es</th>
                                         <?php } ?>
                                     </tr>
                                 </thead>
