@@ -69,12 +69,12 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
                                         <th class="text-center">Polçades</th>
                                         <th class="text-center">Nº de sèrie</th>
                                         <th class="text-center">Propietari/a actual</th>
-                                        <th class="text-center">Antics propietaris</th>
+                                        <th class="text-center">Comentaris</th>
                                     <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
                                         <th class="text-center">Marca</th>
                                         <th class="text-center">Tipus</th>
                                         <th class="text-center">Propietari/a actual</th>
-                                        <th class="text-center">Antics propietaris</th>
+                                        <th class="text-center">Comentaris</th>
                                     <?php } elseif ($dispositiu['dispositiu'] == 'Torre' || $dispositiu['dispositiu'] == 'Portàtil') { ?>
                                         <th class="text-center">UID</th>
                                         <th class="text-center">ID AnyDesk</th>
@@ -85,7 +85,7 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
                                             <th class="text-center">Marca</th>
                                         <?php } ?>
                                         <th class="text-center">Propietari/a actual</th>
-                                        <th class="text-center">Antics propietaris/es</th>
+                                        <th class="text-center">Comentaris</th>
                                     <?php } ?>
                                 </tr>
                             </thead>

@@ -55,14 +55,14 @@ include_once('layouts/header.php');
                                             <th class="text-center">Data adquisició</th>
                                             <th class="text-center">Data cessió</th>
                                             <th class="text-center">Propietari/a</th>
-                                            <th class="text-center">Antics propietaris/es</th>
+                                            <th class="text-center">Comentaris</th>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Teclat') { ?>
                                             <th class="text-center">Marca</th>
                                             <th class="text-center">Tipus</th>
                                             <th class="text-center">Data adquisició</th>
                                             <th class="text-center">Data cessió</th>
                                             <th class="text-center">Propietari/a</th>
-                                            <th class="text-center">Antics propietaris/es</th>
+                                            <th class="text-center">Comentaris</th>
                                         <?php } elseif ($dispositiu['dispositiu'] == 'Torre' || $dispositiu['dispositiu'] == 'Portàtil') { ?>
                                             <th class="text-center">UID</th>
                                             <th class="text-center">ID AnyDesk</th>
@@ -75,7 +75,7 @@ include_once('layouts/header.php');
                                             <th class="text-center">Data adquisició</th>
                                             <th class="text-center">Data cessió</th>
                                             <th class="text-center">Propietari/a</th>
-                                            <th class="text-center">Antics propietaris/es</th>
+                                            <th class="text-center">Comentaris</th>
                                         <?php } ?>
                                     </tr>
                                 </thead>
