@@ -4,6 +4,13 @@ td {
   position: relative;
 }
 
+.comentaris {
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 250px;
+  overflow: hidden;
+}
+
 .btn-editar {
   position: absolute;
   bottom: 0;

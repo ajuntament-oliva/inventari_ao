@@ -119,8 +119,8 @@ if (isset($_GET['id']) && isset($_GET['departament_id'])) {
                                                 ?>
                                             </a>
                                         </td>
-                                        <td>
-                                            <?php echo nl2br(remove_junk(ucwords($caracteristica['comentaris']))); ?>
+                                        <td class="comentaris">
+                                            <?php echo nl2br(remove_junk(($caracteristica['comentaris']))); ?>
                                             <a class="btn btn-primary btn-editar" href="#" data-toggle="modal" data-target="#editModal" data-id="<?php echo (int)$caracteristica['propietari_id']; ?>" data-comentaris="<?php echo htmlspecialchars($caracteristica['comentaris']); ?>"><i
                                             class="glyphicon glyphicon-pencil"></i></a>
                                         </td>
